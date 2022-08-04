@@ -1,0 +1,141 @@
+# A new Soft Technology
+Only a handful of general-purpose technologies have impacted our world in the sort of deeply transformative way that deserves the description eating. And only two of these, written language and money, were soft technologies: seemingly ephemeral, but capable of being embodied in a variety of specific physical forms.  Software has the same relationship to any specific sort of computing hardware as money does to coins or credit cards or writing to clay tablets and paper books.
+
+For the first half century of modern computing after World War II, hardware was the driving force. The industrial world mostly consumed software to meet existing needs, such as tracking inventory and payroll, rather than being consumed by it.
+
+Partly as a consequence of how rarely soft, world-eating technologies erupt into human life, we have been systematically underestimating the magnitude of the forces being unleashed by software. While it might seem like software is constantly in the news, what we have already seen is dwarfed by what still remains unseen.
+
+# Getting Reoriented
+There are four major reasons we underestimate the increasing power of software. Three of these reasons drove similar patterns of miscalibration in previous technological revolutions, but one is unique to software.
+
+First, as futurist Roy Amara noted, “We tend to overestimate the effect of a technology in the short run and underestimate the effect in the long run.”
+
+Second, we have shifted gears from what economic historian Carlota Perez calls the installation phase of the software revolution, focused on basic infrastructure such as operating systems and networking protocols, to a deployment phase focused on consumer applications such as social networks, ridesharing and ebooks.
+
+Third, a great deal of the impact of software today appears in a disguised form. The genomics and nanotechnology sectors appear to be rooted in biology and materials science. The “maker” movement around 3d printing and drones appears to be about manufacturing and hardware. Dig a little deeper though, and you invariably find that the action is being driven by possibilities opened up by software more than fundamental new discoveries in those physical fields.
+
+The fourth reason we underestimate software, however, is a unique one: it is a revolution that is being led, in large measure, by brash young kids rather than sober adults.
+
+Chris Dixon captured this guerrilla pattern of the ongoing shift in political power with a succinct observation: what the smartest people do on the weekend is what everyone else will do during the week in ten years.
+
+# Towards a Mass Flourishing
+Prediction as a foundation for facing the future involves risks that go beyond simply getting it wrong. The bigger risk is getting attached to a particular what and when, a specific vision of a paradise to be sought, preserved or reclaimed. This is often a serious philosophical error — to which pastoralist mindsets are particularly prone — that seeks to limit the future.
+
+First, despite current pessimism about the continued global leadership of the United States, the US remains the single largest culture that embodies the pragmatic hacker ethos, nowhere more so than in Silicon Valley. (I disagree, China is a contender. I'm not sure why (if it has hacker ethos) but I know it is a contender.)
+
+Second, the future will unfold through very small groups having very large impacts. One piece of wisdom in Silicon Valley today is that the core of the best software is nearly always written by teams of fewer than a dozen people, not by huge committee-driven development teams.
+
+Third, the future will unfold through a gradual and continuous improvement of well-being and quality of life across the world, not through sudden emergence of a utopian software-enabled world (or sudden collapse into a dystopian world).
+
+Fourth, the future will unfold through rapid declines in the costs of solutions to problems, including in heavily regulated sectors historically resistant to cost-saving innovations, such as healthcare and higher education.
+
+Putting these four characteristics together, we get a picture of messy, emergent progress that economist Bradford Delong calls “slouching towards utopia“: a condition of gradual, increasing quality of life available, at gradually declining cost, to a gradually expanding portion of the global population.
+
+In other words, the hacker ethos will go global and the workforce at large will break smart. As the hacker ethos spreads, we will witness what economist Edmund Phelps calls a mass flourishing2 — a state of the economy where work will be challenging and therefore fulfilling. Unchallenging, predictable work will become the preserve of machines.
+
+If this vision seems overly dramatic, consider once again the comparison to other soft technologies: software is perhaps the most imagination-expanding technology humans have invented since writing and money, and possibly more powerful than either. To operate on the assumption that it will transform the world at least as dramatically, far from being wild-eyed optimism, is sober realism.
+
+# Purists versus Pragmatists
+
+At the heart of the historical development of computing is the age-old philosophical impasse between purist and pragmatist approaches to technology, which is particularly pronounced in software due to its seeming near-Platonic ineffability
+
+So the significance of pragmatic approaches prevailing over purist ones cannot be overstated: in the world of technology, it was the equivalent of the fall of the Berlin Wall.
+
+# Rough Consensus and Maximal Interestingness
+Software possesses an extremely strange property: it is possible to create high-value software products with effectively zero capital outlay. As Mozilla engineer Sam Penrose put it, software programming is labor that creates capital.
+
+The principle of rough consensus and running code is perhaps the essence of the abundance mindset in software.
+
+# Running Code and Perpetual Beta
+The best products use perpetual beta as a way to lead their users towards richer, more empowered behaviors, instead of following them through customer-driven processes. Backward compatibility is limited to situations of pragmatic need, rather than being treated as a religious imperative.
+
+The Gmail story contains an answer to the obvious question about agile models you might ask if you have only experienced waterfall models: How does anything ambitious get finished by groups of stubborn individuals heading in the foggiest possible direction of “maximal interestingness” with neither purist visions nor “customer needs” guiding them?
+
+The answer is that it doesn’t get finished. But unlike in waterfall models, this does not necessarily mean the product is incomplete. It means the vision is perpetually incomplete and growing in unbounded ways, due to ongoing evolutionary experiments. 
+
+The origins of this curious philosophy lie in what is known as the release early, release often (RERO) principle, usually attributed to Linus Torvalds, the primary architect of the Linux operating system. The idea is exactly what it sounds like: releasing code as early as possible, and as frequently as possible while it is actively evolving.
+
+What makes this possible in software is that most software failures do not have life-threatening consequences.4 As a result, it is usually faster and cheaper to learn from failure than to attempt to anticipate and accommodate it via detailed planning (which is why the RERO principle is often restated in terms of failure as fail fast).
+
+As a result, a lightweight sense of direction — rough consensus — is enough. There is no need to navigate by an increasingly unattainable utopian vision.
+
+# Software as Subversion
+But not only does the model work, it creates vast amounts of new wealth through both technology startups and open-source projects. Today, its underlying concepts like rough consensus, pivot, fast failure, perpetual beta, promiscuous forking, opt-in and worse is better are carrying over to domains beyond software and regions beyond Silicon Valley. Wherever they spread, limiting authoritarian visions and purist ideologies retreat.
+
+Our account of the nature of software ought to suggest an obvious conclusion: it is a deeply subversive force. For those caught on the wrong side of this force, being on the receiving end of Blitzkrieg operations by a high-functioning agile software team can feel like mounting zemblanity: a sense of inevitable doom.
+
+With every single technological advance, from the invention of writing to the invention of television, those who have failed to appreciate the non-zero-sum nature of technological evolution have prophesied doom and been proven wrong. Every time, they have made some version of the argument: this time it is different, and been proven wrong.
+
+# Prometheans and Pastoralists
+Science fiction writer Douglas Adams reduced the phenomenon to a set of three sardonic rules from the point of view of users of technology:
+
+1. Anything that is in the world when you’re born is normal and ordinary and is just a natural part of the way the world works.
+2. Anything that’s invented between when you’re fifteen and thirty-five is new and exciting and revolutionary and you can probably get a career in it.
+3. Anything invented after you’re thirty-five is against the natural order of things.
+
+The specifics of how, when, where and through whom a technology achieves its maximal impact are path dependent. Competing to guess the right answers is the work of entrepreneurs and investors. But once the answers are figured out,  the contingent path from “weird” to “normal” will be largely forgotten, and the maximally transformed society will seem inevitable with hindsight.
+
+The impact is shifting from the path-dependent phase, when it wasn’t clear whether the idea was even workable, to the non-path-dependent phase, where it seems inevitable enough that other ideas can be built on top.
+
+# The Allure of Pastoralism
+The World Fairs pastoral, for instance, emerged out of a Promethean period in the United States, heralded by Alexander Hamilton in the 1790s. Hamilton recognized the enormous potential of industrial manufacturing, and in his influential 1792 Report on Manufactures,4 argued that the then-young United States ought to strive to become a manufacturing superpower. For much of the nineteenth century, Hamilton’s ideas competed for political influence5 with Thomas Jefferson’s pastoral vision of an agrarian, small-town way of life, a romanticized, sanitized version of the society that already existed.
+
+We get attached to pastorals because they offer a present condition of certainty and stability and a utopian future promise of absolutely perfected certainty and stability. Arrival at the utopia seems like a well-deserved reward for hard-won Promethean victories. Pastoral utopias are where the victors of particular historical finite games hope to secure their gains and rest indefinitely on their laurels. The dark side, of course, is that pastorals also represent fantasies of absolute and eternal power over the fate of society: absolute utopias for believers that necessarily represent dystopias for disbelievers. Totalitarian ideologies of the twentieth century, such as communism and fascism, are the product of pastoral mindsets in their most toxic forms. The Jeffersonian pastoral was a nightmare for black Americans.
+
+# Understanding Elite Discontent
+Because they serve as stewards of dominant pastoral visions, cultural elites are most prone to viewing unexpected developments as degeneracy. From the Greek philosopher Plato1 (who lamented the invention of writing in the 4th century BC) to the Chinese scholar, Zhang Xian Wu2 (who lamented the invention of printing in the 12th century AD), alarmist commentary on technological change has been a constant in history. A contemporary example can be found in a 2014 article3 by Paul Verhaege in The Guardian:
+
+There are constant laments about the so-called loss of norms and values in our culture. Yet our norms and values make up an integral and essential part of our identity. So they cannot be lost, only changed. And that is precisely what has happened: a changed economy reflects changed ethics and brings about changed identity. The current economic system is bringing out the worst in us.
+
+Viewed through any given pastoral lens, any unplanned development is more likely to subtract rather than add value. In an imagined world where cars fly, but driving is still a central rather than peripheral function, ridesharing can only be seen as subtracting taxi drivers from a complete vision. Driverless cars — the name is revealing, like “horseless carriage” — can only be seen as subtracting all drivers from the vision. And with such apparent subtraction, values and humans can only be seen as degenerating (never mind that we still ride horses for fun, and will likely continue driving cars for fun).
+
+In other words, pastoralists can imagine sustaining changes to the prevailing social order, but disruptive changes seem profane. As a result, those who adapt to disruption in unexpected ways seem like economic and cultural degenerates, rather than representing employment rebounding in unexpected ways.
+
+# The Principle of Generative Pluralism
+Emerging lifestyles introduce new lived values into societies. Hamilton did not just suggest a way out of the rural squalor1 that was the reality of the Jeffersonian pastoral. His way also led to the dismantlement of slavery, the rise of modern feminism and the gradual retreat of colonial oppression and racism. Today, we are not just leaving the World Fairs pastoral behind for a richer technological future. We are also leaving behind its paternalistic institutions, narrow “resource” view of nature, narrow national identities and intolerance of non-normative sexual identities.
+
+These observations are not new among historians of technology, and have led to endless debates about whether societal values drive technological change (social determinism) or whether technological change drives societal values (technological determinism). In practice, the fact that people change and disrupt the dominant prevailing ideal of “human values” renders the question moot. New lived values and new technologies simultaneously irrupt into society in the form of new lifestyles. Old lifestyles do not necessarily vanish: there are still Jeffersonian small farmers and traditional blacksmiths around the world for instance. Rather, they occupy a gradually diminishing role in the social order. As a result, new and old technologies and an increasing number of value systems coexist.
+
+The inherent unpredictability in the principle implies that both technological and social determinism are incomplete models driven by zero-sum thinking. The past cannot “determine” the future at all, because the future is more complex and diverse. It embodies new knowledge about the world and new moral wisdom, in the form of a more pluralistic and technologically sophisticated society.
+
+Prometheans who discover high-leverage unexpected possibilities enter a zone of serendipity. The universe seems to conspire to magnify their agency to superhuman levels. Pastoralists who reject change altogether as profanity turn lack of agency into a self-fulfilling prophecy, and enter a zone of zemblanity. The universe seems to conspire to diminish whatever agency they do have, resulting in the perception that technology diminishes agency.
+
+The broader lesson of the principle of generative pluralism is this: through technology, societies become intellectually capable of handling progressively more complex value-based conflicts. As societies gradually awaken to resolution mechanisms that do not require authoritarian control over the lives of others, they gradually substitute intelligence and information for power and coercion.
+
+# The Future in the Rear-View Mirror
+Much of our collective sense of looming chaos and paradises being lost is in fact a clear and unambiguous sign of positive change in the world. By this model, if our current collective experience of the human condition felt utopian, with cultural elites extolling its virtues, we should be very worried indeed. Societies that present a facade of superficial pastoral harmony, as in the movie Stepford Wives, tend to  be sustained by authoritarian, non-pluralistic polities, hidden demons, and invisible violence.
+
+Innovation can in fact be defined as ongoing moral progress achieved by driving directly towards the regimes of greatest moral ambiguity, where our collective demons lurk. These are also the regimes where technology finds its maximal expressions, and it is no accident that the two coincide. Genuine progress feels like onrushing obscenity and profanity, and also requires new technological capabilities to drive it.
+
+The subjective psychological feel of this evolutionary process is what Marshall McLuhan described in terms of a rear-view mirror effect: “we see the world through a rear-view mirror. We march backwards into the future.”
+
+Our aesthetic and moral sensibilities are oriented by default towards romanticized memories of paradises lost. Indeed, this is the only way we can enter the future. Our constantly pastoralizing view of the world, grounded in the past, is the only one we have. The future, glimpsed only through a small rear-view mirror, is necessarily framed by the past. To extend McLuhan’s metaphor, the great temptation is to slam on the brakes and shift from what seems like reverse gear into forward gear. The paradox of progress is that what seems like the path forward is in fact the reactionary path of retreat. What seems like the direction of decline is in fact the path forward.
+
+Beyond doing the utmost possible to shield those most exposed to, and least capable of enduring, the material pain of change, it is crucial to limit ourselves and avoid the temptation of reactionary paths suggested by utopian or dystopian visions, especially those that appear in futurist guises. The idea that forward is backward and sacred is  profane will never feel natural or intuitive, but innovation and progress depend on acting by these ideas anyway.
+
+# A Tale of Two Computers
+
+The metaphor of the world as a single interconnected entity that subsumes human existence is an old one, and in its modern form, can be traced at least to Hobbes’ Leviathan (1651), and Herbert Spencer’s The Social Organism (1853). What is new about this specific form is that it is much more than a metaphor. The view of the world as a single, connected, substrate for computation is not just a poetic way to appreciate the world: It is a way to shape it and act upon it. For many software projects, the idea that “the network is the computer” (due to John Gage, a computing pioneer at Sun Microsystems) is the only practical perspective.
+
+Even as the old planet-scale computer declines, the new one it gave birth to is coming of age.
+
+In our Tale of Two Computers, the parent is a four-century-old computer whose basic architecture was laid down in the zero-sum mercantile age. It runs on paperware, credentialism, and exhaustive territorial claims that completely carve up the world with strongly regulated boundaries. Its structure is based on hierarchically arranged container-like organizations, ranging from families to nations. In this order of things, there is no natural place for a free frontier. Ideally, there is a place for everything, and everything is in its place. It is a computer designed for stability, within which innovation is a bug rather than a feature.
+
+The child is a young, half-century old computer whose basic architecture was laid down during the Cold War. It runs on software, the hacker ethos, and soft networks that wire up the planet in ever-richer, non-exclusive, non-zero-sum ways. Its structure is based on streams like Twitter: open, non-hierarchical flows of real-time information from multiple overlapping networks. In this order of things, everything from banal household gadgets to space probes becomes part of a frontier for ceaseless innovation through bricolage. It is a computer designed for rapid, disorderly and serendipitous evolution, within which innovation, far from being a bug, is the primary feature.
+
+We’ll call this planet-scale computer the networked world.
+
+The networked world is not new. It is at least as old as the oldest trade routes, which have been spreading subversive ideas alongside valuable commodities throughout history. What is new is its growing ability to dominate the geographic world. The story of software eating the world is the also the story of networks eating geography.
+
+There are two major subplots to this story. The first subplot is about bits dominating atoms. The second subplot is about the rise of a new culture of problem-solving.
+
+# Tinkering versus Goals
+What would be seemingly pointless disruption in an unchanging utopia becomes a way to stay one step _ahead_ in a changing environment. This is the _key_ difference between the two problem-solving processes: in goal-driven problem-solving, open-ended ideation is fundamentally viewed as a negative. In tinkering, it is a positive.
+
+Tinkerers — be they individuals or organizations — in possession of valuable but under-utilized resources tend to do something counter-intuitive. Instead of keeping idle resources captive, they open up access to as many people as possible, with as few strings attached as possible, in the hope of catalyzing spillover tinkering. Where it works, thriving ecosystems of open-ended innovation form, and steady streams of new wealth begin to flow. Those who share interesting and unique resources in such open ways gain a kind of priceless goodwill money cannot buy. The open-source movement, Google’s Android operating system, Big Data technology, the Arduino hardware experimentation kit and the OpenROV underwater robot all began this way. Most recently, Tesla voluntarily opened up access to its electric vehicle technology patents under highly liberal terms compared to automobile industry norms.
+
+What makes this a problem-solving mechanism is diversity of individual perspectives coupled with the law of large numbers (the statistical idea that rare events can become highly probable if there are enough trials going on). If an increasing number of highly diverse individuals operate this way, the chances of any given problem getting solved via a serendipitous new idea slowly rises. This is the _luck of networks._
+
+Serendipitous solutions are not just cheaper than goal-directed ones. They are typically more creative and elegant, and require much less conflict. Sometimes they are so creative, the fact that they even solve a particular problem becomes hard to recognize. For example, telecommuting and video-conferencing do more to “solve” the problem of fossil-fuel dependence than many alternative energy technologies, but are usually understood as technologies for flex-work rather than energy savings.
+
+From the inside, serendipitous problem solving feels like the most natural thing in the world. From the perspective of goal-driven problem solvers, however, it can look indistinguishable from waste and immoral priorities.

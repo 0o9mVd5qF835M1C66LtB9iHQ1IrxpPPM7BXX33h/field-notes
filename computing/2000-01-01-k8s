@@ -1,0 +1,540 @@
+**Kubernetes**
+
+**Overview**
+- k8s is a platform for managing containerized services and workloads that facilitates both declarative configuration and automation.
+- k8s provides you with service discovery, storage orchestration, automated rollouts and rollbacks, bin packing, self-healing, and secret/config management.
+- k8s actually eliminates the need for orchestration. The technical definition of orchestration is execution of a defined workflow: first do A, then B, then C. In contrast, k8s has composable control processes that continuously drive the current state toward the provided desired state.
+
+Kubernetes Components
+- when you deploy k8s, you get a cluster. A cluster consists of a set of worker machines called nodes that run containerized applications. Every cluster has at least one worker node.
+- the worker nodes host the Pods that are the components of the application workload.
+- control plane components make global decisions about the cluster whereas node components provide the k8s runtime environment by running on every node.
+- kube-apiserver is a component of the k8s control plane that exposes the k8s API. The API server is the frontend for the control plane.
+- etcd is a consistent and highly available key value store which is k8’s backing store for all cluster data.
+- kube-scheduler is the control plane component that watches for newly created Pods with no assigned node, and selects a node for them to run on.
+- kube-controller manager is the control plane component that runs controller processes. Logically, each controller is a separate process but to reduce complexity, they are all compiled into a single binary and run in a single process. Some types of these controllers are node controller, job controller, endpoints controller, and service account & token controllers.
+- cloud-controller-manager is the control plane component that embeds cloud-specific control logic. The cloud controller manager lets you link your cluster into your cloud provider’s API. The node, route, and service controller have cloud provider dependencies.
+- the kubelet is an agent that runs on each node in the cluster and makes sure that containers are running in a Pod. It knows the expected containers to be running in a Pod from a set of PodSpecs.
+- kube-proxy is a network proxy that runs on each node in the cluster and maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster. The proxy uses the OS packet filtering layer if available. If not, it forwards the traffic itself.
+- the container runtime is the software that is responsible for running containers. K8s supports any implementation of the CRI.
+- k8s objects are persistent entities in the k8s system. k8s uses these entities to represent the state of your cluster. They can describe:
+	- containerized applications
+	- resources available to those applicaitons
+	- policies around how those applications behave
+
+Working with Kubernetes Objects
+- a k8s object is a "record of intent" — once you create the object, the k8s system will constantly work to ensure that object exists. By creating an object, you're effectively telling the k8s system what you want your cluster's workload to look like; this is your cluster's *desired state*.
+- to work with k8s objects, you need to use the k8s API. When you use `kubectl` CLI for example, the CLI makes the necessary k8s API calls for you. You can also use the k8s API directly in your own programs using one of the client libraries.
+- almost every k8s object includes two nested object fields: the object `spec`
+ and the object `status`. The `spec` describes the *desired state* while the `statuc` describes the *current state*. The `spec` field is supplied and updated by the k8s system and its components. The k8s control plane continually and actively manages every object's actual state to match the desired state you supplied.
+- `kubectl` will convert object .yaml into JSON when making API requests.
+- each k8s object in your cluster has a name that is unique for that type of resource across a namespace.
+- every k8s object also has UID that is unique across your whole cluster.
+- namespaces are intended for use in environments with many users spread across multiple teams, or projects.
+- namespaces cannot be nested inside on another.
+- k8s starts with four initial namespaces:
+	- `default` is the default namespace for objects with no other namespace
+	- `kube-system` is the namespace for objects created by the k8s system
+	- `kube-public` is the namespace that's created automatically and is readable by all users (included those not authenticated). This namespace is mostly reserved for cluster usage, in case that some resources should be visible and readable publicly throughout the whole cluster. The public aspect of this namespace is only a convention, not a requirement.
+	- `kube-node-lease` is the namespace which holds Lease objects associated with each node. Node leases allow the kubelet to send heartbeats so that the control plane can detect node failure.
+- most k8s resources (pods, services, replication controllers, and others) are in namespaces. However, namespace resources are not themselves in a namespace. And low-level resources such as nodes and persistentVolumes are not in any namespace.
+- labels are key/value pairs that are attached to objects, such as pods. Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system.
+- non-identifying information should be recorded using annotations.
+- the motivation for labels is to allow users to map their own organizational structures onto system objects in a loosely coupled fashion, without requiring clients to store these mappings.
+- unlike names and UIDs, labels do not provide uniqueness. In general, we expect many objects to carry the same label(s).
+- via a label selector, the client/user can identify a set of objects. The label selector is the core grouping primitive in k8s.
+- annotations are key/value pairs which are used to attach arbitrary non-identifying metadata to objects. Clients such as tools and libraries can retrieve this metadata.
+- you can use either labels or annotations to attach metadata to k8s objects. Labels can be used to select objects and can be used to select objects that satisfy certain conditions. Annotations on the other hand are *not* used to identify and select objects.
+- finalizers are namespaced keys that tell k8s to wait until specific conditions are met before it fully deletes resources marked for deletion.
+- finalizers alert controllers to clean up resources the deleted object owned
+- in k8s, some objects are owners of other objects. For instance, a ReplicaSet is the owner of a set of Pods.
+- cross-namespace owner references are disallowed by design.
+- k8s is *not* a PaaS and doesn't have a formal notion of an application. Instead, applications are informal and described with metadata.  The definition of what an application contains is loose.
+
+
+
+**Cluster Architecture**
+Nodes
+- k8s runs your workload by placing containers into pods to run on nodes. A node may be a virtual or physical machine, depending on the cluster.
+- there are two main ways to add a node to the API server. Either the kubelet on a node self-registers to the control plane or a human user manually adds a node object.
+- a node’s status contains the following information: addresses, conditions, capacity and allocatable, and info. You can use kubectl to view a node’s status and other details with kubectl describe node <NODE_NAME>.
+- the default eviction timeout duration is five minutes. - in cases where k8s cannot deduce from the underlying infrastructure if a node has permanently left a cluster, the cluster admin may need to delete the node object by hand. Deleting the node object from k8s causes all pod objects running on the node to be deleted from the API server too.
+- when problems occur on nodes, the k8s control plane automatically creates taints that match the conditions affecting the node. The scheduler takes the Node’s taints into consideration when assigning a pod to a node. Pods can also have tolerations that let them run on a node even though it has a specific taint.
+
+Control Plane-Node Communication
+- there are two primary communication paths from the control plane (api server) to the nodes. The first is from the api server to the kubelet process on each node in the cluster. The second is from the api server to any node, pod, or service through the api server’s proxy functionality.
+
+Controllers
+- in k8s, controllers are control loops (non-terminating loop that regulate the state of a system) that watch the state of your cluster, then make or request changes where needed.
+- controllers might carry actions themselves, but most commonly a controller in k8s will send requests to the API server.
+- k8s comes with a set of built-in controllers that run inside the kube-controller-manager. These built-in controllers provide important core behaviours. For example, the deployment and job controllers. k8s lets you run a resilient control plane so that if any of the built-in controllers were to fail, another part of the control plane will take over the work.
+- when the job controller sees a new task, it doesn’t run any pods or containers itself. It tells the API server to create or remove pods and another component in the control plane will act on that info (there are new pods to schedule and run) and eventually the work will be done.
+- controllers that interact with external state find their desired state from the API server, then communicate directly with an external system to bring the current state closer in line.
+- there can be several controllers that create or update the same kind of object. Behind the scenes, k8s controllers make sure that they only pay attention to the resourced linked to their controlling resource by using labels.
+- you can find controllers that run outside the control plane to extend k8s. If you want, you can also write a new controller yourself. You can run your own controller as a set of pods or externally to k8s.
+
+Cloud Controller Manager
+- the cloud-controller-manager is a k8s control plane component that embeds cloud-specific control logic. The cloud controller manager lets you link your cluster into your cloud provider’s API.
+- by decoupling the interoperability logic between k8s and the underlying cloud infrastructure, the cloud-controller-manager component enables cloud providers to release features at a different pace compared to the main k8s project.
+- the cloud-controller-manager is structured using a plugin mechanism that allows different cloud providers to integrate their platforms with k8s.
+- the controllers inside the cloud controller manager include the node controller, route controller, and the service controller.
+- the node controller is responsible for updating node objects when new servers are created in your cloud provider.
+- the node controller performs the following functions: 1. update a node object with the corresponding server’s unique identifier obtained from the cloud provider’s API. 2. Annotating and labelling the node object with cloud-specific info such as region, CPU, memory, etc. 3. Obtain the node’s hostname and network addresses. 4. Verifying the node’s health.
+- the route controller is responsible for configuring routes in the cloud appropriately so that containers on different nodes in your k8s cluster can communicate together. Depending on the cloud provider, the route controller might also allocate blocks of IP addresses for the Pod network.
+- the service controller is responsible for interacting with cloud provider’s to setup load balancers, IP addresses, network packet filtering, and target health checking.
+
+Container Runtime Interface
+- the CRI is a plugin interface which enables the kubelet to use a wide variety of container runtimes, without having a need to recompile the cluster components.
+- you need a working container runtime on each node in your cluster so that the kubelet can launch pods and their containers.
+- the CRI defines the main gRPC protocol for the communication between cluster components kubelet and container runtime.
+
+  
+
+Garbage Collection
+- k8s has garbage collection to clean up cluster resources such as failed pods, completed jobs, objects without owner refs, unused containers and images.
+- k8s uses owner refs to give the control plane and other API clients the opportunity to clean up related resources before deleting an object.
+- cross-namespace owner refs are disallowed by design.
+- k8s checks for and deletes objects that no longer have owner references, like the pods left behind when you delete a replicaset.
+- when you delete an object, you can control whether k8s deletes the object’s dependents automatically, in a process called cascading deletion. The two types of cascading deletion are foreground and background cascading deletion.
+- foreground cascading deletion is when the owner object you’re deleting first enters a deletion in progress state. After this, the controller deletes the dependents. After deleting all the dependent objects, the controller deletes the owner object. After this point, the object is no longer visible in the k8s API.
+- background cascading deletion is when the k8s API server deletes the owner object immediately and the controller cleans up the dependent objects in the background. By default, k8s uses background cascading deletion.
+- the kubelet performs garbage collection on unused images every five minutes and on unused containers every minute. You should avoid using external garbage collections tools, as these can break the kubelet behaviour and remove containers that should exist.
+- k8s manages the lifecycle of all images through its image manager which is part of the kubelet with the cooperation of advisor. Disk usage above the configured HighThresholdPercent value triggers garbage collection, which deletes images in order based on LRU. The kubelet deletes images until disk usage reaches the LowThresholdPercent value.
+- the kubelet garbage collector collects unused containers based on the following variables which you can define: MinAge, MaxPerPodContainer, and MaxContainers.
+
+  
+
+  
+
+**Containers**
+Images
+- you typically create a container image of your application and push it to a registry before referring to it in a Pod.
+- the imagePullPolicy for a container can be: IfNotPresent, Always, or Never.
+- the caching semantics of the underlying image provider make even imagePullPolicy: Always efficient, as long as the registry is reliably accessible.
+- if you run Docker on your nodes, you can configure the Docker container runtime to authenticate to a private container registry.
+
+  
+
+Runtime Class
+- RuntimeClass is a feature for selecting the container runtime configuration.
+- you can set a different RuntimeClass between different Pods to provide a balance of performance versus security. For example, if part of your workload deserves a high level of information security assurance, you might choose to schedule those Pods so they run in a container runtime with hardware virtualization. You’d then benefit from the extra isolation of the alternative runtime, at the expense of some additional overhead.
+- by specifying the scheduling field for a RuntimeClass, you can set constraints to ensure that Pods running with this RuntimeClass are scheduled to nodes that support it.
+- you can specify overhead resources that are associated with running a Pod. Pod overhead is defined in RuntimeClass through the overhead fields. Through the use of these fields, you can specify the overhead of running pods utilizing this RuntimeClass and ensure these overheads are accounted for in k8s.
+
+  
+
+Container Lifecycle Hooks
+- analogous to many programming language frameworks that have component lifecycle hooks, (React, Angular, etc), k8s provides containers with lifecycle hooks too.
+- there are two hooks that are exposed to containers. PostStart and PreStop.
+- the PostStart hook is executed immediately after a container is created, but there is no guarantee it will execute before the container ENTRYPOINT.
+- the PreStop hook is called immediately before a container is terminated due to an API request or management event such a liveness/startup probe failure. The pod’s termination grace period countdown beings before the PreStop hook is executed. So regardless of the handler outcome, the container will eventually terminate within the Pod’s termination grace period.
+- hook handler calls are synchronous within the context of the Pod containing the container. This means that the container ENTRYPOINT and PostStart hook fire asynchronously. But if the hook takes too long to run or hangs, the container cannot reach a running state.
+- PreStop hooks are not executed asynchronously from the signal to stop the container; the hook must complete its execution before the TERM signal can be sent. If a PreStop hook hangs during execution, the Pod’s phase will be Terminating and remain there until the Pod is killed after its terminationGracePeriodSeconds expires.
+- terminationGracePeriodSeconds applies to the total time it takes for both the PreStop hook to execute *and* for the container to stop normally. If tGPS = 60s and the hook takes 55s to complete and the container normally takes 10s to stop after receiving the signal, then the container will be killed before it can be stop normally.
+- hook delivery is intended to be at least once which means that a hook may be called multiple times for any given event. It is up to the hook implementation to handle this correctly.
+- generally only single deliveries are made. If an HTTP hook receiver is down and is unable to take traffic, there is no attempt to resend. In rare cases, double delivery may occur. For instance, if a kubelet restarts in the middle of sending a hook, the hook might be resent after the kubelet restarts.
+- the logs for hook handlers are not exposed in pod events. If a handler fails for some reason, it broadcasts an event. You can see these events by running kubectl describe pod <POD_NAME>.
+  
+
+**Workloads**
+A workload is an application running on Kubernetes. Whether your workload is a single component or several that work together, on Kubernetes you run it inside a set of pods. Kubernetes treats that level of failure as final: you will need to create a new Pods to recover if the node fails, even if the node becomes healthy later on.
+
+To make life easier, you don't need to manage each Pod directly. You can use *workload resources* instead which manage a set of pods on your behalf. These resources configure controllers that make sure the right number of the right kind of pod are running to match the state you specified.
+
+Kubernetes provides several built-in workload resources:
+- Deployment and ReplicaSet
+	- Deployment is a good fit for managing a stateless application workload on your cluster, where any Pod in the Deployment is interchangeable and can be replaced if needed.
+- StatefulSet
+	- StatefulSet lets you run one or more related Pods that track state somehow. If your workload records data persistently, you can run a StatefulSet that matches each Pod with a PersistentVolume.
+- DaemonSet
+	- DaemonSet defines Pods that provide node-local facilities. Every time you add a node to your cluster that matches the specification in a DaemonSet, the control plane schedules a Pod for that DaemonSet onto the new node.
+- Job and CronJob
+	- Job and CronJob define tasks that run to completion and then stop. Jobs represent one-off tasks, whereas CronJobs recur according to schedule.
+
+*Pods*
+- Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
+- a Pod is a group of one or more containers with shared storage and network resources, and a specification for how to run the containers.
+- a pod models an application-specific "logical host".
+- as well as application containers, a Pod can contain init containers that run during Pod startup. You can also inject ephemeral containers for debugging if your cluster offers this.
+- in Docker parlance, a Pod is similar to a group of Docker containers with shared namespaces and shared filesystem volumes.
+- usually, you don't need to create Pods directly (even singleton Pods). Instead, create them using workload resources such as a Deployment or Job. If your Pods need to track state, consider the StatefulSet resource.
+- Pods in a Kubernetes cluster are used in two main ways:
+	- Pods that run a single containe
+	- Pods that run multiple containers that need to work together (grouping multiple co-located and co-managed containers in a single Pod is a relatively advanced use case. You should use this pattern only in specific instances where your containers must be tightly coupled.)
+- each pod is meant to run a single instance of a given application. If you want to scale your application horizontally, you should use multiple Pods, one for each instance.
+- Pods natively provide two kinds of shared resources for their constituent containers: networking and storage.
+- restarting a container in a Pod should not be confused with restarting a Pod. A Pod is not a process, but an environment for running container(s). A pod persists until it is deleted.
+- on nodes, the kubelet does not directly observe or manage any of the details around pod templates and updates; those details are abstracted away.
+- when the pod template for a workload resource is changed, the controller creates new Pods based on the updated template instead of updating or patching the existing Pods.
+- static Pods are managed directly by the kublet daemon on a specific node, without the API server observing them. Whereas most Pods are managed by the control plane, for static Pods, the kubelet directly supervises each static Pod.
+- static Pods are always bound to one kubelet on a specific node. The main use for static Pods is to run a self-hosted control plane: in other words, using the kubelet to supervise the individual control plane components.
+- the one kubelet automatically tries to create a mirror Pod on the Kubernetes API server for each static Pod. This means that the Pods running on a node are visible on the API server.
+- note that the spec of a static Pod cannot refer to other API objects (ServiceAccount, ConfigMap, Secret, etc)
+
+Pod Lifecycle
+- Pods are only scheduled once in their lifetime. Once a Pod is scheduled (assigned) to a Node, the Pod runs on that Node until it stops or is terminated.
+- if a Node dies, the Pods scheduled to that node are scheduled for deletion after a timeout period.
+- Pods do not, by themselves, self-heal. If a Pod is scheduled to a Node that fails, the Pod is deleted. Kubernetes uses a higher-level abstraction called a controller which handles the work of managing the relatively disposable (ephemeral) Pod instances.
+- a given Pod (as defined by a UID) is never "rescheduled" to a different Node. Instead, that Pod can be replaced by a new, near-identical Pod (with even the same name if desired), but with a different UID.
+- when something is said to have the same lifetime as Pod, such as a volume, that means that the thing exists as long as that specific Pod (with that exact UID) exists. If that Pod is deleted for any reason, and even if an identical replacement is created, the related thing (a volume in this example) is also destroyed and created anew.
+
+Init Containers
+- A Pod can have multiple containers running apps within it, but it can also have one or more init containers which are run before the app containers are started.
+- Init containers are exactly like regular containers except:
+- Init containers always run to completion
+- each Init container must complete successfully before the next one starts
+- if a Pod's Init container fails, the Kubelet repeatedly restarts that Init container until it succeeds. However, if the Pod has a restartPolicy of Never, and an Init container fails during startup of that Pod, Kubernetes treats the overall Pod as failed.
+- Init containers do not support lifecyle, livenessProbe, readinessProbe, or startupProbe because they must run to completion before the Pod can be ready.
+- during Pod startup, the kubelet delays running Init containers until the networking and storage are ready. Then the kubelet runs the Pod's init containers in the order they appear in the Pod's spec.
+- altering an Init container image field is equivalent to restarting the Pod.
+- because Init containers can be restarted, retried, or re-executed, init container code should be idempotent. For instance, code that writes to files on EmptyDirs should be prepared for the possibility that an output file already exists.
+
+
+
+Pod Topology Spread Constraints
+The API field `pod.spec.topologySpreadConstraints` is defined as below:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  topologySpreadConstraints:
+    - maxSkew: <integer>
+      topologyKey: <string>
+      whenUnsatisfiable: <string>
+      labelSelector: <object>
+```
+
+- you can use topology spread constraints to control how Pods are spread across your cluster among failure-domains such as nodes, zones, regions, and other user-defined topology domains.
+- you can define one or multiple `topologySpreadConstraint` to instruct the kube-scheduler how to place each incoming Pods in relation to the existing Pods across your cluster. The fields are:
+	- maxSkew: describes the degree to which Pods may be unevenly distributed. This must be greater than zero. The semantics of maxSkew change based on the value of `whenUnsatisfiable`
+	- topologyKey: is the key of node labels. If two Nodes are labelled with this key and have identical values for that label, the scheduler treats both Nodes as being in the same topology. The scheduler tries to place a balanced number of Pods into each topology domain.
+	- whenUnsatisfiable: indicates how to deal with a Pod if it doesn't satisfy the spread constraint.
+		- "DoNotSchedule" (default) tells the scheduler not to schedule it.
+		- "ScheduleAnyway" tells the scheduler to still schedule it while prioritizing nodes that minimize skew
+	- labelSelector: is used to find matching Pods. Pods that match this label selector are counted to determine the number of Pods in their corresponding topology domain.
+- when a Pod defines more than one `topologySpreadConstraint`, those constraints are ANDed (logical union).
+
+
+
+Disruptions
+- this section is for application owners who need to build HA applications and thus need to understand what types of disruptions can happen to Pods.
+- Pods do not disappear until someone (a person or a controller) destroys them, or there is an unavoidable hardware or system software error
+- we call these unavoidable cases involuntary disruptions to an application
+	- a hardware failure of the physical machine backing the node
+	- cluster administrator deletes VM (instance) by mistake
+	- cloud provider or hypervisor failure makes VM disappear
+	- a kernel panic
+	- the node disappears from the cluster due to cluster network partition
+	- eviction of a pod due to the node being out-of-resources
+- most of these cases except out-of-resources should be familiar to most users; they are not specific to Kubernetes
+- we call other cases voluntary disruptions. These include actions initiated by the application owner and those initiated by a Cluster Administrator. Typical application owner actions include:
+	- deleting the deployment or other controller that manages the pod
+	- updating a deployment's pod template causing a restart
+	-  directly deleting a pod (e.g. by accident)
+- typical Cluster administrator actions include:
+	- draining a node for repair or upgrade.
+	- draining a node from a cluster to scale the cluster down
+	- removing a pod from a node to permit something else to fit on that node.
+	- as an application owner, you can create a PodDisruptionBudget (PDB) for each application. A PDB limits the number of Pods of a replicated application that are down simultaneously from voluntary disruptions. Cluster managers and hosting providers should use tools which respect PDBs by calling the Eviction API instead of directly deleting pods or deployments (for example, `kubectl drain`).
+
+
+
+Ephemeral Containers
+- Ephemeral containers are a special type of container that runs temporarily in an existing Pod to accomplish user-initiated actions such as troubleshooting. You use ephemeral containers to inspect services rather than to build applications.
+- sometimes it's necessary to inspect the state of an existing Pod. In these cases you can run an ephemeral container in an existing Pod to inspect its state and run arbitrary commands.
+- Ephemeral containers differ from other containers in that they lack guarantees for resources or execution, and they will never be automatically restarted, so they are not appropriate for building applications.
+- Ephemeral containers are described using the same ContainerSpec as regular containers, but many fields are incompatible and disallowed for Ephemeral containers.
+- Ephemeral containers may not have ports, so fields such as ports, livenessProbe, and readinessProbe are not allowed.
+- Ephemeral containers are useful for interactive troubleshooting when kubectl exec is insufficient because a container has crashed or a container image doesn't include debugging utilities.
+- in particular, distroless images enable you to deploy minimal container images that reduce attack surface and exposure to bugs and vulnerabilities. Since distroless images do not include a shell or any debuggging utilities, it's difficult to troubleshoot distroless images using kubectl exec alone.
+
+
+
+*Workload Resources*
+Deployments
+- a deployment provides declarative updates for Pods and ReplicaSets.
+- you describe a desired state in a Deployment and the Deployment Controller changes the actual state to the desired state at a controlled rate.
+- you can define Deployments to create new ReplicaSets, or to remove existing Deployments and adopt all their resources with new Deployments.
+
+The following is an example of a Deployment. It creates a ReplicaSet to bring up three nginx Pods:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+```
+in this example:
+- a Deployment named `nginx-deployment` is created, indicated by the `.metadata.name` field.
+- the Deployment creates three replicated Pods, indicated by the `.spec.replicas` field.
+- the `.spec.selector` field defines how the Deployment finds which Pods to manage.
+	- note that the `.spec.selector.matchLabels` field is a map of {key, value} pairs.
+- the `pod-template-hash` label is added by the Deployment controller to every ReplicaSet that a Deployment creates or adopts.
+- a Deployment's rollout is triggered if and only if the Deployment's Pod template (`spec.template`) is changed (labels or container images of the template for instance). Other updates such as scaling the Deployment do *not* trigger a rollout.
+- a Deployment ensures that only a certain number of Pod's are down while they are being updated. By default, it ensures that at least 75% of the desired number of Pods are up (at most 25% will be unavailable).
+- a Deployment also ensures that only a certain number of Pods are created above the desired number of Pods. By default, it ensures that at most 125% of the desired number of Pods are up (at most there will a 25% surge).
+- each time a new Deployment is observed by the new Deployment controller, a ReplicaSet is created to bring up the desired Pods.
+- if you update a Deployment while an existing rollout is in progress, the Deployment creates a new ReplicaSet as per the update and start scaling that up, and rolls over the ReplicaSet that it was scaling up previously — it will add it to its list of old ReplicaSets and start scaling it down.
+- sometimes you may want to rollback a Deployment; for example, when the Deployment is not stable such as crash looping.
+
+
+
+ReplicaSet
+- a ReplicaSet's purpose is to maintain a stable set of replica Pods running at any given time.
+- a ReplicaSet ensures that specified number of pod replicas are running at any given time. However, a Deployment is a high-level concept that manages ReplicaSets and provides declarative updates to Pods with a lot of other useful features.
+- thus, using Deployments are recommended instead of directly using ReplicaSets, unless you require a custom update orchestration or don't require any updates at all.
+- a ReplicaSet can own a non-homogenous set of Pods if there are existing Pods which match the ReplicaSet's selector before the ReplicaSet has been deployed.
+- if you do not specify `.spec.replicas`, then it defaults to 1
+- a Deployment makes it easier to update your pods to a newer version. Without Deployments, you would have to update your Pods to a newer version, create a new ReplicaSet, and then scale down the old ReplicaSet. Deployments do this for you automatically, thus increasing the abstraction by one level. A Deployment does not interact with Pods directly, it just does rolling update using ReplicaSets.
+
+
+
+StatefulSets
+- StatefulSet is the workload API object used to manage stateful applications
+- if you want to use storage volumes to provide persistence for your workload, you can use a StatefulSet as part of the solution
+- like a Deployment, a StatefulSet manages Pods that are based on an identical container spec. Unlike a Deployment, a StatefulSet maintains a sticky identity for each of their Pods.
+	- the identity sticks to the Pod, regardless of which node it's (re)scheduled on.
+- with a Deployment, you specify a PersistentVolumeClaim that is shared by all Pods. This is a shared volume. With a StatefulSet, you specify volumeClaimTemplates which gives each Pod a PersistentVolumeClaim. In other words, no shared volume. The backing storage can have ReadWriteOnce access mode. StatefulSets are great for running things in cluster (Hadoop cluster, MySQL cluster, where each node has it's own storage).
+- StatefulSets are valuable for applications that require one or more of the following:
+	- stable, unique network identifiers
+	- stable, persistent storage
+	- ordered, graceful deployment and scaling
+	- ordered, automated rolling updates
+- in the above, stable is synonymous with persistence across Pod (re)scheduling. If an application does't require any stable identifiers or ordered deployment, deletion, or scaling, you should deploy your application using a workload object that provides a set of stateless replicas. Deployment or ReplicaSet might be better for your stateless needs.
+- limitations
+	- the storage for a given Pod must either be provisioned by a PersistentVolume Provisioner based on the requested `storage class` or pre-provisioned by an admin
+	- deleting and/or scaling a StatefulSet down will *not* delete the volumes associated with the StatefulSet. This is done to ensure data safety.
+	- StatefulSets currently require a Headless Service to be responsible for the network identity of the Pods. You are responsible for creating this Service.
+- for a StatefulSet with N replicas, each Pod in the StatefulSet will be assigned an integer ordinal, from 0 to N-1 that is unique over the Set.
+- for a StatefulSet with N replicas, when Pods are being deployed, they are created sequentially, in order from {0..N-1}
+- on the other hand, when Pods are being deleted, they are terminated in reverse order {N-1..0}
+
+
+
+DaemonSet
+- a DaemonSet ensures that all (or some) Nodes run a copy of the Pod. As nodes are added to the cluster, Pods are added to them. As nodes are removed from the cluster, those Pods are garbage collected. Deleting a DaemonSet will clean up the Pods it created.
+- some typical uses of a DaemonSet are:
+	- running a cluster storage daemon on every node
+	- running a logs collection daemon on every node
+	- running a node monitoring daemon on every node
+- in a simple case, one DaemonSet covering all nodes would be used for each type of Daemon (multiple Pods/containers?)
+- a more complex case might use multiple DaemonSets for a single type of daemon, but with different flags and/or different memory and cpu requests for different hardware types.i
+
+
+
+Jobs
+- a Job creates one or more Pods and will continue to try execution of the Pods until a specified number of them successfully terminate.
+- suspending a Job will delete its active Pods until the Job is resumed again.
+- there are three main types of task suitable to run as a Job:
+	- non-parallel Jobs
+		- normally, only one Pod is started, unless the Pod fails
+		- the Job is complete as soon as its Pods terminates successfully
+	- parallel Jobs with a fixed completion count
+		- specify a non-zero positive value for `spec.completions`
+		- the Job represents the overall task, and is complete when there are `.spec.completions` successful Pods.
+	- parallel Jobs with a work queue
+		- do not specify `.spec.completions`, default to `spec.parallelism`
+		- the Pods must coordinate amongst themselves or an external service to determine what each should work on. For instance, a Pod might fetch a batch of up to N items from the work queue.
+- actual parallelism may be more or less than requested parallelism for a variety of reasons.
+	- for fixed completion Jobs, the actual number of Pods running in parallel will not exceed the number of remaining completions. Higher values of `spec.parallelism` are effectively ignored.
+	- for work queue jobs, no new Pods are started after any Pod has succeeded.
+- your program needs to handle the case where its restarted locally if the process exists with a non-zero exit code. This will cause the container to fail, and it'll restart if `.spec.template.spec.restartPolicy = "OnFailure"`. Else, specify `.spec.template.spec.restartPolicy = "Never"`.
+- when a Job completes, no more Pods are created, but the Pods are usually not deleted either.
+	- keeping them around allows you to still view the logs of completed Pods to check for errors, warnings, or other diagnostic output.
+	- it's up to the user to delete old Jobs after noting their status. Delete the Job with `kubectl`. When you delete the Job, all the Pods it created will be deleted as well.
+- another way to terminate a Job is by setting an active deadline. Do this by setting the `.spec.activeDeadlineSeconds` field of the Job to a number of seconds. Once a Job reaches `activeDeadlineSeconds`, all of its running Pods are terminated and the Job will fail with reason `DeadlineExceeded`.
+- finished Jobs are usually no longer needed in the system. Keeping them around in the system will put pressure on the API server. If the Jobs are managed directly by a higher level controller such as CronJobs, the Jobs can be cleaned up by CronJobs based on the specified capacity-based cleanup policy.
+- another way to clean up finished Jobs (either `Complete` or `Failed`) automatically is to use a TTL mechanism provided by a TTL controller for finished resources, by specifying `.spec.ttlSecondsAfterFinished` field of the Job.
+	- when the TTL controller cleans up the Job, it will delete the Job cascadingly (delete its dependent objects such as Pods together with the Job).
+	- it's recommended to set `ttlSecondsAfterFinished` field because unmanaged Jobs (Jobs you created directly, and not directly through other workload APIs such as CronJob) have a default deletion policy of `orphanDependents` causing Pods created by an unmanaged Job to be left around after that Job is fully deleted.
+	- even though the control plane will eventually garbage collect the Pods from a deleted Job after they either fail or complete, sometimes those lingering Pods may cause cluster performance degradation or in worst case cause the cluster to go offline due to this degradation.
+
+
+
+CronJob
+- a CronJob creates Jobs on a repeating schedule.
+- one CronJob object is like one line of a crontab (cron table) file. It runs a job periodically on a given scheudle, written in Cron format.
+- all CronJob `schedule:` times are based on the timezone of the kube-controller-manager
+- a CronJob creates a Job object *about* once per execution time of its schedule. We say "about" because there are certain circumstances where two Jobs might be created, or no Job might be created. We attempt to make these rare, but do not completely prevent them. Therefore Jobs should be *idempotent*.
+- for every CronJob, the CronJob controller checks how many schedules it missed in the duration from its last scheduled time until now. If there are more than 100 missed schedules, then it does not start the Job and logs an error `Cannot determine if job needs to be started. Too many missed start time (> 100). Set or decrease .spec.startingDeadlineSeconds or check clock skew.
+
+
+
+ReplicationController
+- 
+
+
+
+**Services, Load Balancing, and Networking**
+
+The Kubernetes network model
+- every Pod gets its own IP address
+- this means you do not need to explicitly create links between Pods and you almost never need to deal with mapping container ports to host ports.
+- this creates a clean, backwards compatible model where Pods can be treated much like VMs or physical hosts from the perspective of port allocation, naming, service discovery, load balancing, application configuration, and migration.
+- k8s imposes the following fundamental requirements on any networking implementation
+	- pods on a node can communicate with all pods on all nodes without NAT.
+	- agents on a node (system daemons, kubelet) can communicate with all pods on that node.
+- this model is not only less complex overall, it is principally compatible with the desire for k8s to enable low-friction porting of apps from VMs to containers. If your job previously ran in a VM, your VM had an IP and could talk to other VMs in your project. This is the same basic model.
+- it is possible to request ports on the Node itself which forward to your Pod (called host ports), but this is a very niche operation. How that forwarding is implemented is also a detail of the container runtime. The Pod itself is blind to the existence or non-existence of host ports.
+- k8s networking addresses four concerns
+	- containers within a pod use networking to communicate via loopback
+	- cluster networking provides communication between different Pods
+	- the Service resource lets you expose an application running in Pods to be reachable from outside your cluster.
+	- you can also use Services to publish services only for consumption inside your cluster.
+
+Service
+- an abstract way to expose an application running on a set of Pods as a network service.
+- while it's true that each Pod gets its own IP address, a Deployment's set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.
+- this leads to a problem: if some set of Pods (call them "backends") provides functionality to other Pods (call them "frontends") inside your cluster, how do the frontends find out and keep track of which IP address to connect to?
+- this is where Services come in.
+- in k8s, a Service is an abstraction which defines a logical set of Pods and a policy by which to access them.
+- the set of Pods targeted by a Service is usually determined by a selector.
+- when creating a Service object, you specify the port it listens to and the Pod's targetPort which it'll use to direct traffic to.
+- by default and for convenience, the `targetPort` is set to the same value as the `port` field.
+- port definitions in Pods have names, and you can reference these names in the `targetPort` attribute of a Service.
+- every node in a k8s cluster runs a kube-proxy. kube-proxy is responsible for implementing a form of virtual IP for Services of type other than ExternalName.
+- *basically the way networking works in k8s is using virtual IPs and service proxies.*
+- a frequent question is why k8s relies on proxying to forward inbound traffic to backends? What about other approaches like round-robin DNS with multiple A records (or AAAA for IPv6). There are a few reasons for using proxying for Services
+	- there is a long history of DNS implementations not respecting record TTLs, and caching the results of name lookups after they should have expired.
+	- some apps do DNS lookups only once and cache the results indefinitely.
+	- even if apps and libraries did proper re-resolution, the low or zero TTLs on the DNS records could impose a high load on DNS that then becomes difficult to manage (and scale).
+- in both user space and iptables proxy mode, local iptables rules are installed to intercept outbound TCP connections that have a destination IP address associated with a service
+	- in user space mode, the iptables rule forwards to a local port where a go binary (kube-proxy) is listening for connections.
+	- the binary (running in user space) terminates the connection, establishes a new connection to a backend for the service, and then forwards requests to the backend and responds back to the local process.
+	- an advantage of user space mode is that because the connections are created from an application, if the connection is refused, the application can retry to a different backend.
+	- one disadvantage of user space mode is the inability for networking filtering (firewalling) since the user space proxy obscures the source IP address of a packet accessing a Service.
+	- in iptables mode, the iptables rules are installed to directly forward packets that are destined for a service to a backend. This is more efficient than moving packets from the kernel to kube-proxy and back to the kernel. The main downside however is that it's more difficult to debug, because instead of a local binary that writes a log to `/var/log/kube-proxy` you have to inspect logs from the kernel processing iptables rules.
+	- in both cases there will be a kube-proxy binary running on the node. In user space mode it inserts itself as a proxy; in iptables mode it will configure iptables rather than proxy connections itself.
+- there is also IPVS proxy mode which is designed for load balancing, based on in-kernel hash tables.
+	- IPVS-based kube proxy has more sophisticated load balancing algorithms (least cons, locality, weighted, persistence).
+- you can specify your own clsuter IP address as part of a `Service` creation request. To do this, set the `.spec.clusterIP` field.
+- k8s supports 2 primary modes of finding a Service — environment variables and DNS.
+	- when a Pod is run on a Node, the kubelet adds a set of environment variables for each active Service. It adds `{SVCNAME}_SERVICE_HOST` and `{SVCNAME}_SERVICE_PORT` variables. For example, the Service `redis-mater` which exposes TCP port 6379 and has been allocated cluster IP address `10.0.0.11` produces the following environment variables:
+
+```shell
+REDIS_MASTER_SERVICE_HOST=10.0.0.11
+REDIS_MASTER_SERVICE_PORT=6379
+REDIS_MASTER_PORT=tcp://10.0.0.11:6379
+REDIS_MASTER_PORT_6379_TCP=tcp://10.0.0.11:6379
+REDIS_MASTER_PORT_6379_TCP_PROTO=tcp
+REDIS_MASTER_PORT_6379_TCP_PORT=6379
+REDIS_MASTER_PORT_6379_TCP_ADDR=10.0.0.11
+```
+
+- when you have Pod that needs to access a Service, and you are using the environment variable method to publish the port and cluster IP the client Pods, you must create the Service *before* the client Pods come into existence. Otherwise those client Pods won't have their environment variables populated.
+- you can (and almost always should) set up a DNS service for your k8s cluster using an add-on.
+- a cluster-aware DNS server, such as CoreDNS, watches the k8s API for new Services and create a set of DNS records for each one. If DNS has been enabled throughout your cluster then all Pods should automatically be able to resolve Services by their DNS name.
+- for some parts of your application (for example, frontends) you may want to expose a Service onto an external IP address that's outside of your cluster. k8s `ServiceTypes` allow you to specify what kind of Service you want. The default is `ClusterIP`. The different types are
+	- `ClusterIP` exposes the Service on a cluster-internal IP. Choosing this value makes the Service only reachable from within the cluster. This is the default `ServiceType`.
+	- `NodePort` exposes the Service on each Node's IP at a static port (the `NodePort`). A `ClusterIP` Service is automatically created in which the `NodePort` Service will route to. You'll be able to contact the `NodePort` Service from outside the cluster by hitting `<NODEIP>:<NODEPORT>`
+	- `LoadBalancer` exposes the Service externally using a cloud provider's load balancer. `NodePort` and `ClusterIP` are automatically created, in which the external load balancer will route to.
+	- `ExternalName` maps the Service to the contents of the `externalName` field by returning a `CNAME` record with its value. No proxying of any kind is set up.
+- note that you can also use an Ingress object instead of a Service. Ingress is not a Service type but it acts as the entry point for your cluster. It lets you consolidate your routing rules into a single resource as it can expose multiple services under the same IP address.
+- 
+
+
+- the information above should be sufficient for many people who want to use Services. However there is a lot going on behind the scenes that may be worth understanding.
+	- avoiding collisions
+		- in order to allow you to choose a port number for your Services, we must ensure that no two Services can collide. k8s does that by allocating each Service its own IP address.
+		- to ensure each Service receives a unique IOP, an internal allocator atomically updates a global allocation map in etcd prior to creating each Service.
+
+DNS for Services and Pods
+
+Connection Applications with Services
+
+Ingress
+
+Ingress Controllers
+
+EndpointSlices
+
+Service Internal Traffic Policy
+
+Topology Aware Hints
+
+Network Policies
+
+IPv4/IPv6 dual-stack
+
+**Storage**
+
+Volumes
+
+Persistent Volumes
+
+Projected Volumes
+
+Ephemeral Volumes
+
+Storage Classes
+
+Dynamic Volume Provisioning
+
+Volume Snapshots
+
+Volume Snapshot Classes
+
+CSI Volume Cloning
+
+Storage Capacity
+
+Node-specific Volume Limits
+
+Volume Health Monitoring
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+**Configuration**
+
+  
+
+**Security**
+
+  
+
+**Policies**
+
+  
+
+**Scheduling, Preemption and Eviction**
+
+  
+
+**Cluster Administration**
+
+  
+
+**Extending Kubernetes**
