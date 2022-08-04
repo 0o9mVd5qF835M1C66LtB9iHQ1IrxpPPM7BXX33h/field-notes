@@ -1,0 +1,252 @@
+Infrastructure as Code (IaC)
+- how is infrastructure traditionally managed?
+	- VMware running inside a private data centre
+	- product engineers file a ticket, and someone on the other end of the ticketing queue will pull it off, log into a management portal or admin console, and point & click to provision that piece of infrastructure
+	- this is called clickops
+	- this was acceptable for small shops where churn was minimal
+	- it was also acceptable before the advent of cloud, where everything is now predominantly API-driven and highly elastic
+- what is infrastructure as code?
+	- capturing the traditional process of provisioning infrastructure and codifying it
+	- infrastructure as code has two benefits: codification and versioning (with version control)
+- infrastructure lifecycle
+	- IaC can be applied throughout the lifecycle, both on day 0 and day 1
+	- day 0 code provisions and configures your initial infrastructure, while day 1 refers to OS updates, patches, and app configurations you apply after the initial infrastructure is provisioned
+	- day 1 through day N code configurations might leverage tools like Chef, Ansible, Docker, etc
+
+Terraform’s purpose (vs other IaC)
+- terraform creates and manages resources on cloud platforms and other services through their 
+- providers enable terraform to work with virtually any platform or service with an accessible API
+- the core terraform workflow consists of three stages: write, plan and apply
+	- write: define resources which may be across multiple cloud providers
+	- plan: terraform creates an execution plan describing the infrastructure it will create, update, or destroy based on existing infrastructure and your configuration
+	- on approval, terraform performs the proposed operations in the correct order, respecting any resource dependencies
+
+Terraform basics
+Getting started
+- IaC tools allow you to manage infrastructure with configuration files rather than a graphical user interface
+- terraform is Hashicorp’s IaC tool
+- terraform keeps track of your infrastructure in a state file which acts as a source of truth for your environment
+- terraform uses the state file to determine the changes to make to your infrastructure so that it will match your configuration
+- the terraform{} block contains terraform settings, including the required providers
+- the provider{} block configured the specified provider
+- you can use multiple provider blocks in your terraform configuration to manage resources from different providers
+- resource{} blocks define components of your infrastructure
+- a resource might be a physical or virtual component such as an EC2 instance, or a logical resource such as a Heroku application
+- resource blocks have two strings before the block: the resource type and the resource name
+- when you create a new configuration, (or check out an existing configuration from version control) you need to initialize the directory with terraform init
+- initializing a configuration directory downloads and installs the providers defined in the configuration
+- terraform creates a .terraform.lock.hcl which is a lock file for your project’s configurations
+- use terraform fmt to automatically update configurations in the current directory
+- you can also validate your configuration is syntactically correct via terraform validate
+- when you apply configuration, terraform will write data into a file called terraform.tfstate
+- terraform stores the IDs and properties of the resources it manages in this file, so that it can update or destroy those resources going forward
+- you can inspect the project’s current state using terraform show
+- terraform has a built-in command called terraform state for advanced state management
+- terraform destroy terminates all the resources specified in your terraform state
+- just like apply, terraform determines the order to destroy your resources when using terraform destroy
+- you can use input variables to parameterize your terraform configuration
+- you can use output values to present useful information to the terraform user
+- remote state storage makes collaboration easier and keeps state and secret information off your local disk
+- remote state is loaded only in memory when it’s used
+
+Providers
+- terraform relies on plugins called providers to interact with cloud providers, SaaS providers, and other APIs
+- terraform configurations must declare which providers they require so terraform can install and use them
+- some providers require configuration (like endpoint URLs or cloud regions) before they can be used
+- each provider adds a set of resource types and/or data sources that terraform can manage
+- each resource type is implemented by a provider; without providers, Terraform can’t manage any kind of infrastructure
+- providers are distributed separately from terraform itself, and each provider has its own release cadence and version numbers
+- the terraform registry is the main directory of publicly available terraform providers, and hosts providers for most major infrastructure platforms
+- the terraform registry includes documentation for a wide range of providers developed by Hashicorp, third-party vendors, and our Terraform community
+- provider documentation in the registry is versioned; you can use the version menu in the header to change which version you’re viewing
+- terraform cli can automatically download providers from a terraform registry, or load them from a local mirror or cache
+- to save time and bandwidth, terraform cli supports an optional plugin cache
+- you can enable the cache using plugin_cache_dir setting in the cli configuration file
+
+Terraform State
+- terraform must store state about your managed infrastructure and configuration
+- this state is used to map configuration to real world resources
+- the primary purpose of terraform state is to store bindings between objects in a remote system and resource instances declared in your configuration
+- this state is stored by default in a local file named terraform.tfstate
+- this state can also be stored remotely, which works better in a team environment
+- prior to any operation, terraform does a refresh to update the state with real infrastructure
+- the CLI insulates users from any format changes within the state itself
+- the terraform project will keep the CLI working while the state format underneath it may shift
+- state snapshots are stored in JSON format and new terraform versions are generally backward compatible with state snapshots produced by earlier versions
+- however the state format is subject to change in new terraform versions so if you build software that parses or modifies it directly you should expect to perform ongoing maintenance of that software
+- alternatively, there are several commands which produce JSON output that is specifically intended for consumption by external software
+- terraform output command has a -json option for obtaining either the full set of root module output values or a specific named output value from the latest state snapshot
+- terraform show command has a -json option for inspecting the latest state snapshot in full
+- a typical way to use these commands in situations where terraform is running in automation is to run them immediately after a successful terraform apply to obtain a representation of the latest state snapshot, and then. Store that result as an artifact associated with the automated run so that other software can potentially consume it without needing to run terraform itself
+- it is often asked if it’s possible for terraform to work without state, or for terraform to not use state and just inspect cloud resources on every run
+- for the reasons below, state is required - and in the scenarios where terraform may be able to get away without state, doing so would require shifting massive amounts of complexity from one place (state) to another place (the replacement concept)
+- terraform requires some sort of database to map terraform config to the real world - when you have a resource resource “aws_instance” “foo” in your configuration, terraform uses this map to know that instance i-abc1234 is represented by that resource
+- for some providers like AWS, terraform could theoretically use something like AWS tags
+- early prototypes of terraform actually had no state files and used this method — however the first major issue was a simple one: not all resources support tags, and not all cloud providers support tags
+- therefore, for mapping configuration resources in the real world, terraform uses its own state structure
+- for small infrastructures, terraform can query your providers and sync the latest attributes from all your resources
+- this is the default behaviour of terraform for every plan and apply: terraform will sync all resources in your state
+- for larger infrastructures, querying every resource is too slow
+- many cloud providers do not provide APIs to query N resources at once, and the round trip for each resource is hundreds of ms
+- on top of this, cloud providers almost always have API rate limiting so terraform can only request a certain number of resources in a period of time
+- larger users of terraform make heavy use of the -refresh=false flag as well as the -target flag in order to work around this
+- in these scenarios, the cached state is treated as the record of truth
+
+Terraform Settings
+- terraform settings are gathered together into terraform{} blocks
+- within a terraform{} block, only constant values can be used; arguments may not refer to named objects such as resources, input variables, etc, and may not use any of the terraform language built-in functions
+- the special terraform{} configuration block type is used to configure some behaviours of terraform itself, such as requiring a minimum terraform version
+
+Use Refresh-Only Mode to Sync Terraform State
+- terraform relies on the contents of your workspace’s state file to generate an execution plan to make changes to your resources
+- to ensure the accuracy of the proposed changes, your state file must be up to date
+- in terraform, refreshing your state file updates terraform’s knowledge of your infrastructure, as represented in your state file, with the actual state of your infrastructure
+- terraform plan and apply operations run an implicit memory refresh as part of their functionality, reconciling any drift from your state file before suggesting infrastructure changes
+- you can update your state file without making modifications to your infrastructure using the -refresh-only flag for plan and apply operations
+- if modifications to your state file proposed by a -refresh-only plan were acceptable, you could run a terraform apply -refresh-only and approve the operation to overwrite your state file without modifying your infrastructure
+- in previous versions of terraform, the only way to refresh your state file was by using the terraform refresh subcommand
+- this was less safe than the -refresh-only flag in plan/apply ops since it would automatically overwrite your state file without giving you the option to review the modifications first
+- for these reasons, terraform refresh is deprecated
+
+Lock and Upgrade Provider Versions
+- terraform providers manage resources by communicating between terraform and target APIs
+- whenever the target APIs change or add functionality, provider maintainers may update and version the provider
+- when multiple users or automation tools run the same terraform configuration, they should all use the same versions of their required providers
+- there are two ways for you to manage provider versions in your configuration
+1. Specify provider version constraints in your configuration’s terraform block
+2. Use the dependency lock file
+
+Perform CRUD Operations with Providers
+- upon terraform plan or terraform apply, terraform core asks the terraform provider to perform an action via RPC interface
+- the provider attempts to fulfill the request by invoking a CRUD operation via target API client library
+- while most terraform providers manage cloud infrastructure, providers can serve as an interface to any API and allow terraform to potentially manage any resource
+
+
+Terraform modules
+- a terraform module is a set of terraform configuration files in a single directory
+- even simple configurations consisting of a single directory and one or more .tf files is a module
+- when you run terraform commands directly from such a directory, it is considered the root module; in this sense, every terraform configuration is part of a module
+- terraform commands will only directly use the configuration files in one directory (usually the current working directory)
+- your configuration can use module blocks in other directories; when terraform encounters a module block, it loads and processes that module’s configuration files
+- a module that is called by another configuration is sometimes referred to as a “child module” of that configuration
+- when using a new module for the first time, you must run either terraform init or terraform get to install the module; terraform will install any new modules in the .terraform/modules directory within your configuration’s working directory
+- a typical file structure for a new module includes main.tf, variables.tf and outputs.tf; note that is just like a function; body definition, input, and output
+- there are no provider{} blocks in module main.tf configurations; when terraform processes a module block, it will inherit the provider from the enclosing configuration; because of this, it’s recommended to not include provider blocks in modules
+- variables declared in modules that aren’t given a default value are required
+- variables within modules work almost exactly the same way that they do for the root module; when you run a terraform command on your root configuration, you can pass via command line or .tfvars file; with a module, variables are set by passing arguments to the module in your configuration
+- like variables, outputs in modules perform the same function as they do in the root module but are accessed in a different way; you can access a module’s output from the configuration that calls the module via module.<MODULE_NAME>.<OUTPUT_NAME>
+
+Terraform workflow
+- the core Terraform workflow has three steps: write, plan, apply
+- you can run terraform as an individual user, a single team, or an entire organization at scale
+- running terraform with an entire organization at scale usually includes terraform integration into CI
+- terraform init
+- terraform validate
+- terraform plan
+- terraform apply
+- terraform destroy
+
+Terraform CLI (outside of core workflow)
+- terraform fmt
+- terraform taint
+- terraform state
+- terraform workspace
+- terraform import
+
+Terraform state
+state locking
+- if supported by your backend, terraform will lock your state for all operations that write to state
+- this prevents others from acquiring the lock and potentially corrupting your state
+- you won’t see any message that it’s happening
+- if state locking fails, terraform will not continue
+- you can disable state locking for most commands with the -lock flag but it’s not recommended
+- not all backends support locking
+- terraform has a force-unlock command to manually unlock the state if unlocking failed
+- be very careful with the command; if you unlock the state when someone else is holding the lock it could cause multiple writers
+
+sensitive data in state
+- terraform can contain sensitive data, depending on the resources in use and your definition of “sensitive”
+- the state contains resource IDs and all resource attributes
+- for resources such as databases, this may contain initial passwords
+- when using local state, state is stored in plain-text JSON files
+- when using remote state, state is only ever held in memory when used by terraform; it may be encrypted at rest, but this depends on the specific remote state backend
+
+Terraform Cloud and Enterprise
+- terraform cloud and terraform enterprise are different distributions of the same application
+- terraform cloud is available at app.terraform.io and is an application that helps teams use terraform together
+	- manages terraform runs
+	- shared state and secrets
+	- access controls for approving infrastructure changes
+	- private registry for sharing terraform modules
+	- detailed policy controls
+- paid tiers allow you to:
+	- add more than five users
+	- create teams with different levels of permissions
+	- enforce policies before creating infrastructure
+- business tier allows large organizations to:
+	- scale to multiple concurrent runs
+	- create infrastructure in private environments
+	- manage user access with SSO
+	- automates self-service provisioning for infrastructure end users
+- enterprises with advanced security and compliance needs can purchase terraform enterprise, the self-hosted distribution of terraform cloud
+	- it offers enterprises a private instance that includes the advanced features available in terraform cloud
+
+========Plugin Development========
+Custom Providers
+- terraform core is the terraform binary that communicates with plugins to manage infrastructure resources
+- terraform plugins (providers and provisioners) bridge terraform core and their respective target APIs
+- terraform provider plugins implement resources via basic CRUD APIs to communicate with third party services
+- upon terraform plan or terraform apply, terraform core asks the terraform provider to perform an action via RPC interface
+	- the provider attempts to fulfill the request by invoking a CRUD operation against the target API’s client library
+	- this process enforces a clear separation of concerns: providers are able to serve an an abstraction of a client library
+	- most terraform providers manage cloud infrastructure, but they can serve as an interface to any API and allow terraform to manage any resource
+- when you run terraform init, terraform will attempt to download providers from the terraform registry
+- providers are go binaries
+- once an apply completes, the provider saves the resource’s state
+- there are two SDKs that you can use to build Terraform providers
+	- SDKv2 is what the majority of existing providers are built on, and it continues to provide a stable development experience
+	- terraform plugin framework is a new SDk under active development
+
+========Internals========
+Credentials Helpers
+
+Debugging Terraform
+
+Provider Network Mirror Protocol
+- the provider network mirror protocol is an optional protocol which you can implement to provide an alternative installation source for terraform providers, regardless of their origin registries
+- terraform uses network mirrors only if you activate them explicitly in the CLI configuration’s provider_installation_block
+-
+
+Module/Provider Registry Protocol
+- the provider registry protocol is what terraform CLI uses to discover metadata about providers available for installation and to locate the distribution packages for a selected provider
+- the primary implementation of this protocol is the public terraform registry at registry.terraform.io
+- by writing and deploying your own implementation of this protocol, you can create a separate origin registry yo distribute your own providers, as an alternative to publishing them on the public terraform registry
+- each terraform provider has an associated address which uniquely identifies it within terraform
+	- a provider address has the syntax hostname/namespace/type where
+	- hostname is the registry host that the provider is considered to have originated from, and the default location terraform will consult for information about the provider unless overriden in the CLI configuration
+	- namespace is the name of a namespace, unique on a particular hostname, that can contain one or more providers that are somehow r elated
+	- on the public terraform registry the “namespace” represents the organization that is packaging and distributing the provider
+	- type is the provider type like “azurerm”, “aws”, “google”, “dns” etc — a provider type is unique within a particular hostname and namespace
+	- the hostname/ portion of a provider address (including its slash deliver) is optional, and if omitted defaults to registry.terraform.io/
+	- hashicorp/aws is a shorthand for registry.terraform.io/hashicorp/aws which is the official AWS provider published by Hashicorp
+- each distinct provider address has associated with it a set of versions, each of which has an associated number
+	- terraform assumes version numbers follow the semantic versioning 2.0 conventions
+- service discovery
+	- the providers protocol begins with terraform CLI using terraform’s remote service discovery protocol, with the hostname in the provider address acting as a “user-facing hostname”
+	- the service identifier for the provider registry protocol is providers.v1
+	- its associated string value is the base URL for the relative URLs defined in the sections that follow
+- the following sections describe the various operations that a provider registry must implement to be compatible with terraform CLI’s provider installer
+	- list available versions: this operation determines which versions are currently available for a particular provider GET :namespace/:type/versions (curl 'https://registry.terraform.io/v1/providers/hashicorp/random/versions’)
+	- find a provider package: this operation returns the download Url of and associated metadata about the distribution package for a particular version of a provider for a particular operating system and architecture GET :namespace/:type/:version/download/:os/:arch
+
+Resource Graph
+
+Resource Lifecycle
+
+Login Protocol
+
+JSON Output Format
+
+Remote Service Discovery
+
+Provider Metadata
