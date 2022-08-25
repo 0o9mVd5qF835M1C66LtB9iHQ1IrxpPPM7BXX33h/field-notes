@@ -1,0 +1,157 @@
+Asset classes
+- equity <— we mainly look at equity in these lessons
+	- public equity
+	- private equity
+- credit/debt
+- currency
+- commodities
+- real estate
+- macro
+etc
+
+shkreli finance lesson 1
+- first five/six things when looking at a company
+	- stock (share) price
+	- shares outstanding
+	- market cap (SP * SO)
+	- (cash - debt) net cash
+	- enterprise value (EV)
+
+Shkreli Finance Lesson 2 - income statements, balance sheets, present value discounting
+- this lesson is about accounting
+	- accounting is the language of finance
+- holy trinity of understanding a company is
+	- IS/BS/CF
+	- income statement
+	- balance sheet
+	- cashflow
+	- main focus is on IS/BS
+ - balance sheet
+	- assets listed in order of liqudity
+		- cash
+		- cash-like: marketable securities
+		- A/R (net of bad debt, debt you’ll probably get back): people who owe you money
+		- inventory (raw materials, WIP, finished products)
+		- PP&E (property, plant, and equipment) hard asset which has a useful life of 12 months
+		- goodwill/intangible asset
+	- balance sheet securities
+		- most corporations don’t like to own stocks on their balance sheet. They like to own bonds (even apple)
+		- they want to own government bonds, not corporate bonds
+		- bonds with maturity dates > 12 months is a long-term marketable security
+	- liabilities are easier than assets
+	- A/P (opposite of A/R)
+	- accrued expenses
+		- difference b/t A/P and AE is subtle
+		- contract for 12 months, A/P is just individual pay cheque
+	- D/R
+		- most complicated concepts
+		- unearned revenue
+		- you haven’t given the product yet
+		- upfront cash
+		- software gets a lot of D/R
+	- debt
+		- commercial paper
+		- current portion of long-term debt
+		- long-term debt
+- shareholder equity is assets less liabilities
+	- aka book value
+	- A - L = S/E aka book value
+	- tangible book value also removes intangible assets like goodwill
+- income statement (more fun, less account-y than balance sheet)
+	- see more reality, less abstract than BS
+	- revenue is sales
+		- revenue recondition: when do you recognize revenue
+		- rev rec
+		- when: title has passed to the customer.
+		- The customer now owns the asset.
+		- Even when it’s on promise
+		- you can book revenue on a promise
+		- a lot of fraud is from intracompany revenue
+		- you need to cancel intracompany revenue
+		- intracompany revenue overinflated revenue
+		- what if you have a $10M contract for 4 years, and they give it all upfront?
+		- do you report $10M? 2.5M? $750k?
+		- the rules for that is FASB, divide per quarter
+		- the rest is D/R on the BS. $9.25M is on D/R, because you haven’t performed the series yet
+		- lots of complexity to rev rec
+		- revenue is pushing out $X amount of product out to the world
+		- whether or not they did or did not get paid
+	- COGS
+		- cost to make the revenue
+		- includes cost of labor
+	- R&D
+	- SG&A (selling, general and administrative) 
+		- office, legal, etc
+	- operating expenses
+	- operating profit
+		- operating margin % is operating profit/revenue
+	- interest income
+	- pretax income
+	- taxes
+	- gross profit
+		- what’s leftover after revenue - COGS - R&D
+		- gross margin = gross profit/revenue
+	- net income
+		- net margin % is net profit / revenue
+- throw the BS and IS away
+- what is the value of a company?
+	- how do we value stuff?
+	- how do we value cashflow?
+	- how much do you sell this contract?
+		1. I Jeff, give the owner of this contract $1 every Jan 1 forever
+		2. You can sell/transfer this contract
+	- what is the value of this contract?
+	- Martin says $50. Will spend tremendous detail.
+	- I’ll send the rest of my life what cash flow is worth
+- how do we value future cash flow?
+	- we know how to value today’s cash flow.
+	- q: $1000 in 10 years or $100 a year for 9 years
+		- this is not a guessing game. We can get a precise answer
+		- this is literally what the discipline of finance is all about
+	- $1 today is worth more than $1 tomorrow (usually, almost always)
+		- 1. Inflation
+		- 2. opportunity cost (investment potential) <— the better answer
+			- opportunity cost IS risk. They are the *same*
+	- this is a very theoretical part of finance. It’s almost philosophical
+	- $1 today vs $1 tmr
+	- $5 in 2016 > $5 in 2017 > $5 in 2018
+		- $5 in 2100 approaches the value of 0 (approaches asymptote)
+		- the sum of $5 from 2016 -> 2100 = $166.66
+		- $5 forever is worth $166.66 today
+		- discount rate is the % at which we discount the $5 each year
+		- money is worth less in the future due to risk and opportunity cost
+	- the #1 question of finance: what is the discount rate?
+		- somewhat subjective
+		- 10 year government bond interest rate is: 3%
+			- there is apparently no risk in government repayment (theoretically, there is risk)
+		- you loan money to different entities at different rates dependant on risk
+			- US: 1.7% (LESS RISK)
+			- apple: 2%
+			- Brazil: 6%
+			- Charlie: 10%
+			- bob the crackhead: 50% (RISKEST)
+		- the more risk, the more we discount
+	- golden rule: discount rate = risk free rate (inflation, USG/UST bonds) + risk premium
+	- most fortunes are made/lost because someone correctly predicts that a very unlikely thing happens or doesn’t happen
+	- warren buffet: KO, AXP
+	- warrant buffet predicted correct moats
+- eventually, we will build to discounted cash flow
+- you will spend a lifetime thinking in the way of DCFs
+- all investment is about: what is the risk of your cash flow?
+
+Shkreli Finance Lesson 3 - discounting cashflows
+- this lessons goes more in depth of a value of company
+- gold: a company is worth the discounted sum of its cashflow from today until eternity
+	- it’s a pretty complete definition of the value of a company
+	- it’s not perfect, but that would involve a very long conversation
+	- it’s a close definition
+- job of investor:
+	- forecast those cashflows
+	- assess risk to cash flows
+	- acquire assets for less than that value or sell those assets for more than that value
+- start with bonds to help understand
+	- 95% of people have traded stocks and not bonds
+	- you can buy bonds online too
+	- shkreli demands people who work for him to trade bonds and other asset classes to get a better understanding, not just equity
+	- bond is a loan
+	- 
