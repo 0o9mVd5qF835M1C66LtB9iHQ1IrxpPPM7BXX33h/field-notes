@@ -1,0 +1,44 @@
+open vs non-open source
+
+aside: this scratch is on open vs closed-source. There is another vertical when building infra companies which is bottoms-up/PLG vs top-down from the start.
+- Rajko: I think it is harder/more rare to go from 0-30 with a team that is top-down from day one, but if you succeed, you are more likely you can continue on from 30-100... while PLG/performance is probably a more effective way to go from 0-30, and perhaps happens more often, but then you have more uncertainty on nailing the transition from 30-100 :/
+
+
+- during the 2000 - 2015s, oss was vital for infra companies since big tech needs the flexibility to replace. Even if that flexibility is only perceived flexibility.
+    - big tech won't touch software they can't control, self host, etc
+- moving forwards, oss only makes sense for things that require educating the industry. Abstractions are leaky, and these abstractions can't afford to be black boxes.
+    1. frameworks
+        - nextjs
+        - blitzjs
+        - remix
+    2. runtimes
+        - deno
+        - bun
+    3. open standards
+        - git
+        - otel
+        - docker
+    - cassado counters the idea that oss makes sense with market/category creation and educating the industry with case studies
+        - Unix then Linux
+        - iPhone then Android
+        - VMWare then Xen/KVM
+        - GitHub then Gitlab
+        - Snowflake then OLAP copycats
+        - Fivetran then Airbyte
+        - this shows that open source is great for entering an existing market
+        - it hasn't been good at creating new markets
+- cassado poses a new question: are the calories of starting open source worth it for a new market?
+    - if you're building within another company, then sure. This is when an engineering in a large comapny builds a successful open source project and then creates a startup around it (Cadence -> Temporal)
+    - if you're creating a new market, probably not. New markets typically require product experience or sales conversations to mature markets.
+    - if you're in a traditional market, then yes because you don't need to spend time on market education, and OSS differentiates you from incumbents. However, you're most likely signing up to having a company worth a fraction of the value. (Look at case studies above.)
+- tangent: another useful mental model is the distinction between
+    1. closed core, open crust
+        - core is closed with proprietary IP, crust is open with client side SDK, bindings, plugins, packages, config, CLI, images, drivers, etc
+    2. open core, closed crust
+        - core is open source but crust is closed with IP-heavy security, encryption, governance, compliance, management facilities, etc
+    - jeff's observation: seems like super genius phds create the cores and generalist industry plumbers create the crust
+    - having an open crust solves the long tail of integrations  by pushing the work to the ecosystem. This was the case with terraform and vault.
+- skepticism of OSS
+    - the value of OSS seems to decrease when the delivery model is primarily as-as-service. The company needs to include so much more cloud-specific, glue code that the actual code that is running is significantly different then the code hosted in VCS
+- IC perspective
+    - companies are most incentivize to adopt OSS solutions so employees are more motivated to learn/grow since OSS is a transferrable skill from company to company
