@@ -1,0 +1,112 @@
+- an iam policy is a list of statements
+- order of priority
+    - explicit deny
+    - explicit allow
+    - default deny
+- on an action, user, role, and resource policies are joined
+    - the order of priority is then eva
+- managed policies vs inline policies
+    - managed policies are reusable
+    - use inline policies for exceptions (explicit deny/allow)
+    - two types of managed policies
+        - aws managed
+        - customer managed
+
+- arn format
+    - arn:partition:service:region:account-id:resource-type:resource-id
+    - arn:aws:sqs:us-east-1:12345:queue:my-queue
+
+- iam users
+    - an identity used for any *single* thing requiring long-term access
+    - humans, applications, or service accounts
+    - 5000 limit per account (hard limit) - large companies or merges need to use iam federation or iam roles
+
+- iam groups
+    - containers are for users
+    - can't login to a group
+    - groups can have policies (inline, managed)
+    - no nesting
+    - groups aren't a true identity. they can't be referenced as principal in a policy
+    - they only exist to group permissions
+
+- iam roles
+    - can be used by multiple principals
+    - iam roles are assumed temporarily
+    - upon successful authentication, temporary security credentials are generated, and made available to the identity that assumes role
+    - two types of policies associated with iam roles
+        - trust policy (who can assume role)
+        - permissions policy (what can this role access)
+
+- service control policies
+    - scps can be attached to the entire org by attaching the scp to the root org
+    - scps can also be attached to specific orgs by attaching the scp to an OU
+    - they can also be attached to specific aws accounts
+    - scps are hierarchical
+    - even if the management has scps attached, it's never affected (sudo permissions)
+        - it cannot be restricted using scps
+        - management account should not manage any aws resources
+    - scps are account permissions boundaries
+        - they limit what the account and cannot do
+        - you cannot restrict the account's root user
+            - it has 100% access to the account
+        - but with scps, you restrict what the account can do
+            - this indirectly affects the root user
+    - scps don't grant any permissions, just limit them
+    - scps have a deny-list architecture
+        - deny, allow, deny
+        - you can make allow-list architecture by removing the default FullAWSAccess policy
+        - this is more secure, because people need to explicitly declare what services, an account has
+        - this has high admin overhead
+    - identity policies and scps make a venn diagram
+        - the intersection contains operations that are actually allowed to be performed by identity
+
+- cloudwatch
+    - cloudwatch is a public service
+        - you can use from AWS or on-prem
+    - you can store, monitor, and access logging data
+    - built-in integrations with ec2, vpc flow logs, lambda, cloutrail, r53 and more
+    - for custom logging, you can use the unified cloudwatch agent
+    - you can also use development kits from aws and directly integrate logs from app code
+    - log group has many log streams has many log events
+        - you define retention/permissions on log groups
+        - metric filters/metrics on log groups too
+
+- cloudtrail logs api calls and account events
+    - these are called cloudtrail event
+    - events can be actioned done by human, role, or service
+    - 90 days stored by default in event history
+    - to customise the service, you create one or more trails
+    - there are management events (control plane) and data events (data plane)
+        - by default, cloudtrail only logs management events
+        - data events are expensive (every s3 object access is logged)
+    - cloudtrail is a regional** service!
+        - a trail can be set to either one region or all regions
+    - if a service is a global service, they are logged to us-east-1
+        - iam, sts, cloudfront
+    - events can be stored in s3
+        - compressed JSON
+        - JSON is good for machines to read
+    - events can also be stored in cloudwatch logs
+        - more powerful than storing in s3
+    - you can create an organizational trail
+    - cloudtrail is enabled by default, but only the ephemeral 90 days
+    - cloudtrail is not realtime
+        - there is a delay!!
+
+- aws control tower
+    - setup and government an AWS multi-account architecture, following prescriptive best practices
+    - it orchestrates other AWS services
+        - organizations
+        - iam identity center
+        - cloudformation
+        - config
+    - landing zone
+        - organizations on steroids
+        - SSO,ID federation
+        - centralixed logging/auditing
+    - guard rails
+        - detect/mandate rules/standard across all accounts
+    - account factory
+        - automates and standardizes new account creation
+    - dashboard
+        - single page oversight of the entire architecture

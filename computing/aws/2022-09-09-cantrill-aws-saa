@@ -1,0 +1,50 @@
+course fundamentals & aws accounts
+- at a high level, an aws account is a container for identities and resources
+- each aws account needs a unique email-address
+- one credit card can be reused for multiple aws accounts though
+- each account has a special user called a root user
+    - this root user is the only identity created with an aws account
+    - this root user can't be restricted, it always have full access
+    - you must be very careful with the root user*
+- you *can* create users which can be restricted with a service called IAM
+- account topology
+    - general/management account
+        - a root user will be created, and secured via MFA
+        - account section admin action items
+            - fill in alternate contacts for billing, operations, and security
+            - activate iam access to billing information
+        - budget is created immediately to avoid unintended costs
+        - we will create an iam user called IAMADMIN with admin privileges, secured via MFA as well
+    - production account
+        - RU, budget, and iam admin will be created as well
+- access keys
+    - use access keys to make programmatic calls to AWS from the AWS CLI, Tools for PowerShell, AWS SDKs, or direct AWS API calls
+    - you can have a maximum of two access keys (active or inactive) at a time
+- billing
+    - billing preferences
+        - receive pdf invoice by email
+        - receive free tier usage alerts
+        - receive billing alerts
+    - budgets
+        - you must enable cost explorer for usage, savings plans, and reservations budgets
+- iam basics
+    - iam is a globally resilient service
+    - iam can do as much as the account's root user
+    - it has full access
+    - 3 objects: users, groups, and roles
+    - a 4th object is an iam policy which gets attached to users, groups, or roles
+    - there is no cost with iam, but there is limits
+    - always strive for least privileges
+- organizations
+    - you create an organization with a standard account
+    - the standard account then becomes the management account (previously called master)
+    - when standard accounts accept invitations to join the organization, they become member accounts of the organization
+    - you can also create accunts directly in an organization, as opposed to inviting a standard account
+    - the organization root can contain multiple organization units (OU)
+    - the organization root is not the same as an AWS account's root user
+    - the root of an organization is just a container, it's not a real account
+    - consolidated billing
+        - member account's get their billing method removed
+        - they pass it through to the management account
+        - the management account is the payer account
+    - aws docs recommend organization is created via console

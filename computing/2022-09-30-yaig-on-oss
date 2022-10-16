@@ -29,16 +29,27 @@ aside: this scratch is on open vs closed-source. There is another vertical when 
         - it hasn't been good at creating new markets
 - cassado poses a new question: are the calories of starting open source worth it for a new market?
     - if you're building within another company, then sure. This is when an engineering in a large comapny builds a successful open source project and then creates a startup around it (Cadence -> Temporal)
+        - this is a great way to derisk a company. You do some open source thing, if it catches on, you consider monetizing. The skill sets required to start a company from scratch vs on a successful project are quite different. The latter is most likely easier.
     - if you're creating a new market, probably not. New markets typically require product experience or sales conversations to mature markets.
     - if you're in a traditional market, then yes because you don't need to spend time on market education, and OSS differentiates you from incumbents. However, you're most likely signing up to having a company worth a fraction of the value. (Look at case studies above.)
-- tangent: another useful mental model is the distinction between
-    1. closed core, open crust
-        - core is closed with proprietary IP, crust is open with client side SDK, bindings, plugins, packages, config, CLI, images, drivers, etc
-    2. open core, closed crust
-        - core is open source but crust is closed with IP-heavy security, encryption, governance, compliance, management facilities, etc
-    - jeff's observation: seems like super genius phds create the cores and generalist industry plumbers create the crust
-    - having an open crust solves the long tail of integrations  by pushing the work to the ecosystem. This was the case with terraform and vault.
+open source verticals
+    - foss vs coss
+        - fully open source software owned by community vs commercialized open source software owned by companies
+    - core and crust
+        1. closed core, open crust
+            - core is closed with proprietary IP, crust is open with client side SDK, bindings, plugins, packages, config, CLI, images, drivers, etc
+        2. open core, closed crust
+            - core is open source but crust is closed with IP-heavy security, encryption, governance, compliance, management facilities, etc
+        - jeff's observation: seems like super genius phds create the cores and generalist industry plumbers create the crust
+        - having an open crust solves the long tail of integrations  by pushing the work to the ecosystem. This was the case with terraform and vault.
 - skepticism of OSS
     - the value of OSS seems to decrease when the delivery model is primarily as-as-service. The company needs to include so much more cloud-specific, glue code that the actual code that is running is significantly different then the code hosted in VCS
 - IC perspective
     - companies are most incentivize to adopt OSS solutions so employees are more motivated to learn/grow since OSS is a transferrable skill from company to company
+
+
+"I think a perfect valid definition of infra is "consumed by an app builder." Here seem to be the rough levels:
+    - infra mini - infra is low level compute / network / storage / db
+    - infra midi - infra is any horizontal layer consumed by app builders
+    - infra maxi - infra is everything that isn't the specific UI/CRUD needed by the business
+being a maxi .. I think the entire app industry is going to shrink to a bunch of MBAs running around with some low code crud thing. Apps become a spreadsheet and integration. Everything else is infra"
