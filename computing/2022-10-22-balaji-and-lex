@@ -1,0 +1,194 @@
+- government
+    - we can't easily and peacefully create opt-in governments
+    - you can start a new company, new community, new currency in today's society. you can voice or exit
+    - we want to build something new without historical constraint
+    - the opposition to opt-in governments
+        - tradition
+            - new is good
+            - going to the moon, and artificial intelligence is new
+            - new has more upside, but less stability
+    - we're seeing a v3
+        - v1 hunter gatherer
+        - v2 farmer/soldier
+        - v3 new hunter gatherer, digital nomad (going back to the future)
+    - 99.99% of political discourse focuses on fixing the current system
+    - if .01% of the portfolio focusing on a new system seems like a decent investment strategy
+- the network state
+    - the network state is a highly aligned online community, with a capacity for collective action, tht crowdfunds territory across the world, and eventually gains diplomatic recongition from preexisting states
+    - online communities tend to not be highly aligned
+        - give to get, and build karma
+        - capacity for collective action
+            - need at least 1000 people to like a post to boost to society
+            - if you have 970 people like a post, you have a laser
+            - novelty vs tradition
+            - novelty is like hackernews, box of chocolates, you never know what you're going to get
+            - hackernews doesn't have capacity for collective action
+        - what is the discourse for a highly aligned community with collective action?
+            - discord is the transitional state, but not the end
+            - discord is chatty, but the work is done outside discord
+            - makes sense, discord was born in the gaming world
+    - difference between online communities, and the platforms in which those communities are formed
+        - cave and commons
+        - social networks are on the cave and commons continuum
+        - twitter is all commons. maybe some DMs are caves
+        - signal is all cave. completely private
+        - polar ends of spectrum are easy to reason about
+        - the middle is somewhat more complicated
+        - facebook is the middle. it's quasi-private, you have to assume it's public
+            - something can get screenshotted, and shared outside the private community
+        - reddit, discord, slack are in the middle as well
+- pseudonymous economy
+    - anonym, pseudonym, real name is the spectrum
+    - anonymous, 0 reputation tied to an identity
+    - pseudonymous, repuation is tied to an identity
+    - real name is social security number, state name, air tag, tracking device
+        - all databases have a foreign key ref to real name
+        - real name allows central state to perform joins across facebook, google, etc
+    - pseudonym creates a whole separate node
+    - finsta, rinsta
+        - rinsta is the public-persona, meant to be search-indexed
+        - finsta is private-persona, meant for friends
+        - restoration of shade, the all seeing web crawler just "passes by you"
+    - pseudonyms remove discrimination, and bring global equality of opportunity
+    - before, statename surname was your profession
+        - potter if you were a potter
+        - smith if you were a blacksmith
+        - programmable surname will tell something about you too
+        - .eth, .sol, .btc, etc
+        - very early in internet civilization
+    - is there value of having of having permanent state name tied to your physical body?
+        - how do we prevent people from commiting murder in society A, and then starting fresh in society B?
+        - murder is illegal is most countries
+        - countries have social contracts
+            - if you violated, you wouldn't be allowed to leave
+            - such a hollow abstraction?
+    - the rule of a centralized state is perhaps more negative than positive
+        - it's like nuclear energy, fire
+        - the more trust you give it, the less trust it deserves
+        - it's a weird feedback loop: the more trust, the more it can do. the more it can do, the more bad things it can do.
+    - overcorrecting from centralization with too much decentralization yields to anarchy
+        - new hitler
+        - well, you always have an opt-out of the network state with exit
+        - perhaps, in a way, hitler is more common in centralized states like today
+- exit
+    - voice: democracy and capitalism
+    - exit: migration
+    - you can vote with your wallet (capitalism), your ballot (democracy), or vote with your feet (migration)
+    - wallet has some aspects of exit (store of value)
+    - voting with your feet has some aspects of voice
+    - voice vs exit is the dichotomy of: do you reform a system or exit it to build a new one or find an alternative?
+    - given the mental model of voice vs exit, we can now classify technologies
+        - internet has a bunch of instances of exit
+        - internet gives microeconomic leverage via alternatives
+            - uber vs lyft
+            - tinder swiping
+            - shop for better prices
+            - illustrator vs DALLE
+        - the individual is in power
+    - you can customize your twitter experience
+    - can you customize your USA experience?
+        - your experience isn't configurable
+- internet amplification
+    - the internet amplifies microeconomic leverage
+    - the internet also amplifies variance for any existing behavior
+        - mockery, debates
+        - true, bad stuff does happen, but on the other end of the distribution, people are also using the internet to find soulmates
+        - the internet tears society apart, and it puts it back together
+        - balaji says once we identify the positive side, we can amplify it to remove the bad
+- advice for young people
+    - you are fullstack engineer, and fullstack influencer
+    - engineering
+        - master computer science and statistics
+        - computer sciencen and stats are to this century what physics was to the last
+        - you spend over 50% of the time looking at the screen, which will only increase with AR glasses
+        - most of your life will be spent in the matrix
+            - (as i'm typing this it's absolutely beautiful outside but I'm here typing this shit)
+            - in a constructed digital world
+            - the physics is set by the programmers
+            - physics is very important for the natural world
+            - cs and stats is important for the digital world
+            - every domain has algorithms and data structures
+                - aviation
+        - you have to understand the theory and practice
+            - good exercise go from bernoulli trials to binomial distribution, to gaussian distribution, to geometric, etc
+            - computer science is theory, software engineering is practice
+            - probability and statistics is theory, data science is practice
+            - it's ok to use libraries once you go under the hood
+                - you can get quite far standing on the shoulder of giants, but you can't build a g/fb/aapl without someone at the company knowing computer architecture, layout memory, and compiler theory
+                - libraries are just the APIs of the platform/runtime
+        - there is such thing as "great man" that can push the tech tree in this rpg of life
+            - satoshi nakamoto was truly the firt person to push the tech tree further. vitalik came five years after
+            - steve jobs and apple
+            - truly shaping where history goes
+        - physics is good to know because you go one level deeper
+    - influencer/creator
+        - social media is about to become far more lucrative and monetizable
+        - people think social media is old/over
+        - with property rights in crypto, it's not just what google allows you have, but it's what you own
+        - you have genuine propery rights, this changes everything
+        - like china getting property rights
+        - might be some lag
+    - build both a $1b dollar company (engineering) AND a million person media operation
+    - just centralized tech/media in 2010s
+    - centralized tech/media vs decentralized in 2020s
+        - nyt, google, all wokeified
+        - substack are decentralized (defactors)
+        - andreeson, dorsey, zuck, brian, are cutting the media establishment and going direct
+    - why is this important?
+        - centralized media has lost a lot of clout
+        - media engagement has crashed
+        - some of the most evil people are historians
+            - nyt was homophobic, then pro gay
+            - nyt had slaves, and then they were against
+            - they investigate your boss, but not their own
+        - every influencer realizes, every media corporations are competitors
+            - during 2010s, partially successfully, they would give influencers positive coverage if they supported the party line, and negative coverage if they didn't
+    - once you realize
+        - apple didn't collaborate blackberry
+        - amazon didn't collaborate with barnes and nobles
+        - netflix dind't collaborate blockbuster
+        - they are your competitors
+    - **you need to build your own voice**
+        - you can't outsource your own voice
+        - i'd rather speak for myself, and go direct, in my own words
+        - it took balaji a long time to understand. he was always good at cs/stats. he might've been career academic for life
+        - but the importance of telling your own stories is: if you don't tell your own story, the story will be told for you
+        - if you don't write history, you will not be the winner
+            - you must write the history
+    - build peaceful alternatives to legacy institutions
+        - fed with bitcoin
+        - wall street with defi/eth
+        - academia of chain of research
+        - media
+        - wikipedia
+    - if you're an individual who's good at engineering, and good at content creation
+        - jack dorsey
+        - mark andreeson
+        - jeff besos (on twitter)
+        - if you have both, you can become president of a network state
+        - it's a new path to political power, that does not require going through the chinese or american establish
+        - don't need to wait until your 75
+        - v1: miami mayor taking existing miami
+        - v2: building a new digital community
+    - there's a new birth of global freedom
+        - people will look at the internet as being to the americas as what the americas were to europe
+        - a new world. a cloud continent
+        - spending 50% of your day online
+        - you commute up and down to the cloud
+        - one of the biggest stories in the world that isn't being told much
+            - india getting access to 5g, lte
+            - majority of english speakers online in 2030 will be india
+            - they've been lurking
+            - (this makes sense, lots of my youtube comments are from india)
+                - even balaji experienced this with his coursera course
+            - these folks don't type with an accent
+        - in the same way US was a branch of UK and started with english
+            - nowadays most americans don't have english ancestry
+            - germans, italians, jewish, african american
+            - internet is more representative of the world than the USA is
+            - hence, majority of english speakers in india
+            - america got forked by the rest of the world via internet
+            - it's even more capatalist and democratic than america
+                - just like how america was more capitalist and democratic than the UK
+                - US, india, singapore are *not* anti-british, they are post-british (monarchy)
+                - people can respect monarchy while also being happy you got your own sovereignty
