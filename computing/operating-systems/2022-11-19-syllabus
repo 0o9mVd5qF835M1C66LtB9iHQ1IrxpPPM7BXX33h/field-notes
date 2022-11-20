@@ -1,0 +1,26 @@
+omokernel
+
+resoures
+
+- course
+    - mit 6.1810 (xv6) https://pdos.csail.mit.edu/6.828/2022/index.html
+    - brown cs1690 https://brown-cs1690.github.io/brown-cs167-s22/#/
+
+- ISA
+    - The PDP11/40 Processor Handbook, Digital Equipment Corporation, 1972.
+    - pdf: https://pdos.csail.mit.edu/6.828/2005/readings/pdp11-40.pdf
+    - web-based: https://pdos.csail.mit.edu/6.828/2005/pdp11/
+
+- operating systems
+    - the little book: https://littleosbook.github.io/
+    - xinu 5k LoC
+    - xv6 10k LoC
+        - no networking stack
+    - minix 100k LoC
+        - Minix is another good candidate. Versions 1 and 2 were intended as teaching OSes but version 3 no longer targets that goal. I know Minx 2 had a network stack and I think Minix 1 did as well. There is a textbook, Operating Systems: Design and Implementation by Tanenbaum that goes along with Minix.
+    - unix 28m LoC
+        - Lions' Commentary on Unix
+        - the design of the unix operating system (maurice j. bach)
+    - plan9
+        - https://9p.io/wiki/plan9/documentation/
+        - http://doc.cat-v.org/plan_9/
