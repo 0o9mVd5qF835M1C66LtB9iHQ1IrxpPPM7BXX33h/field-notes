@@ -1,0 +1,108 @@
+2. concurrent execution
+===============================================================================
+- unlike a conventional, sequential programming environment, an operating system provides concurrent execution
+    - allows multiple processes to run at the same time
+    - in a concurrent environment, storage for arguments, local variables, and a function call stack are associated with each process rather than with code
+
+programming models of multiple activities
+    - synchronous event loop
+        while true {
+            if (screen timeout has expired) {
+                turn off screen;
+            } else if (volume button is pushed) {
+                adjust volume;
+            } else if (text message has arrived) {
+                display notification for user;
+            }
+            
+        }
+    - asynchronous event handlers
+        - asynchronous paradigm is used in systems where hardware can be configured to invoke a *handler* for each event
+        - a programmer writes a separate piece of code for each event, and uses global variables to coordinate the interactions
+
+    - concurrent execution
+        - from a programmer's ppint of view, concurrent execution is a delightful experience
+
+multitasking
+- although many processors incorporate some amount of parallelism, the most visible form of concurrency is a grand illusion created by the operating system
+    - basic embedded devices such as tv remote controls will use a synchronous event loop rather than a multitasking system
+- multitasking-based systems can either be
+    - timesharing
+        - gives equal priority to all computations by load balancing the available compute equally
+        - N computations executing ==> each computation receives 1/N of the available processor cycle
+        - more computations ==> slower rate for each
+    - real-time
+        - does not treat all computations equally
+        - assigns priorities to computations, and schedules each computation such that each will meet its required schedule
+    - single unit of work depends
+        - process usually occupies a separate address space (popularized by Unix)
+        - thread refers to a concurrent unit of work that shares an address space with other threads
+        - xinu's design allows processes to share an address
+
+concurrent semantics in xinu
+- synchronous vs concurrent execution
+    - a normal function call does not return until the called function completes
+    - in contrast, process creation functions create and resume return to the caller immediately after starting a new process, which allows execution of both the existing process and the new process to proceed concurrently
+- a xinu process
+    - has its own copy of arguments and local variables
+    - although processes can share code and global variables, each process must have a private copy of local variables
+    - important thing to note: a kernel must allocate additional storage for each process, even if the process shares the same code that another process is using
+    - process exist only occurs when the process pops the last activation record off its stack
+
+shared memory, race conditions, synchronization
+- in a concurrent programming system, no process should use the processor while waiting for another process
+    - a process that executes instructions while waiting for another process is said to engage in busy waiting
+    - busy waiting is prohibited in concurrent programming because of side effects
+    - the semaphore abstraction solves this problem, allowing processes to coordinate and synchronize
+        - semaphore is an integer value
+        - wait(sem) decrements the semaphore
+        - signal(sem) increments the sempahore
+        - semaphores in xinu are created with semcreate
+        - processes will block on wait if the integer value is non-positive (<= 0)
+        - a semaphore could be a boolean between two coordinating processes, but is an integer to allow multiple processes
+        - an integer implementation is the boolean scaled for multiple processes
+    - coordinating between two processes
+        - coordinating compute: two pairs of semaphores, one for each process
+        - visualize ping pong
+        void main(void) {
+            sid32 produced, consumed;
+
+            consumed = semcreate(0);
+            produced = semcreate(1);
+
+            resume(create(cons, 1024, 20, "cons", 2, consumed, produced));
+            resume(create(prod, 1024, 20, "cons", 2, consumed, produced));
+
+        }
+
+        void prod(sid32 consumed, sid32 produced) {
+            int32 i;
+            for (i = 0; i <= 2000; i++) {
+                wait(consumed);
+                n++;
+                signal(produced);
+            }
+        }
+
+        void cons(sid32 consumed, sid32 produced) {
+            int32 i;
+            for (i = 0; i <= 2000; i++) {
+                wait(produced);
+                printf("n id %d\n", n);
+                signal(consumed);
+            }
+        }
+    - coordinating between two processes writing to storage
+        - requires mutual exclusion (mutex) to alternate acceses
+
+
+
+
+
+
+
+
+
+
+
+
