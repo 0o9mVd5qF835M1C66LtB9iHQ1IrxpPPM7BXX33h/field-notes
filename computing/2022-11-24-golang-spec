@@ -1,0 +1,82 @@
+packages
+- go programs are constructed by linking packages together
+    - in turn, a package is constructed from one or more source files
+        - these source files declare constants, types, variables, and functions
+        - the elements above are accessible in all files of the same package
+        - these elements may be exported and used in another package
+- source file organization
+    ```
+    SourceFile = PackageClause ";" { ImportDecl ";" } { TopLevelDecl ";" } .
+    ```
+
+- package clause
+    ```
+    PackageClause = "package" PackageName .
+    PackageName = identifer. // must not be blank
+    ```
+        
+    - a set of files sharing the same package name form the *implementation* of the package
+
+- import declarations
+    - an import declaration states that the source file containing the declaration depends on functionality of the imported package
+    - the declaration eables access to *exported* identifiers of that package
+    - an import declaration declares a dependency relation between the importing and imported package
+        - it's illegal for a package to import itself, directly or indirectly
+        - it's also illegal to import a package without referring to any of its exported identifiers
+        - to import a packafge solely for its side-effects (initialiation) use the black identifier as explicit package name
+        ```
+        import _ "lib/math" // just like unused variables
+        ```
+        - the interpretation of the import path is implementation-dependant but it is typically a substring of the full fil name of the compiled package
+        ```
+        import "lib/math"    math.Sin
+        import m "lib/math"  m.Sin
+        import . "lib/math"  Sin
+        ```
+
+program initialization and execution
+
+errors & run-time panics
+- the `error` type is defined as
+    ```
+    type error interface {
+        Error() string
+    }
+    ```
+- execution errors such as out-of-bounds array indexing triggers a run-time panic, which is a built-in function panic with a value of the implementation-defined runtime.
+    - that type satisfies the predclared interface type `error`
+    - the exact error values that represent distinct run-time error conditions are unspecified
+    ```
+    package runtime
+
+    type Error interface {
+        error
+        // and perhaps other methods
+    }
+    ```
+
+system considerations
+- package unsafe
+    - the unsafe package provides low-level programming operations that violate the type system
+        - golang restricts pointer operations
+        - there is no linguistic mechanism to convert between pointers and integers
+        - the package unsafe implements this functionality under restricted circumstances
+    - a package using unsafe must be vetted manually for type safety and may *not* be portable
+        the results of functions from unsafe are consistent in the same program, but they might differ when crossing operating systems, architectures, compilers, compiler versions, etc
+    - a package using unsafe is not protected by the Go 1 compatability guidelines
+    - func Alignof(x ArbitraryType) uintptr
+    - func Offsetof(x ArbitraryType) uintptr
+    - func Sizeof(x ArbitraryType) uintptr
+    - type Pointer *ArbitraryType
+        - equivalent of C's void*
+
+
+- size and alignmenet guarantees
+    - for numeric types, the following sizes in bytes are guaranteed
+        byte, uint8, int8                     1 (8 bits)
+        uint16, int16                         2 (16 bits)
+        uint32, int32, float32                4 (32 bits)
+        uint64, int64, float64, complex64     8 (64 bits)
+        complex128                           16 (128 bits)
+    - a struct or array type has size zero if it contains no fields (or elements, respectively) that have a size greater than zero
+    - two distinct zero-size variables may have the same address in memory!
