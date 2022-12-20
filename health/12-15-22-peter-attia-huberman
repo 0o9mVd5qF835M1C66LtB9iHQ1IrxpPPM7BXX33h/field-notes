@@ -1,0 +1,231 @@
+lifespan, bloodwork, biomarkers
+- what gets in the way of lifespan are the four horsemen of disease
+    - atherosclerotic disease
+    - cancer
+    - neurodeenerative disease
+    - metabolic disease
+    - if you're a non-smoker, your the chance of your death being one of these is 80%
+
+    - how does bloodwork help?
+    - athersclerotic
+        - bloodwork is a very good predictor of risk if you know what to look for  
+        - ApoB is the single most important lipoprotein that we care about it
+    - nerodegenerative disease
+        - there's not much insight on parkinsons disease
+        - but with dimension, like Alzeimers (most prevalent), biomarkers can be quite helpful
+        - overlap with athersclerotic diseases
+        - same things that drive the risk of heart disease also drive the risk dimentia
+    - other markers of inflamation, endothelial health, and metabolic health
+    - biomarkers help with these, but there's an enormous blind spot to cancer
+
+    - novel testing
+        - genetic testing (can get out of a blood test), get a whole suite of genes which plays a more nuanced role
+
+    - in aggregate, blood testing of biomarkers provides pretty good insight into lifespan
+
+- healthspan, you have cognitive, physical, emotional domains
+    - biomarkers are far less helpful
+    - rely on functional testing
+    - cognitive
+        - testing
+        - long-term, a lot of the things that imply good cognitive health are in line w the same things that you would to to reduce dimentia
+    - physical
+        - functional tests give far more insight
+        - DEXA
+        - CPET testing
+        - VO2 max testing
+        - zone two lactate testing
+        - fat oxidation
+    - emotional
+        - biomarkers don't help at all
+        - e.g. good relationship for example
+
+- blood testing frequency
+    - once a year?
+    - should a 20 year old start getting blood work to get a window of what's going on?
+    - everyone should be screen early in life
+    - the single most prevalent genetic driver is Lp[a] Lp "little a"
+    - 8-12% (perhaps as high as 20%) of the population has a high enough, Lp[a] that it is contributing to atherosclerosis
+        - you're born with this, and you just need to check it once
+        - it's leaving money on the table
+    - frequency
+        - it comes down to interventions
+        - there has to be reasons
+        - a blood test is a static intervention
+        - it might make sense to check blood 2-4 times a year
+        - but you want to actually try to move those metrics
+    - quantiative measurementss on weight, BMI
+        - these are kind of crude
+        - rather take a DEXA anually, and then maybe follow weight a little bit more closely
+        - DEXA
+            - four pieces of information
+            - lean mass, to non lean-mass ratio
+            - telling by abs/six-pack isn't a terrible way to do it
+            - a DEXA is an x-ray that can differentiate between three different things
+                1. bone mineral content
+                2. fat
+                3. other (lean body mass: organs, muscles, etc)
+            - all reports are terrible
+            - attia has his own template, own dashboard
+            - DEXA is a better measurement on body fat compared to calipers, buoyancy testing
+            - body fat is the least interesting
+            - least germane to your health (rank fourth)
+            - the others are bone mineral density, visceral fat, and the metrics that can let you compute lean mass index, fat-free mass index
+            - bone mineral density => risk of osteoporois and osteopenia
+                - 50 year old women has more risk
+                - estrogen is the single most important hormone in regulating bone mineral density
+                - huge cause of morbidity
+                - over age of 65 year old, one year morbidity is 35% - 40%
+                - bones matter!!
+                - z score of zero means you're at the 50th percentile for your age and sex
+                - z score of plus one is one std dev above
+                - z score of minus one is one std dev above
+                - t score does the same thing but compare you to a young person
+                - attia looks more at the z-score
+                - some things to improve bone mineral density
+                    - theres a real critical window in which we are malleable
+                    - if you're under 20, 25, you're still in that time of your life where you can reach your potential
+                    - strength training is the best thing you can do
+                    - attia was shocked, he thought running was the best thing you can do
+                    - power lifting is putting more of a sheer force from the muscle via the tendon onto the bone
+                    - that's what the bone is sensing
+                    - that's was activating the ostioblasts (the cells that are allowing bone to be built)
+                    - more important for females
+                    - how high you can get basically sets your trajectory for the rest of your life
+                    - strength training is essential for life. that is preventing the fall off
+                    - what does that strength training look like?
+                        - fairly low rep ranges (1-6), not aiming for pump hypertrophy
+                        - heavy loads that are hard to move, 80% of one rep max, done with long resting periods
+                    - it's never too late to start, but you should never stop
+                    - you need to train the whole body. training bone is local, but the issue is systemic
+- marginal decade
+    - everyone will have a marginal decade
+    - most of us know when we're in that marginal decade
+    - have them in exquisite detail (prompt them w 50 questions), what their marginal decade should look like. a very nuanced exploration of that topic
+    - you can't design a program until you know
+    - you need an objective
+    - the marginal decade is the objective
+    - then you delinate the objective function
+    - break it down into metrics you can measure (back casting)
+    - e.g. to do that, requires a VO2 max of of 3ml of O2/g
+    - do the same exercise with strength and stability
+    - the gravity of aging is more viscious than people realize
+    - the height of your glider has to be much higher than what you think it is
+    - forecasting is great for short-term things
+    - backcasting is needed for long-term things
+    - Annie Duke book
+
+- all-cause mortality (ACM)
+    - ACM is agnostic to how you die
+    - smoking
+        - 40% increase in ACM
+        - you're not shortening your life by 40%, it means at any point in time, there's a 40% greater risk that you're going to die than a non-smoker
+    - high blood pressure: 20-25% increase in ACM
+    - kidney disease: 125% increase in ACM
+    - muscle mass
+        - low muscle mass compared to high muscle mass
+        - low muscle mass has 3x hazard ratio (200% increase in ACM)
+        - looking at the data, its less muscle mass, and more association with strength
+        - 250% greater risk if you have low strength
+        - attia has SMA is the strength metric assessment
+    - cardio respiratory fitness
+        - more profund
+        - bottom quartile for their age and sex with VO2 max, compared to top quartile, 2x difference in risk of ACM
+        - bottom 25% to top 2.5% (the elite), 5x difference. 400% difference in ACM
+        - single strongest association for modifiable behavior
+        - you don't have to be a world class elite here for 2.5%
+    - you shouldn't argue about the nuance of supplets or diets (vegan, carnivore, paleo) until you can deaadlift your body weight for 10 reps
+    - farmer carry your weight for two minutes (grip strength, mobility)
+    - get your exercise house in order
+    - until your VO2 max is at least to the 75th percentile
+    - dead hang for a minute
+    - wall sit for two
+    - attia's rule: refrain from talking about supplements and nutrition
+
+- centenarian decathlete
+    - someone living their marginal decade the best
+
+
+                    
+- cholesterol
+    - ringed molecule
+    - 36 carbons for all i remember
+    - it's a lipid, so it's a hydrophobic molecule
+    - synthesized by every cell in the human body
+    - it's very important
+    - yes, you can eat foods that are rich in cholesterol, known in 1960
+    - the cholesterol you eat does not really make it in your body. it gets esterifiedss.
+    - our own cholesterol is basically recirculated in a pool throughout our body
+        - it gets back into the body through this Niemann pick C1-like1 transporter
+        - this is the checkpoint of regulation
+        - if the body doesn't have enough, it takes it into circulation
+        - it it does, it'll make the body poop it out
+        - all the cholesterol in our body is not esterified
+    - the cholesterol you eat is esterified
+    - we manage to de-esterify 10%-15% of our dietary cholesterol
+        - small amount of dietary cholesterol gets into the body's pool
+    - dietary cholesterol plays no role in serum cholesterol
+
+- saturated fat is different
+    - this will raise LDL cholesterol
+    - saturated fat is a fatty acid
+    - totally different molecule than cholesterol (which is a whole ring stuck together)
+    - saturated fat is long-chain fatty acid which is fully saturated (no double bonds)
+    - saturated fat can exist in isolation or tryglycerid
+    - saturated fat raises LDL cholesterol is generally correct
+
+- what is LDL cholesterol
+    - every cell in the body makes cholesterol
+    - usually they make enough
+    - there are handful of times when a cell needs to borrow from another cell
+    - if you were to design the system, you'd have to be able to transport cholesterol from one cell to another
+    - most logical place to transport is circulation
+    - problem with circulation is it's water (plasma)
+    - problem: i want to transport cargo which is hydrophobic in a hydrophilic medium
+    - blood, sodium electrolyes, glucose, they're all water soluble (it's easy)
+    - but if you want to move cholesterol, you have to package it in something that's hydrophillic. that something is called lipoprotein
+        - spherical molecules that are lipid on the inside, protein on the outside
+        - inside, they contain cholesterol and tryglycerides
+    - lipoproteins exist in different densities
+    - density is a function of how much protein and lipid is in it
+    - VLDL, IDL, LDL, HDL
+    - IDL = sum(VLDL, LDL, HDL)
+    - Lp[a] is a special case of LDL
+        - has another apolipoprotein
+    - there are two broad categories of lipoproteins
+        1. ApoAs (HDL)
+        2. ApoBs (VLDL, IDL, LDL)
+    - doesn't care about HDL LDL ratio
+    - attia only cares about ApoB, which drives atherosclerosis
+        - ApoB is the total concentration of LDL and VLDL
+    - if you want to live to 100, you're going to have to keep your ApoB below 30mg/dL
+    - yo uwant ApoB to be as close to the level as it was when you were born
+    - we start developing heart disease when we're born
+    - looking at young people dying in their 20s
+    - really young Apob level 20 - 30mg/dl makes it impossible to develop ASCVD
+        - nutritionally, two big pools
+        - depends what is driving ApOB
+        - anything that reduces cholesterol and tryglycerides
+        - tryglerides are generally driven by carbohydrate intake
+        - restricting carbs ==> reduce triglycerides
+        - but if yo ureduce tryglycerides by increasing fat intake, you will still increase ApoB
+        - ideal world, can you lower saturated fat while lowering carbohydrate
+        - no one can get to a level of 30mg/dL purely on dietary intervention
+        - need to look at pharmacologic
+    - multiple classes
+        1. tried and true: statin (inhibits cholesterol synthesis) 
+            - liver is very sensitive: doesn't want too much, nor too litle
+            - side effects: very benign compared to the "propaganda" out there
+            - no evidence in clinical trials
+            - backoff for patients with highly suprresed desmoterol levels
+        2. next tool, drug that blocks reabsorption of cholesterol. ezetimibe
+            - just mechanically blocks
+        3. bempedoic acid
+            - only affects liver
+        4. pcsk8 inhibitor
+            - responsible for the degradatin of LDL receptors
+            - most potent
+
+- medicine 2.0 -> medicine 3.0
+    - medicine 2.0 they treat 10-year risk
+    - medicine 3.0 treats causitive agent
