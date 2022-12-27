@@ -1,3 +1,33 @@
+expressions
+- an expression *specifies* the computation of a value
+    - it does this by applying operators and functions to operands
+
+operands
+- denote the elementary values in an expression
+- operand may be a literal, a variable, function, or a parenthesized expression
+
+operators
+- operators combine operands into expressions
+- there are five precedence levels for binary operators
+- multiplication operators bind strongest, logical OR binds the weakest
+```
+Precedence    Operator
+    5             *  /  %  <<  >>  &  &^
+    4             +  -  |  ^
+    3             ==  !=  <  <=  >  >=
+    2             &&
+    1             ||
+```
+- types of operators
+    - arithmetic operators
+    - comparison operators
+    - logical operators
+    - address operators
+    - receive operator
+    - conversions
+    - constant expressions
+order of evaluation
+
 statements
 - statements control execution
 - the majority of golang statements are heavily inspired by C
@@ -72,6 +102,8 @@ built-ins
 
 - length and capacity
     - the built-in functions len and cap take arguments of various types
+        - not considered operators because golang doesn't actually calculate len
+        - it's compiler magic, not an actual function call
     - they both return a result of type int
     - the implementation guarantees that the resut always fits an int
     - the capacity of a slice is the number of elements for which there is space allocated in the underlying array
