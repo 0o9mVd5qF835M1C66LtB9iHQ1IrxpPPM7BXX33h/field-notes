@@ -1,3 +1,80 @@
+built-ins
+- built-in functions are *predeclared*
+- the built-in functions do *not* have standard go types
+- they can only appear in call expressions, *not* as function values
+
+- close
+    - the built-in function close records that no more values will be sent on the channel
+    - it's an error if the channel is a receive-only channel
+    - sending to or closing an already-closed channel causes a run-time panic
+    - closing a nil channel also causes a run-time panic
+    - after calling close, and after any previously sent values have been received, receive operations will return the zero value for the channel's type without blocking
+
+- length and capacity
+    - the built-in functions len and cap take arguments of various types
+    - they both return a result of type int
+    - the implementation guarantees that the resut always fits an int
+    - the capacity of a slice is the number of elements for which there is space allocated in the underlying array
+        - at any time the following relationship holds:
+        0 <= len(s) <= cap(s)
+    - the len of a nil slice, map, or channel is 0
+    - the capacity of a nil slice or channel is 0
+
+- allocation
+    - the built-in function new takes a type T, allocates storage for a variable of that type at run time, and returns a value of type *T pointing to it
+
+
+- making slices, maps, and channels
+    - the built-in function make takes a type T, optionally followed by a type-specific list of expressions
+        - slice: make(T, n, m)
+        - map: make(T, n)
+        - ch: make(T, n)
+        - note that only slices support a capacity argument (i guess only slices have a dynamic resizing implementation underneath the hood?)
+
+- slices
+    - the built-in functions append and copy assist in common slice operations
+    ```
+    append(s S, x ...E) S // core type of S is []E
+    copy(dst, src[]T) int
+    ```
+
+- map deletions
+    - the built-in function delete removes the element with key k from a map m
+    ```
+    delete(m, k) // removes element m[k] from map m
+    ```
+    - if m is nil or m[k] dne, delete is a no-op
+- complex numbers
+    - three functins assemble and disassemble complex numbers
+    ```
+    complex(realPart, imaginaryPart floatT) complexT
+    real(complexT) floatT
+    imag(complexT) floatT
+    ```
+- handling panics
+    - two built-ins, panic and recover, assist in reporting and handling run-time panics and program-defined error conditions
+    ```
+    func panic(interface{})
+    func recover() interface{}
+    ```
+    - notes from jeff
+        - panics are glorified gotos
+        - the caller of the function panicking has no control over execution
+        - library code could should never panic, or at least never let panics escape program code
+        - application code is ok to panic, in scenarios where the program should just quit
+    ```
+        func f() {
+            defer func() {
+                if x := recover(); x != nil {
+                    log.Println("run time panic: %v", x)
+                }
+            }()
+
+            g() // panics
+        }
+    ```
+
+
 packages
 - go programs are constructed by linking packages together
     - in turn, a package is constructed from one or more source files
