@@ -1,3 +1,27 @@
+introduction
+- this is the reference manual for the go programming language
+- go is a general-purpose language designed with systems programming in mind
+- it is
+    - strongly-typed
+    - garbage-collected
+    - first-class support for concurrent programming
+    - simple
+
+blocks
+- a block is a possibly empty sequence of declarations and statements with matching brace brackets
+```
+Block = "{" StatementList "}" .
+StatementList = { Statement ";" } .
+
+```
+- in addition to explicit blocks in the source code, there are implicit blocks
+    1. the universe block encompasses all go source text
+    2. each package has a package block containing all go source text for that package
+    3. each file has a file block containing all go source text for that package
+    4. each if, for, and switch statement is considered to be in its own implicit block
+    5. each clause in a switch or select statement acts as an implicit block
+- blocks next and influence scoping
+
 expressions
 - an expression *specifies* the computation of a value
     - it does this by applying operators and functions to operands
