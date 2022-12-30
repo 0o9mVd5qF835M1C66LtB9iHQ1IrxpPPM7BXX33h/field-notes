@@ -1,0 +1,151 @@
+contents
+    part 1. the path to observability
+    part 2. fundamentals of observability
+    part 3. observability for teams
+    part 4. observability at scale
+    part 5. spreading observability culture
+
+part 1. the path to observability
+    1. what is observability?
+    2. how debugging practices differ between observability and monitoring
+    3. lessons from scaling without observability
+    4. how observability relates to devops, sre, and cloud native
+
+    1. what is observability?
+        - definition: observability is how well you know the internal state of the system
+            - using monitoring, people would pattern match, guess, intuit, and ship custom metrics & dashboards for specific users
+            - using o11y, people ask questions by slicing/dicing data
+            - root: control theory
+                - control theory defines observability as a measure of how well internal states of a system can be *inferred* from knowledge of its external outputs
+                - the application of observability to software systems has much in common with its control theory roots
+                - however, it is far less mathematical and much more practical
+            - high level
+                1. high cardinality
+                2. high dimensions
+                3. explorability
+            - o11y enables engineers to
+                - understand the inner workings of your application
+                - understand any system state your application may have gotten itself into, even new ones you have never seen before and couldn't have predicted
+                - understand the inner workings and system state solely by observing and interrogating with external tools
+                - understand the internal state *without* shipping any new custom code to handle it
+            - put simply
+                - o11y is a measure of how well you can understand and explain any state your system can get into, no matter how novel or bizarre
+                - o11y enables ad-hoc iterative investigation, witout being required to define or predict those debugging needs in advance
+                - if you can understand any bizarre or noevel state *without* needing to ship new code, you have observability
+    - monitoring vs o11y
+        - why o11y now?
+            - the traditional approach of using metrics and monitoring of software to understand what it's doing falls drastically short
+            - this approach is fundamentally *reactive*
+            - when those robots tell them performance is bad, they alert themselves
+            - then, over time, they tend to those arbitrary thresholds like gardeners: pruning, tweaking, and fussing over the noisy signals they grow
+        - debugging monitoring vs o11y
+            - modern distributed systems architectures notoriously fail in novel ways that no one is able to predict and that no one has experienced before
+                - when modern architectures started to favor decomposing monoliths into microservices, software engineers lost the ability to step through their code w traditional debuggers
+                - in short: *we blew up the monolith*
+            - now every request has to hop the network multiple times, and every software developer needs to be better versed in systems and operations just to get their daily work donew
+                - in a modern world, debugging with metrics requires you to connect dozens of *disconnected* metrics
+            - debugging with o11y is about preserving as much context around any given request as possible
+                - so that we can reconstruct the environment and circumstances that trigerred the bug that led to a novel failure mode
+            - monitoring is for the known-unknowns
+            - o11y is for the unknown-unknowns
+        - cardinality
+            - cardinality is the size of the set of all values
+            - cardinality matters for o11y, bc high-cardinality information is almost always the most useful in identifying data for debugging or understanding a system
+            - being able to query against unique IDs is the best way to pinpoint individual needles in any given haystack
+            - you can always downsample a high-cardinality value into something w lower-cardinality, but you can never do the reverse
+        - dimensionality
+            - dimensionality refers to the number of keys within that data
+            - in observably systems, telemetry data is generated as an arbitrarily wide structured event
+        - debugging w o11y
+            - explorability
+                - explorability of a system is measured by how well you can ask any question and inspect its corresponding internal state
+                - explorability means you can *iteratively* investigate and eventually understand any state your system has gotten itself into
+                - the reason monitoring worked so well for so long is that systems tended to be simple enough that engineers could reason about exactly where they might need to look for problems and how those problems might present themselves
+                    - engineers could, by and large, predict the majority of possible failure states up front and discover the rest the hard way once their applications were running in production
+            - user behavior
+                - the shift from monoliths to microservices shifted our problems from
+                    - most of my problems are component failures to
+                    - most of my questionings have to do with user behavior or subtle code bugs and interactions
+                - o11y is for modern systems (microservices)
+
+    3. lessons from scaling without observability
+        - a story about how parse moved from pattern matching and guessing w intution to being curious and tool-literate, slicing and dicing data to get answers for iterative questions
+
+    4. how o11y relates to devops, sre, and cloud native
+        - devops, sre, and cloud native are other emergent sister needs that have arised due to microservices
+        - o11y is also one of those emergent needs now that the architectures we build are not monoliths, but rather microservices-based
+
+part 2. fundamentals of observability
+    5. arbitrarily wide structured events
+    6. distributed tracing
+    7. open telemetry
+    8. analyzing events to achieve observability
+    9. how monitoring & o11y come together
+
+    5. arbitrarily wide structured events
+        - structured events are the building blocks of observability
+            - k/v map capturing data of an event (usually a request)
+            - must be arbitrarily wide so operators can understand any state of the system
+            - this lets operators ask any question by arbitrarily slicing and dicing data along any number of dimensions
+        - metrics otoh
+            - aggregate system state over a predefined period of time
+            - metrics are too limiting to serve as the fundamental building block of observability
+    
+    6. stitching events into traces
+        - events aka spans are the building block of o11y
+        - you can stitch events together in a trace
+        - traces are very useful in S2S communication
+        - we create (instrument) a trace by hand
+            - k/v map
+            - trace_id, span_id, parent_id, timestamp, duration
+            - service_name
+
+    7. open telemetry
+        - historically, engineers send data about system state to central a logging/monitoring solution
+            - the data is known as telemetry
+            - telemtry: metrics, traces, profiles
+            - wide events aren't new, just a special kind of log that consists of many structured data fields
+        - otel is an open source standard for application instrumentation
+        - start w automatic instrumentation (http/grpc wrappers) for a basic skeleton of your events
+        - then use custom instrumentation to get visibility in *all* areas of code
+
+    8. analyzing events to achieve observability
+        - analyzing events to achieve observability is the core analysis loop
+        - debugging from first principles includes understanding a system scientifically by forming hypotheses and answering them by asking high cardinality questions
+        - this democratizes the art of debugging, instead of having to rely on intuition and pattern matching which only gets better through the length of tenure
+        - you can automate the core analysis loop with honey comb's bubble up feature
+            - you detect the spike or anomalous shape of slow requests and bubble up will compute the values of all dimensions inside and outside the box
+            - this lets can compare the difference in each dimension bt the slow and normal events
+            - AI Ops is misleading, you need both the computer to churn through data and humans to add cognitive context
+    
+    9. how monitoring & o11y come together
+        - monitoring systems are reactive by alerting humans to known failure states
+        - monitoring is best fit to understand the state of your systems
+        - monitoring is a good warning signal or a way to rule out code-based issues
+        - o11y is reactive by letting you ask high cardinality questions
+        - o11y is best fit to understand the state of your code
+        - conclusion
+            - monitoring is best suited to evaluating the health of your *systems*
+            - o11y is best suited to evaluating the heath of your *software*
+
+part 3. observability for teams
+    10. applying o11y practices in your team
+    11. o11y-driven development
+    12. using SLOs for reliability
+    13. acting on and debugging SLO-based alerts
+    14. o11y and the software supply chain
+
+    10. applying o11y practices in your team
+        - starting small is a mistake w o11y since you need high dimension/cardinality data
+        - make sure to cross the finish line
+    
+    11. o11y-driven development
+        - TDD defines the expected behavior for an application in a controlled state
+            - production is full of interesting deviations
+            - TDD does not prepare your code for intriguining anomalies
+        - o11y helps you write better software
+            - quickly solving bugs depends on being able to examine the problem while the original intent is still fresh in the head of the original author
+
+    12. using SLOs for reliability
+    13. acting on and debugging SLO-based alerts
+    14. o11y and the software supply chain
