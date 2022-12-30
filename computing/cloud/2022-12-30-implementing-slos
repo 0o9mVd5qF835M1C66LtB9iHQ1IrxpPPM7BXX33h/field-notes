@@ -1,0 +1,15 @@
+contents
+    part 1. slo development
+    part 2. slo implementation
+    part 3. slo culture
+
+part 1. slo development
+    1. the reliability stack
+    2. how to think about reliability
+    3. developing meaningful slis
+    4. choosing good slos
+    5. how to use error budgets
+
+part 2. slo implementation
+    8. monitoring & alerting
+    9. probability & statistics for slis and slos
