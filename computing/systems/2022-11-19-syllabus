@@ -1,6 +1,11 @@
 omokernel
 
-resoures
+idea
+- create xv6
+- then make it posix compliant
+    - more syscalls
+    - networking?
+    - windowing?
 
 - course
     - mit 6.1810 (xv6) https://pdos.csail.mit.edu/6.828/2022/index.html
@@ -24,3 +29,4 @@ resoures
     - plan9
         - https://9p.io/wiki/plan9/documentation/
         - http://doc.cat-v.org/plan_9/
+        - plan9 vs kubernetes?

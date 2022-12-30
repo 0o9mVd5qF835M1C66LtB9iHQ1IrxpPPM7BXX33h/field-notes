@@ -1,0 +1,96 @@
+1. operating system interfaces
+- job of a kernel is to share a computer among multiple programs
+- they also provide controlled ways for program to interact, so they can share data, or work together
+- xv6 takes the traditional form of a kernel
+    - a kernel is a special program that provides services to running programs
+    - a running program is called a process
+    - a given computer typically has many processes but only a single kernel
+    - a process alternates between executing in user space and kernel space
+- this chapter essentially goes over the interface and its usage (via shell)
+
+- processes and memory
+    - xv6 is a timesharing-based multitasking system (not real-time!)
+    - a process can create a new process using the fork syscall
+        - fork gives the new process an exact copy of the calling process's memory (instructions and data)
+        - fork returns in both the original and new processes. in the original, fork returns the new process's PID. in the new process, fork returns 0.
+        - the original and new processes are often called the parent and child
+    - the exit syscall causes the calling process to stop executing and release resources such as memory and open files
+    - wait syscall waits for child of the current process to exit. on child exit, the syscall returns the PID of the child process.
+        - if the caller of wait has no children, then wait will immediately return -1
+    int pid = fork();
+    if (pid > 0) {
+        printf("parent: child=%d\n", pid);
+        pid = wait((int *) 0);
+        printf("child %d is done", pid);
+    } else if (pid == 0) {
+        printf("child: exiting\n")
+        exit(0);
+    } else {
+        printf("fork error\n")
+    }
+
+    - the exec syscall replaces the calling process's memory with a new memory image loaded from a file stored in the file system
+        - the file must have a particular format (xv6 uses ELF)
+        - usually the file is the result of compiling a program's source code
+        - when exec succeeds, it does not return to the calling program; it starts executing the entry point's instructions declared in the ELF heaader instead
+    
+    - shells are implemented like so:
+        - parent forks a child and waits
+        - child execs the passed in program and then exits
+        - parent returns from wait, and then exits
+        - kernels optimize the implementation of fork so that we don't fork an entire process (and it's memory: instructions and data) just to replace it with a new program via exec
+
+- i/o and file descriptors
+    - a file descriptor is a small integer representing a kernel-managed object that a process may read or write to
+    - a process obtains a file descriptor by opening a:
+        - file
+        - dir
+        - device
+        - pipe
+        - copying an existing fd
+    - a file descriptor is often referred to as a file for simplicity
+    - the file descriptor interface abstracts away the differences between files, pipes, and devices, making them all look like a stream of bytes
+    - every process has private space of file descriptors starting at zero
+        - fd0 is stdin
+        - fd1 is stdout
+        - fd2 is stderr
+    - the shell takes advantage of this standard to implement I/O redirection and piping
+    - the read/write syscalls read and write bytes to open files via file descriptors
+        - the implementation for cat uses stdin and stdout fd's as read/write input
+        - the cat program doesn't know whether its reading from a file, console or a pipe
+        - similarly, the cat program doesn't know whether its printing to a console, file, or a pipe
+    - the close syscall releases a fd, making it free for reuse by a future open, pipe or dup syscall
+    - a newly allocated fd is always the lowest-numbered unused descriptor of the current process
+    - fd's and fork interact to make I/O redirection easy to implement
+        - fork copies the parent's fd table along with its memory, so that the child starts with exactly the same open files as the parent
+        - the syscall exec replaces the calling process's memory but preserves its file table
+        - here's a simplified version of cat < input.txt
+        char* argv[2]
+        
+        argv[0] = "cat"
+        argv[1] = "0;
+
+        if (fork() == 0) {
+            close(0);
+            open("input.txt", O_RDONLY);
+            exec("cat", argv)
+        }
+
+    - pipes
+
+- file system
+
+
+- real world
+    - unix system call interface has been standardized through the portable operating system interface (POSIX)
+    - xv6 is not posix compliant
+        - missing many syscalls
+        - primary goal for xv6 is simplicity and clarity
+        - modern kernels provude more services than xv6, and even go beyond POSIX
+    - unix unified access to multiple types of resources (file, dir, device)
+        - everything abstracted as a file can be extended
+        - plan9 applied the philosophy to networking and graphics resources
+        - multics, unix's predecessor abstracted file storage which made it look like memory
+        - file-as-memory was too complex, and influenced the simple design of unix
+    - xv6 doe snot provide a notion of users or protection from one another; in unix terms, all xv6 processes run as root
+

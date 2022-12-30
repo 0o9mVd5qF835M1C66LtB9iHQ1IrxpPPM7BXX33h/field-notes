@@ -96,7 +96,7 @@ shared memory, race conditions, synchronization
         - requires mutual exclusion (mutex) to alternate acceses
 
 
-
+3. overview of hardware and runtime environment
 
 
 

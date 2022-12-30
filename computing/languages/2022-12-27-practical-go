@@ -1,0 +1,73 @@
+practical go
+
+1. guiding principles
+- different programming languages or operating systems have different core values
+- go principles
+  1. clarity
+  2. simplicity
+  3. productivity
+  - note that there is no mention of performance or concurrency
+  - there are languages somewhat faster than go, but they're certainly not as simple
+
+- "software engineering is what happens to programming when you add time and other programmers" - russ cox
+
+- clarity
+  - "programs must be written for people to read, and only incidentally for machines to execute" - SCIP
+  - "the most important skill for a programmer is the ability to effectively communicate ideas"
+  - code is read many more times than it is written
+  - a single piece of code will, over its lifetime, be read hundreds, maybe thousands of times
+  - thus, having code which is clear means it will be maintainable
+- simplicity
+  - "simplicity is the prerequisite for reliability" - djikstra
+  - "controlling complexity is the essence of computer programming" - kernighan
+  - "there are two ways of constructing a software design: one way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. the first method is far more difficult" - C.A.R. Hoare
+  - complexity turns reliable software into unreliable software
+  - complexity is what kills software projects
+  - therefore, simplicity is the highest goal of go
+- productivity
+  - "design is the art of arranging code to work today, and be changeable forever" - sandi metz
+  - the joke goes that go was designed while waiting for a c++ program to compile
+  - to say that go is a language designed to be productive is an understanding that is it build for software design in the large, at industrial scale
+
+9. concurrency
+- the go team have gone to great lengths to make concurrency in go cheap (in terms of hardware resources) and performant, however it's possible to use go's concurrency features to write code which is neither performant nor reliable
+- here is some advice to avoid some of the pitfalls with go's concurrency features
+
+- channel axionms
+  - programmer's quickly grasp the idea of a channel as a queue of values
+  - they're also comfortable with the notion that channel operations may block when full or empty
+  - here are some less common properties of channels
+  - send/receive to a nil channel blocks forever
+    - it can be surprising for newcomers that a send on a `nil` channel blocks forever
+    func main() {
+      var c chan string
+      c <- "let's get started" // deadlock
+    }
+
+    func main() {
+      var c chan string
+      fmt.Println(<-c) // deadlock
+    }
+
+    - blocking forever is useful in in a for select conditional, where you want to stop reading on a channel e.g. merging two channels into one
+    
+  - send to a closed channel panics
+    - if you have multiple writers on a channel, and one of them closes it, you need to synchronize with locks before the critical section
+  - a receive from a closed channel returns the zero value immediately
+    - this is the inverse of the previous
+    - instead of looping and recving the channel a hard-coded amount of times, its better to use a for range
+    for v:= range c {
+      // do something with v
+    }
+
+    // above is syntax sugar for:
+    for v, ok := <- c; ok {
+      // do something with v
+    }
+
+  - prefer channels with a size of zero or one
+    - 
+
+  - keep yourself busy or do the work
+  - leave concurrency to the caller
+  - never start a goroutine without knowing when it'll stop

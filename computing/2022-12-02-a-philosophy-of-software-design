@@ -1,0 +1,30 @@
+11. design it twice
+- designing software is hard
+    - it's unlikely that your first design will be the best
+    - you need to consider multiple options, and design it twice
+        - make list of pros and cons of each
+        - the best choice may actually be one of the alternatives
+        - it could also be combining some of them
+- designing it twice doesn't have to take a lot of extra time
+    - the reward for being a good designer is that you get to to spend most of your time in the design phase
+    - poor designers spend most of their time chasing bugs with brittle code
+
+21. conclusion
+- this book is about one thing: complexity
+    - the root causes are:
+        - dependencies
+        - obscurity
+    - red flags are:
+        - information leakage
+        - unneeded error conditions
+        - generic names
+    - methods to design simpler software
+        - deep and generic classes
+        - defining errors out of existence
+        - separating interface documentation from implementation documentation
+    - downside is that they create extra work
+    - but these investments in good design pays off quickly
+- to repeat,
+    - the reward for being a good designer is that you get to spend most of your time in the design phase
+    - poor designers spend most of their time chasing bugs with brittle code
+    - measure twice, cut once.
