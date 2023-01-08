@@ -33,12 +33,13 @@ practical go
 - the go team have gone to great lengths to make concurrency in go cheap (in terms of hardware resources) and performant, however it's possible to use go's concurrency features to write code which is neither performant nor reliable
 - here is some advice to avoid some of the pitfalls with go's concurrency features
 
-- channel axionms
+- channel axioms
   - programmer's quickly grasp the idea of a channel as a queue of values
   - they're also comfortable with the notion that channel operations may block when full or empty
   - here are some less common properties of channels
   - send/receive to a nil channel blocks forever
     - it can be surprising for newcomers that a send on a `nil` channel blocks forever
+    ```
     func main() {
       var c chan string
       c <- "let's get started" // deadlock
@@ -48,14 +49,39 @@ practical go
       var c chan string
       fmt.Println(<-c) // deadlock
     }
+    ```
 
-    - blocking forever is useful in in a for select conditional, where you want to stop reading on a channel e.g. merging two channels into one
+    - blocking forever is useful in a for select conditional, where you want to stop reading on a channel e.g. merging two channels into one
     
   - send to a closed channel panics
     - if you have multiple writers on a channel, and one of them closes it, you need to synchronize with locks before the critical section
+    ```
+    func main() {
+        var c = make(chan int, 100)
+        var mu sync.Mutex
+        var closed bool
+
+        for i := 0; i < 10; i++ {
+            go func() {
+                for j := 0; j < 10; j++ {
+                    c <- j
+                }
+
+                mu.Lock()
+                // the following operation needs to be atomic
+                if !closed {
+                    close(c)
+                    closed = true
+                }
+                mu.Unlock()
+            }()
+        }
+    }
+    ```
   - a receive from a closed channel returns the zero value immediately
     - this is the inverse of the previous
-    - instead of looping and recving the channel a hard-coded amount of times, its better to use a for range
+    - instead of looping and recving the channel a hardcoded amount of times, its better to use a for range
+    ```
     for v:= range c {
       // do something with v
     }
@@ -64,10 +90,65 @@ practical go
     for v, ok := <- c; ok {
       // do something with v
     }
+    ```
 
   - prefer channels with a size of zero or one
-    - 
+    - when dealing with an unknown producer or consumer, choose a buffer size of zero or one
+    - a buffer size of zero is ideal for coordination
+    - a buffer size of one is ideal to permit the sender to deposit the value without blocking and move on
+    - a buffer size greater than one is useful in the case where you know the exaxct number of values that will be deposited in the channel *before* it is drained
+    - the most reasonable channel sizes are usually zero and one
+    - most other sizes are *guesses*
+    - when you guess incorrectly, the program is unreliable
 
   - keep yourself busy or do the work
+    - if your goroutine cannot make progress until it gets the result from another, oftentimes it is simpler to just do the work yourself rather than delegate it
+    - this often eliminates a lot of state tracking and channel manipulation to plumb a result back from a goroutine to its initiator
+
   - leave concurrency to the caller
+    ```
+    func ListDirectory(dir string) ([]string, error)
+    func ListDirectory(dir string) chan string
+    ```
+
+    - usually people turn functions async by returning a channel
+    - they are most likely firing off a goroutine (which populates the channel), then returning 
+    - they *could* allocate a channel to hold all items, fill the channel, close it, and return it, but this has the same problems as consuming a large amount of memory
+
+    - by using a closed channel to signal between two functions, there is no way for the async function to *error* to the caller
+        - if the async function's channel returned immediately, there is no way for the caller to tell the difference between an empty return or an error
+    
+    - the solution to this problem (and the synchronous problem of having to fit everything in memory) is to use a callback
+        - this function will be called for every item being iterated over
+        - not surprisingly, this is how filepath.WalkDir works
+
+    - if your function starts a goroutine, you must provide the caller with a way to explicitly stop that goroutine
+        - it is often easier to leave the decision to execute a function asynchronously to the caller of that function
   - never start a goroutine without knowing when it'll stop
+    - this usually means providing an explicit way to stop that goroutine
+    - this is what the point above avoids with the callback function
+    - if you do *call* (not make) a function asynchronously with go, then usually you must pass in a stop channel so the caller can stop it
+    - e.g. if you're starting two servers via goroutines, and want both of them to stop when one stops, you have to do something like this:
+    ```
+    func main() {
+        done := make(chan error, 2)
+        stop := make(chan struct{})
+        go func() {
+            done <- serveDebug(stop)
+        }()
+        go func() {
+            done <- serveApp(stop)
+        }()
+
+        var stopped bool
+        for i := 0; i < cap(done); i++ {
+            if err := <-done; err != nil {
+                fmt.Println("error: %v", err)
+            }
+            if !stopped {
+                stopped = true
+                close(stop)
+            }
+        }
+    }
+    ```
