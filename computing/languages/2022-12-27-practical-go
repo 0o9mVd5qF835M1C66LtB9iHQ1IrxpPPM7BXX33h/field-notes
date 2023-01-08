@@ -55,6 +55,31 @@ practical go
             - the `var` acts as a clue to say that this variable has been *deliberately* declared as the zero value of the indicated type
         - when declaring and explicitly initializing a variable, use `:=`
 
+3. commentary
+    - summary
+        - dave thomas and andrew hunt (the pragmatic programmer) "good code has lots of comments, bad code requires lots of comments"
+        - comments should do one (and only one) of three things
+            1. the comment should explain *what* the thing does
+            2. the comment should explain *how* the thing does what it does
+            3. the comment should explain *why* the thing is what it is
+
+            - the first form is ideal for commentary on public symbols
+            - the second form is ideal for commentary inside a method
+            - the third form is unique as it does not displace the first two
+                - comments such as these record hard won battles for deep understanding of the business logic
+                - links to issues, design documents, RFCs, or specifications that provide more background are always helpful
+
+
+
+
+    - comments on variables and constants should describe their contents not 
+    their purpose
+        - from the google style guide: any public function that is not both obvious *and* short must be commented
+        - any function in a library must be commented regardless of length or complexity
+    - always document public symbols
+        - brian kernighan: "don't comment bad code, rewrite it"
+        - rather than commenting a block of code, refactor it
+
 9. concurrency
     - the go team have gone to great lengths to make concurrency in go cheap (in terms of hardware resources) and performant, however it's possible to use go's concurrency features to write code which is neither performant nor reliable
     - here is some advice to avoid some of the pitfalls with go's concurrency features
