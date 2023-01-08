@@ -80,6 +80,49 @@ practical go
         - brian kernighan: "don't comment bad code, rewrite it"
         - rather than commenting a block of code, refactor it
 
+4. package design
+    - the size of a unit of software differs by language. In C the unit is a function, as C offers little else. In Java, the unit of software is commonly mis_believed to be the class. In Go, the unit of software is not the function, or the type, or the method, but instead the _package.
+
+
+    - a good package starts with its name
+    - good package names should be unique
+    - avoid package names like base, common, or util
+    - return early rather than nesting deeply
+    - make the zero value useful
+    - avoid package level state
+
+5. project/module structure
+    - summary
+        - in the future go developers will use the term module and project interchangeably
+    - consider fewer, larger packages
+        - arrange code into files by import statements
+            - start each package with one .go file
+            - give that file the same name as the folder
+                - e.g. package http should be placed in a file called http.go in a directory named http
+            - as your package grows, you may choose to split apart the various *responsibilities* into different files
+                e.g. messages.go, client.go, server.go
+        - go eschewed elaborate type hierarchy
+            - this is generally a good thing
+            - don't make the mistake or replacing that wit han elaborate package hierarchy
+            - if you find you have created intermediate directories in your project which contain no .go files, you may have fallen afoul of the desire to create a taxonomy of your source code
+        - use internal packages to reduce your public API surface
+    - keep package main as small as possible
+        - your main function AND main package should do as little as possible
+        - this is bc main.main acts a singleton (there can only be one main function in a program)
+        - writing tests for main is hard, you can't even reference main.main from a test
+        - you should aim to move as much of your business logic *out* of your main function and ideally out of your main package too
+        - func main() should parse flags, open connections to databases, loggers, then hand off execution to a high level object
+
+6. api design
+    - design apis that are hard to misuse
+    - design apis for their default use case
+        - discourage the use of nil as a parameter
+        - prefer var args to []T parameters
+            - if the parameter is a slice, callers can pass an empty slice or nil to the function and the compiler will be happy
+            - this adds extra load because you *should* cover these cases in your testing
+    - let functions define the behavior they require
+    - understanding nil
+
 9. concurrency
     - the go team have gone to great lengths to make concurrency in go cheap (in terms of hardware resources) and performant, however it's possible to use go's concurrency features to write code which is neither performant nor reliable
     - here is some advice to avoid some of the pitfalls with go's concurrency features
