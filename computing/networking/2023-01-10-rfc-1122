@@ -1,0 +1,191 @@
+RFC-1122
+- network working group, internet engineering task force
+- october 1989
+
+=======================================================
+Requirements for Internet Hosts -- Communication Layers
+=======================================================
+- this is one RFC of a pair that defines and discusses the requirements for Internet host software
+- this RFC covers the communications protocol layers: link layer, IP layer, and transport layer
+- its companion RFC-1123 covers the application and support protocols
+
+1. introduction
+    - for each protocol, this document also contains an explicit set of requirements, recommendations, and options
+    - the list of requirements in this document is not incomplete by itself
+        - the requirements for an internet host is prmarily defined in the standard protocol specification documents
+        - corrections, amendments, and suppluments are contained in this RFC
+    - this introductory section begins with a brief overview of the internet architecture as it relates to hosts, and then gives some general advice to host software vendors
+
+    - internet architecture
+        - internet hosts
+        - architectural assumptions
+            - the current architecture is based on a set of assumptions about the communication system
+            - the assumptions most relevant to *hosts* are as follows:
+            a. the internet is a network of networks
+            b. gateways don't keep connection state information
+                - all state information required for e2e flow control and reliability is implemented in the hosts (in transport or application layer)
+                - all connection control information is thus co-located with the endpoints of the communication
+                - so the connection will only be lost if an endpoint fails
+            c. routing complexity should be in the gateways
+                - an important objective is to insulate host software from changes caused by the inevitable evolution of the Internet routing architecture
+            d. the system must tolerate wide network variation
+                - bandwidth delay, packet loss, packet reordering, maximum packet size, etc
+                - another type of falure: failing networks, gateways, and hosts
+        - internet protocol suite
+            - the application layer is the top layer of the internet protocol suite
+            - the application layer of the internet suite essentially combines the functions of the top two layers (presentation and application) of the OSI reference model
+            - we dinstinguish two categories of application layer protocols
+                - user protocols that provide service directly to users
+                - support protocols that provide common system functions
+            - the most common internet user protocols are
+                - telnet (remote login)
+                - ftp (file transfer)
+                - smtp (electronic mail delivery)
+            - support protocols
+                - used for hostname mapping, booting, and management
+                - SNMP, BOOTP, RARP, and DNS protocols
+
+            - transport layer provides e2e communication services for applications
+                - transmission control protocol (TCP)
+                - user datagram protocol (UDP)
+
+            - internet layer is used by the transport layer above to carry data from source host to destination host
+                - IP is a connectionless or datagram internetwork service
+                - providing no e2e delivery guarantees
+                - IP datagrams may arrive at the destination host damaged, duplicated, out of order, or not at all
+                - layers above IP are responsible for reliable delivery service when it's required
+                - IP protocol includes provision for addressing, type-of-service specification, fragmentation and reassembly, and security information
+
+                - ICMP is a control protocol that is considered to be an integral part of IP, although it is architecturally layer *on top* of IP
+                - it uses IP to carry its data e2e just as a transport protocol like TCP or UDP does
+                - ICMP provides error reporting, congesting reporting, and first-hop gateway redirection
+
+                - IGMP is an internet layer protocol used for establishing dynamic host groups for IP multicasting
+
+            - link layer
+                - to communicate on its *directly-connected* network, a host must implement the communication-protocol used to interface to that network
+                - we can this a link layer or media-access layer protocol
+        - embedded gateway code
+            - some internet host software includes embedded gateway functionality, so that these hosts can forward packets as a gateway would, white still performing the application layer functions of a host
+            - there are varying opinions in the internet community about embedded gateway functionality
+
+    - reading this document
+        - organization
+        - requirements
+            - MUST: this word or the adjective "REQUIRED" means that the item is an absolute requirement of the specification
+            - SHOULD: this word or the adjective "RECOMMENDED" means that there may exist valid reasons in particular circumstances to ignore this item
+                - but the full implications should be understood and the case carefully weighed before choosing a different course
+            - MAY: this word or the adjective "OPTIONAL" means that this item is truly optional
+                - one vendor may choose to include the item bc a particular marketplace requires it or bc it enhances the product
+
+            - an implementation is not compliant if it fails to satisfy one or more of the MUST requirements for the protocols it implements
+            - an implementation that satisfies all the MUST and all the SHOULD requirements for its protocols is said to be "unconditionally compliant"
+            - an implementation that satisifies all the MUST requirements but not all the SHOULD requirements for its protocols is said to be "conditionally compliant"
+        - terminology
+        The terms frame, packet, datagram, message, and segment are illustrated by the following schematic diagrams:
+
+         A. Transmission on connected network:
+           _______________________________________________
+          | LL hdr | IP hdr |         (data)              |
+          |________|________|_____________________________|
+
+           <---------- Frame ----------------------------->
+                    <----------Packet -------------------->
+
+
+         B. Before IP fragmentation or after IP reassembly:
+                    ______________________________________
+                   | IP hdr | transport| Application Data |
+                   |________|____hdr___|__________________|
+
+                    <--------  Datagram ------------------>
+                             <-------- Message ----------->
+           or, for TCP:
+                    ______________________________________
+                   | IP hdr |  TCP hdr | Application Data |
+                   |________|__________|__________________|
+
+                    <--------  Datagram ------------------>
+                             <-------- Segment ----------->
+
+
+2. link layer
+    - introduction
+        - all internet systems, (both hosts AND gateways) have the same requirements for *link* layer protocols
+        - these requirements are given in chapter 3 of "Requirements for Internet Gateways" ("An Ethernet Address Resolution Protocol RFC-826, 1982) augmented with the material in *this* section
+    - protocol walkthrough
+        - NONE
+    - specific issues
+        1. trailer protocol negotiation
+            - the trailer protocol ("Trailer Encapsulations", RFC-893, 1984) for link-layer encapsulation MAY be used, but only when it has been verified that both systems (host or gateway) implement trailers
+            - if the system does not dynamically negotiate the use of the trailer protocol on a per-destination basis, the default configuration MUST disable the protocol
+        2. address resolution protocol
+            - cache validation
+                - an implementation of the Address Resolution Protocol (ARP) ("An Ethernet Address Resolution Protocol", RFC-826, 1982) MUST provide a mechanism to flush out-of-date cache entries
+                - if this mechanism involves a timeout, it SHOULD be possible to configure the timeout value
+
+                - a mechanism to prevent ARP flooding (DDoS) MUST be included
+                - the recommended maximum rate is 1 per second per destination
+            - packet queue
+                - the link layer SHOULD save (rather than discard) at least one (the latest) packet of each set of peackets destined to the same unresolved IP address AND transmit the saved packet when the address has been resolved
+                - failure to follow this recommendation causes the first packet of every exchange to be *lost*
+                - although higher-layer protocols can generally cope with packet loss via retransmission, packet loss does impact *performance*
+        3. ethernet and IEEE 802 encapsulation
+            - ("A standard for the Transmission of IP Datagrams over Ethernet Networks" RFC-894, 1984) describes the IP encapsulation for Ethernets
+            - "A Standard for the Transmission of IP Datagrams over IEEE 802 Networks" RFC-1042 1988) describes the IP encapsulation for IEEE 802 networks
+                - this RFC contains a great deal of information of importance to Internet implementors planning to use IEEE 802 networks
+
+            - EVERY internet host connected to a 10Mbps Ethernet cable:
+                - MUST be able to send and receive packets using RFC-894 encapsulation
+                - SHOULD be able to receive RFC-1042 packets, intermixed with RFC-894 packets; AND
+                - MAY be able to send packets using RFC-1042 encapsulation
+
+            - an internet host that implements sending both the RFC-894 AND the RFC-1042 encapsulations MUST provide a configuration switch to select which is sent, and this switch MUST default to RFC-894
+            - address translation from internet addresses to link-layer addresses on Ethernet AND IEEE 802 networks MUST be managed by the Address Resolution Protocol (ARP)
+            - the MTU for an Ethernet is 1500 and for 802.3 is 1492
+        
+    - link/internet layer interface
+        - the packet receive interface between IP and the link layer MUST include a flag to indicate whether the incoming packet was addressed to a link-layer broadcast address
+            - although the IP layer does not generally know link layer addresses (since every different network medium typically has a different address format), the broadcast address on a broadcast-capable medium is an important special case
+            - see DISCUSSION concerning broadcast storms in Section 3.2.2
+        - the packet send interface between the IP and link layers MUST include the 5-bit TOS field (Section 3.2.1.6)
+        - the link layer MUST NOT report a destination unreachable error to IP solely because there is no ARP cache entry for a destination
+
+                                                  |       | | | |S| |
+                                                  |       | | | |H| |F
+                                                  |       | | | |O|M|o
+                                                  |       | |S| |U|U|o
+                                                  |       | |H| |L|S|t
+                                                  |       |M|O| |D|T|n
+                                                  |       |U|U|M| | |o
+                                                  |       |S|L|A|N|N|t
+                                                  |       |T|D|Y|O|O|t
+FEATURE                                           |SECTION| | | |T|T|e
+--------------------------------------------------|-------|-|-|-|-|-|--
+                                                  |       | | | | | |
+Trailer encapsulation                             |2.3.1  | | |x| | |
+Send Trailers by default without negotiation      |2.3.1  | | | | |x|
+ARP                                               |2.3.2  | | | | | |
+  Flush out-of-date ARP cache entries             |2.3.2.1|x| | | | |
+  Prevent ARP floods                              |2.3.2.1|x| | | | |
+  Cache timeout configurable                      |2.3.2.1| |x| | | |
+  Save at least one (latest) unresolved pkt       |2.3.2.2| |x| | | |
+Ethernet and IEEE 802 Encapsulation               |2.3.3  | | | | | |
+  Host able to:                                   |2.3.3  | | | | | |
+    Send & receive RFC-894 encapsulation          |2.3.3  |x| | | | |
+    Receive RFC-1042 encapsulation                |2.3.3  | |x| | | |
+    Send RFC-1042 encapsulation                   |2.3.3  | | |x| | |
+      Then config. sw. to select, RFC-894 dflt    |2.3.3  |x| | | | |
+  Send K1=6 encapsulation                         |2.3.3  | | | | |x|
+  Use ARP on Ethernet and IEEE 802 nets           |2.3.3  |x| | | | |
+Link layer report b'casts to IP layer             |2.4    |x| | | | |
+IP layer pass TOS to link layer                   |2.4    |x| | | | |
+No ARP cache entry treated as Dest. Unreach.      |2.4    | | | | |x|
+    
+
+3. internet layer protocols
+- TODO
+- specifically, broadcast storms which concern the link layer
+
+4. transport protocols
+- TODO
