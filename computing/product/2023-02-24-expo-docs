@@ -1,0 +1,153 @@
+expo
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+setup
+================================================================================
+installation
+    - install expo cli on dev machine
+    - install expo go on ios device
+    - authenticating on both clients makes it easier to track projects
+
+create a new app
+    - init: npx create-expo-app my-app
+        - --template option is available
+    - start dev server: npx expo start
+        - expo cli starts metro bundler, an http server that
+        1. compiles javascript code using babel
+        2. serves it to the expo app
+
+    - open the app
+        - scan QR code
+
+conceptual overview
+================================================================================
+
+what is expo?
+    - expo is an open-source framework for apps that run natively on android, ios, and the web
+    - the expo npm package enables a suite of incredible features for react native apps
+    - the expo package can be installed in nearly any react native project
+    - expo provides
+        1. tools and features
+            - expo sdk (comprehensive suite of well-tested react native modules)
+            - expo modules api (highly performant native code w modern swift/kotlin)
+            - prebuild (separate react from native to develop from any computer, upgrade easily, white label apps, and maintain larger projects)
+
+            - expo cli (merge deps, compile native apps, develop for the web, and connect to any device w a powerful dev server)
+
+        2. services
+            - deeply integrated cloud services for building, submitting, and updating your react native app
+            - can be used with any react native app, regardless if it uses expo or not
+
+workflows
+    - the two approaches to building applications w expo tools are
+        1. managed workflow
+            - you only write typescript
+            - expo tools/services take care everything else for you
+        2. bare workflow
+            - you can use any expo library and service
+            - you are responsible for the native ios and android projects
+
+    - managed workflow
+        - like rails and CRA for RN
+        - devs build managed workflow apps using expo cli on their computer and dev client on their mobile devices
+            - either expo go app for simple projects or dev build when the project grows
+        - managed workflow apps typically use one or more expo services (push notifs, build, updates, etc)
+        - expo tries to manage as much complexity as possible
+        - this is why it's called the managed workflow
+
+        - an engineer using managed workflow doesn't use android studio or xcode often 
+            - although may be useful for debugging
+            - they write typescript code and managed configuration through expo config
+            - app.json/app.config.js
+            - the expo SDK expresses an increasingly comprehensive set of system APIs
+                - camera
+                - biometric auth
+                - fs
+                - hapticss
+                - etc
+            
+            - you can do a lot, but not everything
+            - if you get to the point where you need full control over the native code
+            - you can generate native projects and continue development using bare workflow
+            - do this via `expo prebuild`
+
+    - bare workflow
+        - full control over native code
+        - you can use all packages from the expo SDK, dev builds, and all expo/EAS services
+        - config via app.json/app.config.js is mostly NOT supported
+        - you will need to configure each native project directly
+
+    - which workflow is right for me?
+        - expo never locks you in
+        - start w managed workflow
+        - if more experienced, doesn't hurt start to every project w managed workflow
+    
+
+
+
+common questions
+    - what is expo used for?
+        - expo is an open-source framework for apps that run natively on android, iOS, and the web
+        - the `expo` npm package brings these features to any react native project
+    - do comanies use expo?
+        - yes, expo is used by top companies worldwide
+    - is expo go open source?
+        - yes
+        - also, the expo go app is built with expo and react native
+
+    - why does expo have its own SDK?
+        - when expo was first created, react antive had yet to be publicly released
+        - ==> no third-party packages
+        - to make RN devX reasonable, expo team created several libs to achieve common func
+        - expo SDK is well tested, built with TS, documented
+        - every expo SDK works together to ensure versioning always matches
+        - creates a nice upgrading experience
+
+        - expo SDK is also written w expo native API to make contributing, maintaining, and readability easier
+
+    - is expo similar to react for web dev?
+        - expo is a framework FOR react native
+        - react native is similar to react-dom fro web dev
+        - but it has a few kew differences
+            - RN has no HTML/CSS
+            - instead of the DOM, RN uses native components (View rather than div)
+            - no access to browser APIs (expo-location instead of navigator.geolocation)
+
+    - what's the difference between expo and react native?
+        - expo package provides a suite of features that make it easier to develop, and scale complex react native applications
+         - expo package is not required to use EAS, or react native, but highly recommended
+
+    - how much does expo cost?
+        - expo platform is free and open source (SDK and CLI)
+        - EAS is an optional suite of cloud services for RN apps, from the expo team
+        - EAS makes it easier to
+            - build
+            - submit to stores
+            - update
+            - send push notifs
+            - more
+        - there is an EAS free tier
+    
+    - how do i add custom native code?
+        - create a dev build
+        - modules in the expo SDK are recommended for easier upgrades and improved devX
+
+    - what are the disadvantages of expo?
+        - expo adds features and functioanlity to react native projects with minimal overhead
+        - you can use any custom native code w expo by creating a dev build
+        - previously, expo had large native binary sizes and didn't support custom native code without "ejecting"
+            - these issues went away in dec 2022 at the release of EAS build
+            - EAS build supports any react native app
+            - the concept of "ejecting" was replaced by the popular expo prebuild
+            - `expo eject` was fully deprecated in aug 2022
+
+    - should i use expo cli or react native cli?
+        - expo cli should be used simultaneously w react native CLI
+        - expo cli provides the same core functionality as react native cli, and additional functionality like
+            - auto typescript setup
+            - web support
+            - auto installing compatible libs
+            - improved native build commandsi
+            - tunneling
+            - prebuild
+            - more
