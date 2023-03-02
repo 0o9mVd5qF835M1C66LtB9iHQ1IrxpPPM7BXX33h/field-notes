@@ -1,0 +1,112 @@
+intro
+  - what is bun?
+    - bun is an all-in-one toolkit for javascript and typescript apps
+    - it ships a single executable called bun
+    - at its core, is the bun runtime
+      - a fast js runtime designed as a drop-in replacement for nodejs
+      - its written in zig, and powered by javascriptcore under the hood
+      - this dramatically reduces startup times and memory usage
+
+    > bun run index.tsx // ts and jsx supported out of the box
+
+    - the bun CLI tool also implements a
+      - test runner (bun test)
+      - script runner (bun run start)
+      - nodejs compatible package manager (bun install <pkg>)
+    - these are all significantly faster than existing tools
+
+
+  - what is a runtime?
+    - javascript (or more formally, ECMAScript) is just a *spec* for a programming language
+      - anyone can write a javascript engine that ingests a valid javascript program and executes it
+      - the two most popular engines in use today are
+        1. V8 (by Google)
+        2. JavascriptCore (by Apple)
+      - both are open source
+    
+    - browsers
+      - most js programs don't run in a vaccum
+      - they need a way to access the outside world
+      - this is where *runtimes* come in
+        - they implement additional APIs
+        - notably, browsers ship with javascript runtimes that implement a  set of web APIs
+        - these web APIs are exposed via the global `window` object
+    - nodejs
+      - similaaarly, nodejs is a javascript runtime that can be used in non-browser environments, like servers
+      - javascript programs executed by nodejs have access to a set of nodejs specific globals like
+        - Buffer
+        - process
+        - __dirname
+        - node:fs
+        - node:net
+        - node:http
+      - nodejs also implements a commonjs-based module system and resolution algorithm that predates javascript's native module system
+
+    - bun is designed as a faster, leaner, more modern replacement for nodejs
+
+
+  - design goals
+    - speed (currently 4x more faster than nodejs)
+    - typescript & jsx support
+    - ESM & CommonJS compatibility
+      - internally bun uses ESM exclusively, but CommonJS modules can be imported as is
+    - web standard APIs
+    - nodejs compatible
+
+    - bun is more than a runtime
+    - the long-term goal is to be a cohesive, infra toolkit for building apps w javascript/typescript
+      - a package manager
+      - a transpiler
+      - a bundler
+      - a script runner
+      - test runner
+      - and more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

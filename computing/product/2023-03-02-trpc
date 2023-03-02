@@ -1,0 +1,81 @@
+trpc
+====
+
+introduction
+  - trpc allows you to easily build & consume fully typesafe apis
+		- without schemas
+		- without codegen
+
+  - as typescript and static typing becomes best practice in web dev
+    - API contracts represent the major pain point
+    - we need better ways to *statically type* our API endspoints
+    - we need better ways to *share those types* between client and server
+      - or server to server
+
+  - trpc is a simple library
+    - for building typesafe APIs
+    - leveraging fullpower of typescript
+
+
+  - an alternative to REST and graphql
+    - currently, graphql is the dominant way to implement typesafe APIs in typescript
+    - since graphql is designed as a language-agnostic spec for API implementation
+      - it doesn't fully use the power of typescript
+      - if your project is built with fullstack typescript
+      - you can share types *directly* between your client and server, without relying on codegen
+
+  - what is trpc for?
+    - trpc is for fullstack typescript devs
+    - makes it easy to write endpoints
+    - type errors with your API contracts will be caught at build time
+    - this reduces the surface area for bugs a runtime
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
