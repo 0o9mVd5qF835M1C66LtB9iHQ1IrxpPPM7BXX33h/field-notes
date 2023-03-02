@@ -1,0 +1,152 @@
+###############################################################################
+# type manipulation
+###############################################################################
+creating types from types
+  - typescript's type system is very powerful
+  - bc it allows expressing types *in terms* of other types
+    - the simplest form of this idea is generics
+    - there are also a wide variety of type operators available
+    - it's also possible to express types in terms of values that we already have
+
+  - by combining various type operators, we can express complex operations/values
+    - in succint, maintainable ways
+  - in this section we cover wayas to express a new type in terms of an existing type or value
+    - generics (types taking parameters)
+    - keyof type operator (using keyof operator to create new types)
+    - typeof type operator (using typeof operator to create new types)
+    - indexed access types (using type['a'] to access a subset of a type
+    - conditional types (types acting like if statements)
+    - mapped types (creating types by mapping each property in an existing type)
+    - template literal types (mapped types which change properties via template literal strings)
+
+
+
+generics
+  - major part of software engineering is building reusable APIs
+  - components that are capable of working on the data of today as well as tomorrow
+    - give you the most flexible capabilities for building large software systems
+  - hello world
+
+    function() identity(arg: any): any {
+      return arg;
+    }
+
+    - using any is certainly generic
+      - it will cause the function to accept any and all types for the type of `arg`
+      - but we are actually *losing* information about the type
+      - instead, we want a way of capturing the type of the argument
+      - so that we can denote the return type
+      - we can use a type variable here
+
+    function identity<Type>(arg: Type): Type {
+      return arg
+    }
+
+    - this function now lets us "traffic" type information on one side of the function and out the other
+    - this version of the identity function is "generic"
+    - two ways to call this function
+      1. let output = identity<string>("foo"); // explicit
+      2. let output = identity("foo"); // implicit
+
+    - you may have to explicitly pass the type when the compiler fails to infer the type
+      - this happens w complex types
+
+
+  - generic types
+    - we can type the generic function above
+
+    let myIdentityFunction: <Type>(arg: Type) => Type = identity
+
+    - we can also write a generic interface
+
+    interface GenericIdentityFn {
+      <type>(arg: Type): Type;
+    }
+
+    function identtiy<Type>(arg: Type): Type {
+      return arg;
+    }
+
+    let myIdentity: GenericIdentityFn = identity; // type assetion
+
+    - we can also move the generic parameter from the function to the interface
+      - this lets other members gain access to the generic parameter
+
+    interface GenericIdentityFn<Type> {
+      (arg: Type): Type;
+    }
+
+    function identity<Type>(arg: Type): Type {
+      return arg;
+    }
+
+    let myIdentity: GenericIdentityFn<number> = identity;
+                                    // ^ type now needs to pass in a generic arg
+
+
+    - we can also make generic classes
+      - a class although has two sides to its type
+        1. the static side
+        2. the instance side
+
+      - generic classes are only generic over their *instance* side, rather than static
+      - this means static members can *not* use the class's type parameter
+
+  - generic constraints
+    - you may sometimes want to write a generic function
+      - that works on a set of types
+      - where you have *some* knowledge
+      - we can create a constraint on the generic type
+
+      interface Lengthwise {
+        length: number;
+      }
+
+      function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
+        console.log(arg.length) // we know arg has a .length property
+      }
+
+      loggingIdentity(3); // will error, since 'number' is not assignable to 'Lengthwise'
+
+    - with type parameters
+      - you can declare a type parameter that is constrained by another type param
+      
+      function getProperty<Type, Key extends keyof Type>(obj: Type, key: Key) {
+        return obj[key]
+      }
+
+      let x = {
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4,
+      };
+
+      getProperty(x, "a"); // OK
+      getProperty(x, "m"); // ERROR
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
