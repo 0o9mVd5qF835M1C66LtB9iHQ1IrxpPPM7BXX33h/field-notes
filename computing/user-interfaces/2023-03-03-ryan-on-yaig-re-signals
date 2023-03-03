@@ -1,0 +1,90 @@
+yaig podcast episode 7
+======================
+
+- some people think react is the final destination
+- why the world need another frontend framework?
+  - over the years, there have been many different approaches for UIs
+  - they come in and out like fashion trends
+  - the principles behind solid were around before react's SPA-based approach
+
+- what was the most frustrating thing with react?
+  - the frameworks that he liked just faded away at the advent of react
+  - there are other ways of approaching the problem
+  - we don't have to throw out what we had before
+
+  - hints in the ecosystem like mobx predictable reactivity with synchronous flow
+  - he does respect react, and used it learn what was best for reactivity as a whole
+    - e.g. unidirectional flow
+  - has been working on solidjs for 7 years
+
+- when/how did the renaissance of reactivity come to be?
+  - from the PL side
+    - ppl are interested in functional relational algebera
+    - RxJs is the first mainstream implementation of those kinds of algebras
+    - you can follow the thread, and see it cut through communities with tech like Elm
+
+  - none of these things happen in isolation
+    - the rise of SPAs happen to coincide with the rise of microservices
+    - with here, and reactivity
+      - we're talking about real-time systems
+      - things getting closer to the user via edge
+      - this coincides with the ever-growing size of bundle size
+      - how can we reduce the bundle size, or prevent sending at all?
+      - how do we do less work?
+
+    - but now, we see this reactivity being the core pieces of other tech/frameworks
+      - if you know what changes, then yoiu only need *that* javascript
+
+- reactivity and state machines
+  - state machines don't compete with reactivity, they live at different levels
+  - state machines deal with high-level state orchestration
+  - reactivity is a communication pipeline
+
+  - the challenge of state machines
+    - often require a DSL
+    - this requires investment
+    - if you're ready to make that investment, and the logic is complicated enough
+    - then it may be worth it
+
+  - but state machines don't seem to make sense for reactivity
+    - frontend is concerned about synchronization (how things show up in the UI)
+    - reactivity is all about consistency
+    - if you have complicated logic, then state machines make sense for sure
+
+  - tetris effect
+    - this happens w any abstraction
+    - someone who learns reactivity in signal will go back to react/svelte will have different views
+    - they now have a clearer mental model on the mechanism of change
+    - the three core primitives of change are
+      1. state/signal
+      2. derive state
+      3. side effects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
