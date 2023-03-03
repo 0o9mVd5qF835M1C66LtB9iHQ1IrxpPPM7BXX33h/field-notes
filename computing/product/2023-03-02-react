@@ -1,0 +1,132 @@
+react
+=====
+https://beta.reactjs.org/
+
+GETTING STARTED
+===============
+
+INSTALLATION
+  - start a new react project
+    - react is a library that lets you organize UI code by breaking it apart into pieces called components
+    - react doesn't take care of routing or data management
+    - this means there are several ways to start a new react project
+      - html file and script tag
+      - minimal toolchain
+      - opinionated framework
+
+
+
+QUICK START
+  - this section will give you 80% of the react concepts that you will use on a daily basis
+
+  - creating, and nesting components
+    - react apps are made out of *components*
+    - components are a piece of the UI which has
+      1. logic
+      2. appearance
+    - a component can be as small as a button, or as large as an entire page
+    - react components are js functions that return markup
+    - react components always start with a capital letter
+
+  - writing markup with JSX
+    - the markup syntax you've seen is called JSX
+    - most react projects use jsx for convenience
+    - jsx is stricter than html
+    - your component can't return multiple jsx tags
+
+  - displaying data
+    - jsx lets you put markup into javascript
+    - curly braces let you "escape" back into javascript
+    - you can also "escape" into javascript from jsx attributes
+
+  - conditional rendering
+    - in react, there is no special syntax for writing conditions
+    - you use the same techniques as you use in vanilla js
+
+  - rendering lists
+    - you will rely on for loops and mapping to render lists of components
+
+  - responding to events
+    - you can attach to events by declaring event handler functions inside your components
+
+  - updating the screen
+    - often, you'll want your component to "remember" some info and display it
+    - e.g. display the number of times a button is clicked
+    - to do this, add *state* to your component
+
+  - using hooks
+    - functions starting with `use` are called hooks
+    - `useState` is a built-in hook provided by react
+    - you can find other built-in hooks in the react api reference
+    - you can also write your own hooks by combining existing ones
+
+    - hooks are more restrictive than vanilla functions
+    - you can only call hooks at the *top level* of your components
+    - if you want to use `useState` in a condition or loop
+      - you must extraact a new component and put it there
+
+  - sharing data between components
+    - you need to move state "upwards" to the parent component
+
+
+
+THINKING IN REACT
+  - react can change how you think about the designs you look at and the apps you build
+  - aka component-first thinking
+  - you will first break it apart into components
+  - then describe different visual states for each of your components
+  - finally, connect components together so that data flows through them
+  
+  1. break the UI into a component hierarchy
+  2. build a static version in react
+  3. find the minimal but complete representation of UI state
+  4. identity where your state should live in
+  5. add inverse data flow
+
+  1. break the UI into a component hierarchy
+    - start by drawing boxes around every component and subcomponent in the mockup and naming them
+
+  2. build a static version in react
+    - now that you have your component hierarchy
+    - it's time to implement the app
+
+    - it's often easier to build the static version first
+    - then add interactivity separately
+    - build components that
+      - reuse other components
+      - pass data using props
+    - you can either build top down or bottoms up
+
+  3. find the minimal but complete representation of UI state
+    - to make the UI interactive, you need to let users change your underlying data model
+    - you will use *state* for this
+    - think of state as the minimal set of cahnging data that your app needs to remember
+
+  4. find the minimal but complete representation of UI state
+    - after identifying your app's minimal state data
+    - you need to identify which component is responsible for
+      - changing the state
+      - or *owns* the state
+    - remember, react uses one-way data flow, passing data down the component hierarchy from parent to child component
+
+
+  5. add inverse data flow
+    - currently the app renders correctly w props and state flowing down the hierarchy
+    - to the change the state according to user input, you need data flowing the other way
+    - the form components deep in the hierarchy need to update the state
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
