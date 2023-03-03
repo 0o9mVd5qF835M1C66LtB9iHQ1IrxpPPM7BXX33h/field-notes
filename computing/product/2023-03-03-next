@@ -1,0 +1,364 @@
+next
+====
+
+FAQ
+  - is nextjs production ready?
+    - yes, nextjs is used by many of the top websites in the world
+  - how do i fetch data in nextjs?
+    - nextjs provides a variety of methods depending on your use case
+    - client-side data fetching (useEffect, SWR)
+    - server-side rendering (getServerSideProps)
+    - static-side generation (getStaticProps)
+    - incremenetal static regeneration (revalidate prop with getStaticProps)
+  - why does nextjs have its own router?
+    - it reduces configuration since it's file-based
+    - it supports shallow routing, allowing you to chance url without running data fetch methods
+    - routes are always lazy-loadable
+  - what is nextjs inspired by?
+    - many of the goals nextjs set out to accomplish were listed in 7 principles of rich web applications
+    - the ease of use of php is a great inspiration
+    - unlike php, nextjs benefits from the es6 module system
+    - every page exports a component or function that can be easily imported for lazy eval or testing
+  - as the nextjs team was researching for server-side rendering options
+    - they found react-page (now deprecated) from jordan walke (creator of react)
+
+
+
+GETTING STARTED
+  - nextjs 13 introduces the app router
+  - the nextjs team has been working to integrate nextjs w react server components and react 18 features
+  - these new features are available to try in the new `app` dir
+    - routing
+      - new fs-based router built on top of server components
+      - supports layouts, nested routing, loading states, error handling, and more
+    - rendering
+      - client-side and server-side rendering w client and server components
+      - fully optimized w static and dynamic rendering on the server w nextjs
+      - streaming on edge and nodejs runtimes
+    - data fetching
+      - simplified data fetching w async/await support in
+        - react components
+        - fetch api
+      - this aligns w the react and the web platform
+    - caching
+      - new nextjs http cache and client-side cache optimized for server components and client-side navigation
+    - optimizations
+      - improved image component with native browser lazy loading
+      - new font module w automatic font optimization
+    - transpilation
+      - automatic transpilation and bundling of deps form local packages (like monorepos) or from external deps (node_modules)
+    - api
+      - updates to the api design throughout nextjs
+    - tooling
+      - introducing turbopack, a 700x faster, rust-based webpack replacement
+
+
+  - thinking in server components
+    - similar to how react changed the way we think about UIs,
+    -  react server components introduce a new mental model for building hybrid applications that leverage the server and client
+    - instead of react rendering your *whole application* client-side
+    - react now gives you the flexibility to  choose where to render your components based on their purpose
+
+    - take a normal page from nextjs
+      - most of the components are non-interactive
+      - these components can be rendered on the server as server components
+      - for smaller pieces of interactive UI, we can *sprinkle* in client components
+      - this aligns with nextjs' *server-first* approach
+
+    - to make this transition easier, server components are the *default* in the `app` dir
+    - you do *not* have to take additional steps to adopt them
+    - then, you can opt-in to client components when needed
+
+
+
+ROUTING
+  - FUNDAMENTALS
+    - nextjs 13 introduced the new app router built on top of react server components
+    - the app router supports
+      - layouts
+      - nested routing
+      - loading states
+      - error handling
+      - and more
+
+
+    - the app directory
+      - the new app router works in a new directory named app
+      - the app directory works alongside the pages directory to allow for incremental adoption
+      - routes across diretories should not resolve to the same URL path and will cause a *build-time* error to prevent conflict
+
+      - by default, components inside app are react server components
+        - this a performance optimization and allows you to easily adopt them
+        - however, you can also use client components
+
+      - folders and files
+        - in the app directory,
+        - folders are used to define routes
+          - a route is a single path of nested folders
+          - a hierarchy of folders, from root folder to final leaf folder, that includes a page.js file
+        - files are used to create UI that is shown for the route segment
+
+      - route segments
+        - each folder in a route represents a *route segment*
+        - each route segment is mapped to a corresponding *segment* in a *URL path*a
+
+      - nested routes
+        - to create a nested route, you can nest folders inside each other
+        - e.g /dashboard/settings can be created by nesting two new folders in the `app` dir
+        - the /dashboard/settings route has three segments
+          1. / (root segment)
+          2. dashboard (segment)
+          3. settings (leaf segment)
+
+      - file conventions
+        - nextjs provides a set of special  files to create UI with specific behavior in nested routes
+
+        - page.js
+          - create the unique UI of a route and make the path publicly accessible
+          - route.js
+            - create server-side API endpoints for a route
+        - layout.js
+          - create shared UI for a segment and its children
+          - a layout wraps a page or child segment
+          - template.js
+            - similar to layout.js, except a new component instance is mounted on navigation
+            - use layouts, unless you need this mounting behavior
+        - loading.js
+          - create loading UI for a segment and its children
+          - loading.js wraps a page or child segment in a react suspense boudary, showing th loading UI while they load
+        - error.js
+          - create error UI for a segment and its children
+          - error.js wraps a page or child segment in a react error boundary
+          - global-error.js
+            - similar to error.js, but specifically for catching errors in the root layout.js
+        - not-found.js
+          - create UI to show when the `notFound` function is thrown within a route segment
+
+      - component hierarchy
+        
+        <Layout>
+          <Template>
+            <ErrorBoundary fallback={<Error />}>
+              <Suspense fallback={<Loading />}>
+                <ErrorBoundary fallback={<NotFound />}>
+                  <Page />
+                </ErrorBoundary/>
+              </Suspense>
+            </ErrorBoundary>
+          </Template>
+        </Layout>
+
+      - colocation
+        - in addition to special files
+        - you have the option to colocate your files inside folders
+        - e.g. stylesheets, tests, components, and more
+
+
+      - server-centric routing w client-side navigation
+        - unlike the `pages` directory which uses client-side rendering
+        - the new router in the `app` directory uses
+          - *server-centric-routing*
+          - this is more aligned w the server components and data fetching *on the server*
+          - with server-centric routing, the client *does not* have to download a route map
+          - additionally, the same request for server components can be used to look up routes
+          - this optimization is useful for all applications, but has a larger impact on applications w many routes
+
+        - navigation
+          - although routing is server-centric, the router uses *client-side navigation* with the Link component
+          - this *resembles* the behavior of SPAs
+          - this means when a user navigates to a new route, the browser will not reload the page
+          - instead, the URL will be updated and next.js will *only render segments that change*
+
+        - caching
+          - as users navigate around the app, the router will store the result of the react server component payload in an *in-memory* client-side cache
+          - the cache is split by route segments which allows
+            1. invalidation at any level
+            2. ensures consistency across concurrent render
+          - this means for certain cases, the cache of a previously fetched segment can be *re-used*
+          - this further improves performance
+
+      - partial rendering
+        - when navigating between sibling routes
+          - `/dashboard/settings`
+          - `/dashboard/analytics`
+        - nextjs will only fetch and render the layouts and pages in routes that *change*
+        - nextjs will *not* re-fetch or re-render anything *above* the segments in the subtree
+        - this means that in routes that share a layout, the layout will be *preserved* when a user navigates between sibling pages
+
+        - without partial rendering, each navigation would cause the full page to re-render on the server
+        - rendering *only* the segment that's updating reduces the amount of data transferred and execution time
+        - this leads to improved performance
+
+      - advanced routing patterns
+        - in the future, the nextjs router will provide a set of conventions to help you implement more advanced routing patterns including
+        - parallel routes
+          - allow you to simultaneously show two or more pages in the same view
+          - which can be navigated independantly
+          - you can use them for split views (dashboards)
+        - intercepting routes
+          - allow you to intercept a route and show it in the context of another route
+          - you can use these when keeping the context for the current page is important
+            - e.g. seeing all tasks while editing one task
+            - e.g. expanding a photo in a feed
+        - conditional routes
+          - allow you to condtionally render a route based on a condition
+            - e.g. showing a page only if the user is logged in
+
+
+
+RENDERING
+  - FUNDAMENTALS
+    - rendering converts code you write into user interfaces
+    - react 18 and nextjs 13 introduce new ways to render your application
+
+    - rendering environments
+      - there are two environments where your application can be rendered
+        - the client
+        - the server
+    - component-level client and server rendering
+      - before react 18, the primary way to render your application *using react* was entirely on the client
+      - nextjs provided an easier way to
+        - render *pages*
+        - and server-side render (pre-render HTML on server), which react then hydrates
+      - however, this led to the additional javascript needed on the client to make the initial HTML interactive
+      - now, with server and client components
+        - react can render on the client *AND* server
+        - this means you can *choose* the rendering environment at the *component* level
+        - by default ,the `app` directory uses *server components*
+        - this allows you to easily render components on the server and reduces the amount of javascript sent to the client
+
+      - you can interleave client and server components in a component tree by
+        - importing a client component into a server component
+        - passing a server component as a child ora prop to a client component
+        - behind the scenes, react will merge the work of both environments
+
+    - static and dynamic rendering on the server
+      - in addition to client and server-side rendering from react18
+      - nextjs gives you the option to optimize rendering on the server w *static* and *dynamic* rendering
+
+      - static rendering
+        - with static rendering, *both* server and client components can be *prerendered* on the server at *build* time
+        - the result of the work is *cached* and reused on subsequent requests
+        - the cache result can also be *revalidated*
+
+        - note that server and client components are rendered differently during static rendering
+          - client components have their html and jason prerendered and cached on the server
+          - the cached result is then sent to the client for hydration
+          - server components are rendered on the server by react
+            - then their payload is usted to generate html
+            - the same rendered payload is also used to hydrate components on the client
+            - this results in *no* javascript needed on the client
+             
+      - dynamic rendering
+        - with dynamic rendering, both server and client components are rendered on the server at *request* time
+        - the result of the work is *not* cached
+
+
+
+    - edge and nodejs runtimes
+    - next steps
+
+
+DATA FETCHING
+  - FUNDAMENTALS
+    - nextjs 13 introduced a new way to fetch datain your application
+    - the api has been simplified to align w react and the web platform
+    - previous nextjs data fetching methods such as `getServerSideProps` `getStaticProps`, and `getInitialProps` are *not* supported in the new app directory
+
+    - the fetch() API
+      - the new data fetching system is built on top of the native fetch() web api
+      - it also makes use of async/await in server components
+        - react extends fetch to provide automatic request deduping
+        - nextjs extends fetch options object to allow each request to set its own
+          - caching rules
+          - revalidating rules
+
+    - fetching data on the server
+      - whenever possible, we recommend fetching data *inside* server components
+      - server components *always fetch data on the server*
+      - this allows you to
+        - have direct access to backend data resources (db)
+        - keep your application more secure by preventing sensitive information being exposed to the client
+        - fetch data and render in the same environment
+        - this reduces backa nd forth client/server communication, as well as the work on the main thread on the client
+        - perform multiple data fetches with round-trip instead of multiple individual requests on theclient
+        - reduce client-server waterfals
+
+
+
+
+
+
+
+
+    - component-level data fetching
+    - static and dynamic data fetches
+          
+      
+
+
+
+
+
+
+
+      
+  - defining routes
+  - pages and layouts
+  - linking and navigating
+  - loading UI error handling
+  - route handlers
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
