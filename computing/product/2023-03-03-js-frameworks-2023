@@ -1,0 +1,205 @@
+javascript frameworks - heading into 2023
+=========================================
+https://dev.to/this-is-learning/javascript-frameworks-heading-into-2023-nln
+
+self-notes
+  - this article captures the state of affairs in UI runtimes
+  - in this same directory, are notes on topics which i'm unfamiliar with since hooks (react 16)
+  - those topics are
+    - routing
+      - the return of server-side routing
+    - rendering
+      - why efficient hydration in javascript frameworks is challenging
+      - conquering hydration (in SSR)
+    - architecture patterns
+      - patterns for building javascript websites in 2022
+
+2022 RELEASES
+  - 1.0 releases of astro and sveltekit
+  - solidstart, and qwik entered beta
+  - react 18 released, and added
+    - streaming support
+    - react server components
+    - these two features found there way into nextjs sand remix
+  - typescript, trpc, and tanstack router, create-t3-app
+    
+
+HOW WE GOT HERE
+  - the industry focused on
+    - "the server"
+    - and "solving tradoffs of SPAs"
+    - this isn't new, but what often isn't understood is they *aren't* panaceas
+  - server-side rendering allowed us to render pages sonner
+    - by fetching data *sooner* and usually *closer* to the data-source
+    - but SSR isn't without compromise
+    - it slowed down response times
+    - it also didn't help with ever-growing size of js bundles
+    - it often actually increased bundle sizes
+    - this is bc we now need code not only to client render but to also *hydrate* the page
+
+    - there are some partial solutions to the cons of SSR
+      - cache more aggresively
+      - stream HTML response (phoenix liveview)
+      - invest in smaller/faster frameworks
+
+    - there are some red herrings
+      - we can think progressive enchancement is a *substitute* for hydration or
+      - that moving *away* from client-side caches meaningfully chances the math
+      - the fact is, it *does not*
+
+    - not everyone is on the same page yet
+    - but many leading minds in the space actually agree on a particular thing
+    - this is not something to take lightly
+
+    - that thing is
+      - SPAs aren't the most suitable architecture for everything
+
+
+
+WHERE WE ARE AT
+  - SPA's aren't the most suitable architecture for everything
+    - it shouldn't come as a surprise, but after the past decade, it takes some convincing
+    - clarification: SPA here meaning the typical javascrript client routed and rendered architectures
+      - even the ones that boast server rendering
+      - react
+      - next
+      - remix
+      - vue
+      - nuxt
+      - sveltekit
+      - solidstart
+    - SPA being a hammer for every nail is a natural evolution
+      - create a solution that pairs great UX w great DX and people want to take it everywhere
+      - even where it doesn't belong
+      - where is that?
+      
+      - any place that
+        - cares about *page load performance* as the bottom-line
+        - cares about low-end devices and networks
+        - and, arguably, anywhere the complexity isn't justified
+
+      - to sum up the greatest alignment bt framework thought leaders in 2022
+        - ROUTING BELONGS ON THE SERVER
+        - this doesn't mean to do away with client-side routing (although that's an option)
+        - it just means that client *routed* and *rendered* architectures are pushing against limitations
+
+        - whether you look at
+          - marko, astro, fresh
+          - next/solidstart's server components
+
+        - you see the server *stepping up* on routing duties
+          - rendering the next page in response to navigation after the initial load
+          - even qwik
+            - which could legitimately start as an optimized partially loaded application and scale to a full-blown SPA
+            - prefers server routing (MPAs) in all examples and demos
+
+
+
+REFLECTING ON 2022
+  - conquering hydration
+    - with server rendering being the focus
+      - it's no surprise that *hydration* has been a topic of importance
+      - this is a cost that we pay for every server-rendered application that is authored with a declarative javascript framework
+      - *or so we thought
+
+    - both quick and marko 6 resumable demos showed that
+      - hydration is something that oen day soon, may be something of the past
+
+
+  - hybrid nesting routing
+    - before the end of 2022, we saw 2 experimental technologies that seem to offer the best of both worlds
+      1. client side navigation *paired with*
+      2. after-the-fact server rendering
+    - next 13 app directory saw server components paired with nested routing
+
+    - while not everyone is sold on server components
+      - it's hard to argue w delivering *significantly less* javascript while maintaining that SPA UX at the same time
+      - that SPA UX of course being client routed and rendered architectures
+
+
+  - signals everywhere
+    - fine-grained reactivity has made a comeback in 2022
+    - the vue community would (correctly) tell you
+      - that for them it never went out of style
+    - but only in the past year have we seen fine-grained reactivity make its way in a much wider scope
+      - under a new name, namely "signals"
+
+
+  - typescript driven development
+    - 2022 saw typescript go from being an option -> default on many meta-framework CLIs
+    - having type-safe APIs *across* the client/server boundary isn't even a consideration anymore
+    - trpc was a game changer
+    - tanstack router showed us what type-safe routing looks like
+      - and trpc delivered type-safe data fetching
+    - now there is no going back
+    
+FORWARD TO 2023
+  - wranging in complexity is the theme this year
+  - you don't dump a bunch of innovation in a sapce in short time and not expect something to give
+  - astro and remix's return to "it's just php/rails" for MPAs and SPAs, respectively, have been largely successful
+    - even if they both lack important benefits of more sophisticated solution
+    - ryan clears this up in the twitter thread with remix
+    - this is re: hydration/hybrid routing
+    - this is not a bad thing, remix streamlined DX in a way that is pleasurable,
+    - whereas these more sophisticated solutuions are still a bit of a mess
+    - https://twitter.com/robdjohansen/status/1608586998763384833
+
+  - when a custom language server plugin is the only way to keep server components in check
+  - or you need to be an expert on where *serialization boundaries* happen in your code
+  - this is when you *need* to start questioning things
+
+  - these technologies are the *future*
+    - but we need to rememebr we aren't the first ones to try this
+    - backend technologies were tried in the mid 2000s
+    - and instead, we largely moved to SPAs (client-side routing and rendering)
+    - we need to answer: "what's different this time?"
+      - and it might still come down to this question:
+      - do we believe that what could be shipped to the browser, should be eventually?
+      - or is the server a place we should uniquely leverage?
+      - as the barrier of MPA and SPA melts away,
+      - it's quite possible the division just takes a new form
+
+
+  - edge: the unexpected frontier
+    - edge function support has rolled out to pretty much every meta-framework over the past 12 months (2022)
+    - the majority of these frameworks can deploy to a variety of serverless and edge offerings
+    - however, that hasn't change *how* we develop
+
+    - we are quick to point out that data *is not* on the edge
+    - and we should assume that not all data will be on the edge even as solutions solve for it
+    - the edge needs to move beyond monolithic deployments
+      - we need to figure out how to distribute compute to where it *makes sense*
+      - this isn't about microfrontends or microservices, but monolithic authoring with distributed deploys
+      - we will found out what that looks like in the next 12 months
+
+
+  - other technologies
+    - will 2023 be the year of web components?
+      - about as likely as it will be the year of the linux desktop
+    - will 2023 be the year of wasm?
+      - probably not yet
+      - but quietly, wasm has been finding itself applicable in more spaces than ever
+      - that includes DOM rendering
+      - the overhead we thought we understood was not wht we thought
+      - the fastest WASM rust libraries have closed the gap with javascript wrt client-side rendering
+
+
+
+
+
+
+
+
+
+
+CONCLUSION
+  - new frameworks have been emerging in the last year or so after about 5 years of silence, for good reason
+  - it isn't that we stopped making them, but the time is right
+  - even big players are flirting with ecosystem *resetting* technologies like
+    - server components
+    - virtual DOM-less compilers like vue vapor
+    - new change mechanisms (rendering) like signals
+  - no clear direction yet
+  - existing approaches are at their limit
+  - radical new approaches are incomplete and pass complexity onto the developer
+  - attempt to bury this complexity in meta-frameworks have only been somewhat successful
