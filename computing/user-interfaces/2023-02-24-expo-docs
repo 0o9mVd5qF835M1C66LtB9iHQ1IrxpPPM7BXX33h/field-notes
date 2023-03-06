@@ -151,3 +151,57 @@ common questions
             - tunneling
             - prebuild
             - more
+
+
+
+
+
+
+ADDING CUSTOM NATIVE CODE
+===============================================================================
+
+- expo go app is a great tool to get started
+  - it exists to bootstrap ideas, and share work with minimal friction
+  - expo go includes a feature-rich native runtime, made up of every module in the expo sdk
+
+- the tradeoff is that expo go does not allow you to add custom native code
+  - you can only use the native modules built into the expo sdk
+
+- adding custom native code with development builds
+  - to make use of packages with native code, but continue with the same DX as expo go, you can migrate to using development builds
+  - development builds are like your own personal versionof expo go
+  - they include the native runtime, and you control what is included in that native runtime
+  - this is done by adding/removing packages in package.json
+
+
+
+
+
+DEVELOPMENT BUILDS
+==================
+
+INTRODUCTION
+  - what is a development build
+    - it's a debug build that contains the expo-dev-client package
+    - you can think of a development build as your own version of the expo go client
+  - what is an expo-dev-client
+    - it's used to create a development build
+CREATE DEVELOPMENT BUILDS
+USE DEVELOPMENT BUILDS
+INSTALLATION IN BARE REACT NATIVE
+TOOLS, WORKFLOWS, AND EXTENSIONS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

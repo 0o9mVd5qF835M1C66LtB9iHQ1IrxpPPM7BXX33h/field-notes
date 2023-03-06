@@ -1,0 +1,17 @@
+EA Build
+========
+
+
+
+START BUILDING
+==============
+- eas build is a hosted service for building app binaries for your expo and react native projects
+- makes building your apps for distribution simple and easy to automate by proving defaults
+- it also handles app signing credentials (if you wish)
+- it also makes shared builds with your team easier with internal distribution
+- it has deep integration with EAS submmit for app store submissions
+- first-class support for expo-updates library
+
+
+APP SIGNING
+===========

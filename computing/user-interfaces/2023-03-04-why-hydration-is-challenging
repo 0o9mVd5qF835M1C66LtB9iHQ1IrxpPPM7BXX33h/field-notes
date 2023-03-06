@@ -1,0 +1,127 @@
+why efficient hydration in javascript frameworks is so challenging
+==================================================================
+https://dev.to/this-is-learning/why-efficient-hydration-in-javascript-frameworks-is-so-challenging-1ca3
+
+
+
+DEBUNKING SERVER RENDERING AS THE SILVER BULLET
+  - so you've taken your favorite client rendering js framework and render it on the server
+    - better SEO *and* better performacne
+    - the best of both worlds
+
+  - this is actually a common misconception
+    - simply server rendering your SPA doesn't solve everything
+    - in fact, you've most *likely* increased your javascript payload
+    - you may even have longer wait times, waiting until the application is *interactive* compared to just client rendering
+      - most frameworks hydration code is larger than their typical client code
+      - this is bc, ultimately, it needs to do both things
+        - it might only be hydrating at first
+        - but since the framework *allows* client-side rendering
+        - the app needs the code to that as well
+
+        - now, instead of shipping an empty HTML page immediately
+        - we need to wait for the whole page to load and render on the server
+        - before we then run a process similar to rendering in the browser
+
+        - that page is also a lot larger as it contains all
+          - HTML
+          - the data to bootsrap itself
+
+    - it's not all bad
+      - generally speaking, your main content should be visible faster
+      - you didn't have to wait for the browser to do an additional round trip for the javascript
+      - but you have now also delayed the loading of assets
+      - this includes the javascript needed to hydrate your app
+      - note: this is highly dependant on consumer network & data latency
+      - the point is, that server rendering isn't a *clear* win
+      - we have new tradeoffs and considerations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+THE FUNDAMENTAL PROBLEM
+STATIC ROUTES (NO HYDRATION)
+LAZY LOADING THE JAVASCRIPT (PROGRESSIVE HYDRATION)
+EXTRACTING DATA FROM HTML
+ISLANDS (PARTIAL HYDRATION)
+OUT OF ORDER HYDRATION
+SERVER COMPONENTS
+CONCLUSION
+  - this is an area that is constantly being worked on
+  - so new techniques are constantly emerging
+  - the best solution might be a combination of different techniques
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

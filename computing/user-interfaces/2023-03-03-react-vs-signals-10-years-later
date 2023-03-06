@@ -1,0 +1,98 @@
+react vs signals: 10 years later
+================================
+
+"FIXING" FRONTEND
+  - to the react team, was was the "fix" to the setup/render split
+  - at the core of this conversation, we must first understand what react is
+    - react is not the virtual dom
+    - not the jsx
+  - react's core strenghts *are*
+    - composition
+    - unidirectional data flow
+    - freedom from DSLs
+    - explicit mutation
+    - static mental model
+
+  - react has a very important set of principles
+    - these principles guide react
+    - and are more important than any implementation detail
+    - even years later, there is this notion from react thought leaders that they have fixed frontend
+
+  - but hypothetically, what if they were wrong?
+  - what if they didn't fix frontend?
+    - what if there were other ways to address the problems?
+    - other ways that didn't involve such drastic realignment?
+
+A SOLID ALTERNATIVE
+  - the concept behind solid is equally simple
+    - it even shares ideas like composition, unidirectional data flow, and explicit mutation
+    - the same ideas that made react feel like a *simple* answer to building UIs
+  - where solid differs is *outside* the world of reactivity, *evrything* is an *effect*
+    - it's almost the antithesis of react
+    - this is bc react treats everything you do as being pure
+IMMUTABILITY
+UNIDIRECTIONAL FLOW
+OPT-IN VS OPT-OUT
+FINAL THOUGHTS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

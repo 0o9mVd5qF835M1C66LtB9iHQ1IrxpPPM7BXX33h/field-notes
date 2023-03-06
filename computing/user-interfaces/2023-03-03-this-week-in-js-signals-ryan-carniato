@@ -1,0 +1,287 @@
+this week in javascript signals
+
+
+- why did this week happen?
+
+- been looking at angular for past few months
+  - there's a new guard coming in
+  - angular probably wasn't as bad as people put it out to be
+  - if he saw qwik's presentation a few months ago, it would have saved him time
+  - angular is coming back into the conversation
+  - at this point, angular is just adding hydration
+  - they aren't necessarily on the bleeding edge
+  - but there's many smart people rethinking angular
+
+  - when angular announced signals aka fine-grain reactivity
+    - a bunch of people came out of the woodwork to talk about this
+    - svelte, solid, preact, vue, qwik, people came out to talk about reactivity
+    - what really triggered this was
+    - builder.io's blog, useSignal() is the future of web frameworks
+
+    - mobx and vue were very important
+      - both have two different philosophies
+      - they value different elements as #1
+      - but both solved problems of the previous generation, in very short-order
+      - people don't realize this
+
+  - angular's signals causes a heavy push
+  - suddenly, there's been strong language, like builder.io's
+  - builder is the tip off point
+  - article shows in thisweekinreact.com
+    - this thread wall about signals is about performance
+ - andrew responds, and is the main one that sparks the debate
+    - the thread just kept on going the entire weekend
+    - pete hunt calling signals people barbarians
+    - this thread started on performance but then turned into DX
+
+    - the whole react core team was in the thread
+    - even jordan walke chimed in with an argument
+      - that was good 10 years ago
+
+
+  - the infamous thread is devon govetts one
+    - then people were like, woah what's going on?
+    - no one can make sense of this
+
+
+  - ryan did his best to focus on a few narratives
+  - on sunday he recapped
+  - there's a lot of "does it scale?", which is fair
+    - solid was something for his own-use, continuing the same patterns from previous tech he knew
+    - but angular adopting signals is a different beast
+    - it gives more credibility to scale
+
+
+- this week was actually great
+  - the industry gets to have a discourse on this
+  - we get to revisit technology from 10 years ago
+  - every once in a while we should reevaluate things
+
+
+- aside:
+  - shallowRef in vue, and createSignal in solid are basically the same thing
+  - ryan didn't event any of this stuff
+  - signal was just waiting for everyone
+
+  - vue had a difficult position to be in during the early years
+    - vue has reactivity, chosen mostly for DX
+    - evan worked at meteor
+    - evan liked the reactivity
+    - evan's biggest concern was present something that people could just pickup
+    - in that time period, react and angular were like
+    - we're just using plain POJOS
+
+  - we've went from a world from MVC-based models like backbone to more simple frontend frameworks
+    - just focus on views
+    - vue just hid the data, and just wired it for everyone
+    - impression: vue2.0 and mobx were similar
+    - vue1 was closer to knockout
+    - they essentially *hid* reactivity
+    - this was a challenging position
+    - vue adopted signals in 2020
+    - but it was never new tech
+    - vue was there all along
+    - but ryan enjoyed the reactivity
+    
+  - meteor essentially had signals
+    - they had their tracker library
+    - at the time, you have jquery, and can manipulate the dom
+    - ok, well MVC is a nice pattern, so lets build this thing
+    - this was the same time when the backend ppl wanted to kill the monolith, and move to microservices
+    - where does the state go?
+    - problem: MVC doesn't have a slot for ephemeral state
+    - angular, and ember had to invent more concepts
+    - joke: MVC++
+    - this caused a rewrite in all the initial frameworks
+    - knockout never had this problem, bc controllers were never singletons, they were instances
+      - this was a very early version of what would turn out to be components
+    - ppl were experimenting with reactivity
+      - meteor, ember, backbone, angular
+      - this was cool bc we have state
+      - right after jquery, we can just use events and use fine-grain updates
+
+  - problem
+    - these state libs weren't sophisticated
+    - essentially message queues
+    - easy to shoot yourself in the foot
+    - weird loops where one state causes other state to update
+      - people were just ping-ponging
+    - people weren't deriving state properly
+
+    - at the exact same time this is happening
+      - people were enamored with updating the dom
+      - it was called two way binding
+      - now, we also have ping-ponging up the tree
+      - didn't bother much out for knockout
+      - but angular's process was horrible
+      - suddenly, you have things out of date
+
+  aside:
+    - elm had signals 10 years ago
+    - but not direct influence on ryan
+
+  - this is the world react came into
+    - ruan can empathize why they felt like that
+
+
+
+
+
+- it's not that solid looks like react, it's that react looks like reactive frameworks without being reactive
+  - interesting take
+  - came up in discussion with dad
+  - from a fp perspective, reactivity is a branch of fp
+    - they tie together
+    - in academia, there's a whole bunch of approaches
+    - the react team never looked at the proble this way
+
+
+
+- react makes sense given its circumstances
+  - bg: two basic concepts of UIs in graphics
+    1. model which you mutate (like the DOM)
+      - kind of like an OOP feel
+        - the problem is bursts
+        - you don't know how much updates cost
+
+    2. immediate mode
+      - screw that, were just going to render the whole next frame
+        - the benefit is consistency
+        - the consistency of knowing roughly how much it cost to render a frame
+        - you know what to expect, so there's less surprisesa
+
+  - immediate mode was the philosophy the brought into the frontend world
+  - that's why they care about time slices
+
+
+
+
+- wrote the evolution of signals in js on sunday
+  - too much on twitter
+  - everyone has react-brain
+  - he went in length of what he was talking about here
+
+  - takeway from the hacker way talk
+    - takeway unidirection flow is a good thing
+    - two way data binding can be dangerous if cyclical
+
+  - so react threw out the entire existing industry
+  - mobx solved everything
+    - mobx isn't popular today bc of the impedence mismatch
+    - mobx doesn't really fit well w react
+    - "what can be derived, should be derived"
+    - derived is derived, predictable, one-way, consistent
+    - mobx started the progress of derived state
+    - aka poll-based semantics (where reactivity was originally push-based)
+
+  - push based semantics
+    - they have the ability to update things to c hange
+    - but this isn't nearly good as deferring work
+    - this is the fundamental difference
+
+  - react is pull based
+    - it just rerenders everything
+    - it pulls through the entire systes
+    - push and pull are always battling
+
+  - mobx though had push/pull hybrid
+    - it's almost like react
+    - you push the notification of change (set state)
+    - but mobx doesn't do the work until its asked for it
+    - the difference is the granularity in state updates
+
+
+
+- another problem
+  - dealing with memory
+  - this is the leaky observer pattern (classic go4)
+  - in reactive libraries, the subscription happens on both sides
+    - its true that the effect subscribes to the signal
+    - which means every time the signal changes, the effect gets run
+    - but, in order to do the bookkeeping, banklinking must be done
+    - otherwise, unsubscriptions are impossible
+    - this wasn't fun in knockout
+
+  - luckily, sjs came out in 2013
+    - they model their stuff after digital circuits
+    - FGPA boards with HDL
+    - you talk about everything in terms of signals
+    - in these PLs, although you have control flow, it has to reach steady state
+    - the mental model: any time a value changes, the entire system propagates
+    - you have to inject things like buffers to break it up
+    
+    - this makes sense, reactivity is kind of the same programming model
+    - sjs based on clock cycles
+    - you can only update a value within the same clock cycle, or else it throws
+    - solid used to obey this constraint, but loosened over time bc of confusion
+
+
+
+- reactivity frameworks actually make reactivity cross-platform
+  - people hate on the compiler not being cross-platform
+  - but the compiler actually *is* cross-platform
+  - the dom is just a side effect
+
+
+
+- vue's virtual dom
+  - getting virtual dom and signals to play together nicely isn't easy
+  - virtual doms wasn't small components for updating
+  - but in reactivity, you don't want many effect wrappers, so you want larger components
+
+
+
+
+- pieces were there
+  - mobx, sjs, and vue had the pieces
+  - except one thing
+    - everyone wasn't respecint react
+    - ryan's a huge react fan
+    - react did great things
+    - what are the learnings of react?
+      - composition
+      - uni-directional flow
+      - freedom from DSLs
+      - explicit mutation
+      - static mental model
+    - vue and signal have been able to adopt features quickly  
+  - first and third article have the same conclusion
+    - the perception is that signals are mutable, two-way data binding
+    - he noticed the narrative was that immediate mode "fixed" the problem
+    - the whole point is, a different paradigm can exist
+    - but dan thinks signals is going back to gotos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

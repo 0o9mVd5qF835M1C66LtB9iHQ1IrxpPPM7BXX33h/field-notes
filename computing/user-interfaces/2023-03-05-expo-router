@@ -1,0 +1,9 @@
+expo router
+===========
+
+introduction
+  - expo router brigns the best routing concepts from the web to native ios and android apps
+  - every file in the app directory automatically becomes a route in your mobile navigation
+  - it's built on top of react navigation
+  - deep linking system is generated live, so users can share links to any route 
+
