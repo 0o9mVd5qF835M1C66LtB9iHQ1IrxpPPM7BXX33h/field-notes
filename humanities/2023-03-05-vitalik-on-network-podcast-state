@@ -1,0 +1,285 @@
+vitalik on starting new countries
+
+
+
+ethereum
+  - started end of 2013
+  - travelling
+  - people in israel were interested in what's next
+  - what does a protocol look like to support those applications?
+    - first protocol was color coins
+    - second protocol was master coin- this was all pre-2013
+    - balaji and vitalik met in 2013
+
+    - at the time, he coined swiss-army knife protocols
+    - supported 10 diffeent applications, but had one transaction type
+    - he started poking, trying to collapse/merge three features into one
+    - he started making small tweaks
+    - maybe it makes sense for these contracts to be an account
+    - send coins directly to a contract, just like a virtual agent
+    - it first started on how to modify existing systems
+    - ambition grew, and project became its own independant chain, ethereum
+
+
+
+- what's your retro?
+  - launch process blog post in 2015
+  - frontier: launch of chain
+    - very explicit marketing that iwas beta aka the frontier
+  - homestead
+    - somewhat out of the wild west
+  - metropolis
+    - ethereum foundation originally wanted to build a web browser
+    - this does not happen, we have browser wallets
+
+
+
+- balaji on dao
+  - this is ancient history in crypto world
+  - 7 years ago
+  - people were checking on ethereum in 2016, valuation was $1B
+  - this VC fund tried to be autonomous
+  - from the outside, 10% of ETH was in the dao
+
+  - this dao attacker read the code and could drain it
+  - there was this white hat approach that could undo the black hat
+  - they went back and forth until the final transaction, 30 day clock
+
+  - he now has sympathy towards burnicke
+
+- the other thing in 2016
+  - equally as fascinating as the hack, but 10x fewer people have heard of it
+  - sep 19, 2016
+  - dao had gotten hacked months ago
+  - dao hard fork happened two months ago
+  - eth classic forked
+    - whole bunch of people and exchanges supporting it
+  - first time a crypto civil war existed
+  - ethereum price just peaked
+  - it just felt like the ethereum community was on its way out of the dao fiasco
+
+  - but, then at 5:15am shanghai timein sep 19,
+    - hotel devcon
+    - military style wake up call
+    - ethereum foundation calls him, tell him to come down
+    - walked down to the room
+    - 20 developers in the room
+    - there was a bug, not in the protocol, but in implementations
+    - computations were slower, took n^2 instead of n
+    - a quadratic bug did happen in bitcoin
+    - quadratic attack issue with hasing
+    - one of those issues no one knows about
+
+    - it was ok for bitcoin given block size
+    - but block size increasing ==> more pain
+    - influenced the block size discussion, slightly
+
+    - in ethereum, the issue was in implementation detail
+    - vitalik thinks the attacker might've done it purposely at the beginninng of defcon
+    - patched bug before defcon
+    - showed unity
+    - core devs are the true heros of the ecosystem
+
+    - when defcon finished
+      - the attacker finished second, third, fourth attacks
+      - literally in cyber war between geth/parity clients and the attacker
+      - sometimes only geth worked, sometimes only parity, people had to switch back and forth
+
+
+      - one month later, he found a bug with the protocol itself
+      - self-destruct op code bug, makes ethereum state much bigger using tiny gas
+      - had to do another emergency hard fork**
+
+    - balaji remembers end of 2016, ethereum price dipped
+      - folks thought smart contracts are just too hard
+      - then, 3/4 months hard, things came back
+    
+- vitalik sent the tx that broke thereum consensus for the first and real time
+  - then 2017 happened
+  - then 2018
+    - birth of uniswap
+    - segueway into defi
+  - then 2019
+  - then 2020
+    - defi summer
+    - nfts
+    - the one appllication vitalik didn't predict in the og white paper
+  - then 2022
+    - merge happened (serenity)
+    - then added sharding, to scale
+
+
+
+- balaji was concerned about the merge
+  - moving the whole ecosystem over
+  - the fact that was smooth and non-event, was really impressive
+  - vitalik:
+  - yes, transition took a lot of work
+  - it was a surprise to the team as well that it was a non-event
+  - every test broke
+  - when the real merge happened, everything happened smoothely
+  - changing the engine of a jet while it was flying
+
+- now that the merge is done
+  - the main thing that's left is sharding
+  - we've talked about sharing for a long time, but it's gotten more ambitious
+  - early versions of sharding were willing to give more trust (more than 50% were good-actors)
+  - now it's more ambitious, can we prevent > 90% attacks?
+
+
+  - 2020 trivia
+    - well known in ethereum circles, but not outside
+    - rollup-centric roadmaps
+    - make some changes to ethereum to make L2 scaling solutions easier
+    - L1 is like the supreme court, they don't see every case
+    - rollup team wants to take off training wheels next year
+      - backdoor if bugs happen
+      - some teams will remove entirely, some will have hybrid
+      - humans have half the votes, and the computers have half
+
+  - 2023 will the year of rollups
+    - training wheels are weakened alot
+    - mostly trustless (not fully)
+    - then sharding will be finished
+    - after that, will be fully trustless, which will take a couple years later
+    - after next year, first point vitalik would be happy with ethereum
+    - but they don't want to stop there
+    - ethereum can support 500M users before the next bull
+    - transition from theory -> practical ecosystem
+
+
+
+
+
+- what new country would you start, and why?
+  - important to approach question not from LARPy pov
+  - it's important to dig down into what is a country
+  - break it up into its constituent parts
+  - which of those parts and combination are valuable for people?
+
+  - the serious version of the question: what is the single biggest problem that country can solve?
+
+  - one of the ways to break a country
+    - social network
+    - legal and jurisdiction
+    - possibly, third, physical location (climate)
+
+    - even if you decide legal environment of dubai is perfect for you
+      - problem with dubai
+      - climate is being unfairly considered
+
+
+    - the lives
+    - the laws
+    - and land
+
+
+  - when balaji talks to people
+    - they think about law and land immediately
+    - but land and law are actually boundary conditions
+    - they are the things that are mandatory or forbidden
+    - you usually don't run into the law in everyday life
+    - land is hard, but community you can get first
+
+  
+  - what's the difference between a city and country?
+    - california is the only place in US which has a pleasant climate
+    - plesant climate is inside 8 and 24
+    - california beats every area
+    - there's a huge tax to be in california
+    - may contain traces
+    - other con is cost
+    - although the cons, still huge network effects
+
+
+  - going back to starting a new country
+    - first off, climate is very important
+    - if you're starting a new X, you have to essentially create a network effect
+    - there are ppl willing to pay the network effect penalty
+      - they want a different network effect
+      - they're willing to sacrifice quantity *for* quality
+
+    - climate is one of two factors where you place yourself
+    - other things, to add on climate, which are physical based
+      - time zone
+      - working in america is easier when working in argentia
+      - rather than europe, although both are same distiance
+
+
+    - basically, the question is
+      - what is the benefit?
+      - what are you willing to sacrifice?
+      - a lot of people don't really have that much fancy stuff they need to do wrt law
+
+
+  - balaji on climate
+    - for a new country, the more desirable the land, the less disirable the land
+    - more desirable means its more contentious
+    - basically toronto vs chatham
+
+  - 3000 people is enough
+    - surprisingly small
+    - but they all need to share interests
+    - bc if not, it's way too boring
+    - what do you get?
+    - cost savings
+
+- law
+  - lots of people don't think of law
+  - it's easy not to think of it
+  - but, reality is moreso lord of the flies
+  - crypto is for the powerless and the poweeruser
+  - it's just the edges of the box
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
