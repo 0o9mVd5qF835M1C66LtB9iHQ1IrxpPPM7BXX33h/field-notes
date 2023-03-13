@@ -1,0 +1,173 @@
+local-first software
+====================
+https://www.inkandswitch.com/local-first/
+
+INTRO
+  - you own your data, in spite of the cloud
+  - cloud app benefits
+    - cloud apps like google docs and trello are popular
+    - they enable real-time collaboration with colleagues
+    - makes it easy for us to access oru work from all our devices
+  - but there are cons with centralization
+    - cloud apps take away ownership and agency from users
+    - if a service shuts down, software stops functioning
+    - then the data created with the software is lost
+
+  - this article proposes "local-first software"
+  - a set of *principles* for software that enables both
+    1. collaboration
+    2. ownership
+  - CRDTs have the potential to be a foundational technology for realizing local-first software
+
+
+
+
+
+MOTIVATION
+  - collaboration and ownership
+  - cloud apps are great for collaboration, but are problematic in delivering ownership
+    - although you can access your data anywhere
+    - all data access must go via the server
+    - you can only do the things that the server will let you do
+    - in a sense, you *don't* have full ownership of that data
+    - the cloud provider does
+    - "there is no cloud, it's just someone else's computer"
+
+  - if the service shuts down, even though you might be able to export your data
+  - without the servers, there is normally no way for you to continue running your own copy of the software
+  - you are at the mercy of the company providing the service
+
+  - before web apps, we had "old fashioned" apps
+    - programs running on your local computer
+    - reading and writing files on the local disk
+    - in old fashioned apps, the data lives in files on local disk- you can do anything you like
+    - long-term archiving, backups, manipulating files w other programs
+
+  - to sum up, the cloud gives collaboration
+  - but old-fashioned apps give us ownership
+  - can we have the best of both worlds?
+    - we want both the convenient cross-device access and real-time collaboration from cloud apps
+    - but also the personal ownership of your own data embodied by "old fashioned" software
+
+
+
+
+
+SEVEN IDEALS FOR LOCAL-FIRST SOFTWARE
+  - real-time collaboration and data ownership are not at odds with each other
+  - this software is called local-first software
+  - it prioritizes the use of local storage and local networks
+    - in cloud apps, the data on the server is treated as the primary authorative copy of the data
+    - any data which resides o nthe client is merely a cache that is subordinate to the server
+    - any data modification (writes) must be sent to the server
+    - o/w it "didn't happen"
+
+    - local-first software swaps these roles
+    - the copy of the data on a local device is the primary copy
+    - servers still exist, but they hold secondary copies of your data in order to assist with access from multiple devices
+
+  - here are seven ideals that should be strived for in local-first software
+
+  1. no spinners. work at your finger tips
+    - much of today's software feels slower than previous generations of software
+      - with cloud apps, the primary copy of the data is on the server
+      - all data modifications, and many data lookups equire round-trip to a server
+    - local-first software is different
+      - primary copy of data is on the local device
+      - never a need for the user to wait for a request to a server to complete
+      - all operations are handled by read/writing to local disk
+      - data sync with other devices happens quietly in the background
+
+  2. your work is not trapped on one device
+    - personal mobile devices move through areas of varying network availability
+      - unreliable coffee shop wifi
+      - plane/train
+      - going through a tunnel
+      - elevator
+      - parking garage
+      - developing countries
+      - rural areas
+      - researchers or journalists in field
+
+    - overall, there is plenty need for offline-capable apps
+      - traditional apps work fine without internet connection
+      - but cloud apps typically don't work while offline
+      - for several years, offline first movement has been encouraging to mobile devs
+      - but in practice, it
+      s been difficult to retrofit offline support to cloud apps
+      - tools/libs designed for server-centric models do not easily adapt to offline edits
+
+      
+
+  3. the network is optional
+
+  4. seamless collaboration with your colleagues
+    - collaboration typically requires that several people contribute material to a document or file
+      - traditional software is problematic for several people to work on the same file at the same time
+      - the result is often a *conflict*
+
+      - otoh, cloud apps such as google docs have vastly simplified collaboration
+      - cloud apps allow multiuser modification, simultaneously, without conflicts
+      - users have come to expect this seamless, real-time collaboration in a wide range of applications
+
+
+
+  5. the long now
+    - an important aspect of data ownership is that you can continue accesing the data for a long time in the future
+    - your work should continue be accessible indefinitely
+    - even after the company that produced the software is gone
+
+    - traditional apps continue to work forever
+      - as long as you have the copy of the data and some way of running the software
+      - even if the operating system and the computer become obsolete, you can still run the software on a VM or emulator
+      
+      - otoh, cloud apps depend on the service continuing to be available
+      - if the service is unavailable, yoru data access is gone
+      - without longevity, we risk creating vint cerf's "digital dark age"
+
+
+
+  6. security and privacy by default
+
+
+
+  7. you retain ultimate ownership and control
+    - in 2017, several google doc users were locked out of their documents
+    - an automated system incorrectly flagged these documents as abusive
+    - in local-first apps, the ownership of data is vested in the user
+
+    - with data ownership comes responsibility
+    - maintaining backups, or other preventative measures against data loss
+    - for many professional and creative users, the trade-off of more responsibility might be worth it
+    - consider a significant personal creation
+      - phd thesis
+      - raw film footage
+    - for these you might be willing to take responsibility for storage and backups
+
+
+
+
+
+CONCLUSIONS
+  - computers are one of the most important creative tools mankind has ever produced
+  - software has become the conduit
+    1. through which our work is done
+    2. and the repository in which that work resides
+  - in the pursuit of better tools we moved many applications to the cloud
+  - cloud software is in many regards superior to the "old-fashioned" software
+  - it offers collaborative, always-up-to-date applications, accessible from anywhere in the world
+  - we no longer have to worry about
+    - software version
+    - what machine a file lives on
+  - however, with cloud, ownership of data is invested in the servers, *not* the users
+  - we became borrowers of our own data
+  - cloud services *defy* long-term preservation
+  - no wayback machine can restore a sunsetted web application
+  - the internet archive cannot preserve your google docs
+
+  - this article has shown that it is possible for users to retain ownership and control
+  - while also benefitting from the features we associate with the cloud
+  - that is, seamless collaboration and access from anywhere
+  - it's possible to get the best of both worlds
+  - more work is needed to realize the local-first approach in practice
+  - we need to improve the tools for developing local-first software
