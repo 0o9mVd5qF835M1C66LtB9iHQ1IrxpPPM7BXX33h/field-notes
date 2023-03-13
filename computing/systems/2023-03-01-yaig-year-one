@@ -1,0 +1,143 @@
+04/22
+- k8s is a steaming pile of 2009 technology
+  - no one has made any money from it really
+  - largely bc the problem space is so heavy tailed
+  - some subset is useful, and being used well in practice
+
+  - k8s is so "grand unified", many folks get lost in the chaos
+  - startup w nice k8s setup
+    - realized they weren't actually using any of the features they were excited about
+    - switched to aws fargate
+
+  - service mesh space is sort of a disaster
+    - turbine?
+    - service mesh is a commodotized layer
+      - also incredibly specific to each company above basic commodities
+    - space is interesting to watch
+      - some new wasm companies/projects are bundling what service mesh used to do into wasm libraries
+    
+    - some people still don't undertand what problem service mesh solves
+      - other than discover and routing
+      - service mesh seems massively overkill for those two solutions
+      - take: service mesh is like app ppl wanting to get into networking, and fucking it all up
+
+      - tech lead of lyft networking
+      - service mesh solves an organizational problem (similar to graphql?)
+      - huge PITA to run campaigns to get teams upgrading their RPC libs
+      - latest lib versions for telemetry, security, etc
+
+      - take: a process is the wrong abstraction for this
+      - there's room for a more SDN-like solution
+      - service mesh feels neither fish nor fowl
+      - not great at networking, not great at application abstraction
+      - the idea that we're adding an entire *second* process is a lot
+
+      - it'll be interesting to see how things play out between ebpf/cilium and service mesh
+        - take: there is value in putting networking (packet/service classification) in the kernel, and leave the application layer to.. apps
+        - opposition: a lot of this is the result of the definition of the "app" now bleeding into infra
+
+
+
+clouds, neoclouds
+  - redshift couldn't have been SNOW
+    - this is bc at big tech, you haave to be 100x beeeetter at getting funding than peer VP/directors
+    - bigquery is bigquery bc gcp has fewer offerings, so competition is vastly smaller
+    - its clear to invest sales in bigquery
+    - redshift otoh faces intense internal competition
+  - you could probably rollup on the neocloud vendors
+    - temporal, snowflake/databricks, confluent, etc
+    - make a 4th cloud on top
+    - could be a credible threat to aws market positions
+
+
+  - SNOW is SNOW though bc of their specialized sales team
+
+
+
+q: will there an OLTP equivalent of SNOW?
+  - an independant aurora?
+  - at some level, you can't really build an app without OLTP
+  - for some reason, there hasn't been an independant aurora clone
+  - it's clear both snowflake and databricks are eyeing OLTP
+  - they must want to pull off the CDW (cloud data warehouse) vision
+
+  - maybe, but it'll be a different job
+    - SNOW feels like driving capex rather than opex
+    - your job is to drive consumption rather than keeping it alive
+    - q: do you think you can repeatedly drive consumption in the online case in the same way as the offline case?
+
+  - for the online case
+    - if you need schema management, migrations, test infra,
+    - planetscale is prob the best bet
+    - planetscale is essentially entirely focused on those problems
+    - specifically schema management
+
+
+
+edge compute platforms
+- serverlesss runtimes
+  - what happens to the backend?
+  - strong argument that it's going to converge on distribution primitives
+  - for global state sharing, leader election, etc
+  
+  - wasm provides an interesting interface for more interesting serverless primitives
+  - if you're a normal web app
+    - wasm might not make much difference to you
+    - but wasm being fast and light might push adoption on the backend
+    - it all comes down to wasm being a reduced instruction set
+
+  - from a more API perspective
+    - core belief: betting the web as a platform
+    - doesn't mean betting on HTML/CSS/JS
+    - but rather, platform APIs, portability, etc
+
+    - there's massive value in webassembly as the first agreed-upon fixed point
+    - in essense, this is the unit of compute that can run anwywhere
+    - it's a unit of compute for non-systems workloads, that can run anywhere
+
+  - opposition
+    - wasm loses lots of utility when not run on the client
+    - can see arguments for CDN, edge compute tier
+    - but for backend, the real problems are not local compatability/runtime
+    - the problem for backend is distributed state
+    - docker seems to be useful precisely bc it did *not* reinvent the world
+      - it's just a normal process API with extra stuff for packaging and runtime
+      - everyone gets it, and while not actually foolproof in prod,
+      - its a much clearer path than replatforming on a totally different runtime
+      - wasm has a likely life as server side glue in places like CDNs
+
+    - wasm is appealing as a sandbox for 3rd party deps
+      - you can put each of your app's dependencies into its own sandbox
+      - there are a ton of local benefits like this around device compatability
+      - however, it's being dragged into the distributed execution problem
+        - "if i run WASM in the network somewhere distributed state just gets solved"
+      - language runtimes don't seem to solve this
+      - whether or not you have a common runtime on separate nodes
+        - you still have standard distributed state consistency issues
+
+  - there's cloudflare workers and durable objects
+  - the other two are
+    1. fly.io
+    2. akamai + linode
+
+  - this tier is going to get very important, currently a gap
+  - big players might think
+    - docker image interface and smart networking is sufficientt
+    - the cockroaches, planetscales, and supabases of the world can handle solving
+    - distributed clustering
+
+
+
+policy
+  - seeing a bunch of tech and companies emerge, tackling the auth layer
+  - solutions vary, but OPA, a distributed policy database seems to have made lots of traction in k8s
+  - other approaches are API only
+  - it's not crazy to think policy engines
+    - which most applications have some shitty home grown version of
+    - will get pulled into a separate company
+
+
+
+
+
+

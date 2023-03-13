@@ -1,0 +1,323 @@
+cs 3110: ocaml programming: correct, efficient, and beautiful =============================================================
+
+INTRODUCTION
+  1. better programming through ocaml
+  2. the basics of ocaml
+OCAML PROGRAMMING
+  3. data and types
+  4. higher-order programming
+  5. modular programming
+CORRECTNESS AND EFFICIENCY
+  6. correctness
+  7. mutability
+  8. data structures
+LANGUAGE IMPLEMENTATION
+  9. interpreters
+LAGNIAPPE
+  - the curry-howard correspondence
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INTRODUCTION
+
+
+(1) BETTER PROGRAMMING THROUGH OCAML
+  - it's time to learn how to program better
+  - it's time to learn a functional language, ocaml
+
+  - functional programming provides a different prospective on programming
+  - adapting to that perspective requires letting go of old ideas
+    - assignment, loops, classes/objects
+
+  - learning ocaml will make you a better programmer
+    - you will experience the freedom of *immutability* (goodbye debugging)
+    - you will improve at *abstraction* (goodbye bloated code)
+    - you will be exposed to a type system (goodbye failing tests)
+    - you will be exposed to some *theory of programming languages* (goodbye mysterious, magic incantations)
+  - ocaml cahnges the way you think about programming
+    - "a language that doesn't affect the way you think about programming is not worth knowing"
+  - moreover, ocaml is beautiful
+    - elegant, simple, and graceful
+    - aesthetics do matter
+    - code isn't just for machines, it's also to communicate to humans
+    - elegant code is easier to read and maintain
+
+
+
+
+
+  THE PAST OF OCAML
+    - ocaml comes from a line of programming languages whose grandfather is lisp, and includes modern languages such as closure, f#, haskell, and racket
+
+    - ocaml originates from robin milner and others in edinburgh laboratory for computer science scotland
+    - they were working on therem provers in late 70's and early 80's
+    - traditionally, theorem provers were implemented in languages such as lisp
+
+    - milner kept running into the problem that
+      - therem provers would sometimes put incorrect "proofs" (non-proofs)
+      - tgether, and claim that were valid
+      - so he tried to develop a language that can only construct valid proofs
+      - this language is ML, stands for "meta language"
+      - ML's type system was carefully constructed so that you could only construct valid proofs in the language
+      - eventually, this "classic ML" evolved into a full-fledged programming language
+      - milner received the turing award in 1991, large part for his work on ML
+
+
+
+  THE PRESENT OF OCAML
+    - ocaml is a functional programming language
+      - a functional programming language has
+
+        1. defines computations as mathematical functions
+        2. avoids mutable state
+          - state defined as in the information maintained by computation
+          - e.g. linkedlist, frontier set in dijkstras
+          - mutable defined as in "can be *changed*"
+
+
+
+
+    - they key linguistic abstraaction of fp is the *mathematical function*
+    - a function maps an input to an output
+    - for the same input it *always* produces the *same* output
+    - that is, mathematical functions are *stateless*
+      - they do *not* maintain any extra information or *state* that persists *between* usages of the function
+    - functions are *first-class* meaning you can use them as input to other functions, and produce functions as output
+    - expressing everything in terms of functions enables a *uniform* and *simple* programming model
+      - this programming model is easier to reason about than procedures and methods found in other families of programming languages
+
+
+    - imperative programming languges such as C and Java involve *mutable* state that changes throughout execution
+      - commands *specify* how to compute by destructively changing that state
+      - the *fantasy* of mutability is that it's easy to reason about
+      - "if the machine does this, then that, etc"
+      - the *reality of mutability8* is that whereas machines are good at complicaated state manipulation,
+      - humans are *not* good at understanding it
+
+
+
+    - the essense of why this is true is *referential transparency*
+      - referential transparency is the ability to replace an expression with its value, without affecting the result of computation
+        - in math, if f(x) = y, you can sub y anywhere you see f(x)
+        - in imperative languages, you can *not*
+
+        *side effects* break referential transparency
+        - f might have *side effects*, so computing f(x) at time t might differ from f(x) at t'
+        - mutability *breaks* referential transparency
+
+      - it's tempting to believe t hat there's a single state the machine manipulates
+        - and that the machine does one thing at a time
+        - computer systems go to great lengths in attempting to provide that illusion
+        - but it's just that, and illusion
+        - in reality there are many states, spread across threads, cores, processors, networked computers
+        - the machine does many things concurrently
+        - *mutability makes reasoning about distributed state and concurrent execution immensely difficult*
+
+
+
+    - immutability, however
+      - frees the programmer from these concerns
+      - it provides powerful ways to build correct and concurrent programs
+      - ocaml is primarily an immutable language, like most functional languages
+
+      - in functional programming
+        - we have *expressions*, not commands
+        - we specify what to compute, not *how* to do it
+        - variables *never* change value (better name, might be identifiers then)
+        - functions *never* have side effects
+
+        - it *does* support imperative programming w mutable state, but we won't use those features until later in the book
+        - in part, bc we simply don't *need* them
+        - and also, to get you to quit *cold turkey* from dependance of mutability you might not have known you had
+        
+        - the freedom of mutability is one of the *biggest changes in perspective* that ocaml can give you
+
+
+    - features of ocaml
+      - ocaml is *statically* typed and *type-safe* programming language
+        - this means errors are detected at compile time
+        - some other languages are type-safe but *dynamically* typed
+        - this means type errors are caught at run time (python, racket)
+
+        - other langs, like C/C++ are statically typed, but *not* type safe
+        - they check for some type errors, but don't guarantee the absense of *all* type errors
+
+      - ocaml uses number of advanced features
+        - algebraic data types
+          - build easy data structures in ocaml without poinetrs or memory management
+          - pattern matching enables exaiming the shape of a data structure
+        - type inference
+          - you don't have to write type information down everywhere
+          - the compiler automatically figures out most types
+          - this can make code easer to read and maintain
+        - parametric polymorphism
+          - functions and data structures can be paramterized over types
+          - this is crucial for being able to *reuse* code
+        - garbage collection
+          - automatic memory management relieves  you from the burden of memory allocation and deallocation
+          - this is a common source of bugs in languages like C
+        - modules
+          - ocaml makes it easy to structure large systems through the use of modules
+          - modules are used to encapsulate implementations behind interfaces
+          - ocaml goes well beyond the functionality of most languages with modules by providing functions (called *functors*) that manipulate modules
+
+    - ocaml in the industry
+      - ocaml and other fps are nowhere near as popular as python/c/java
+      - ocam's real strength lies in language manipulation (compilers, analyzers, verifiers, provers)
+      - this is not surprising, bc ocaml evolved from the domain of theorem proving
+
+      - that's not to say that functional programming languages aren't used in the industry
+      - yaron minsky even wrote a paper about using ocaml in the financial industry
+
+
+
+  LOOK TO YOUR FUTURE
+    - general purpose languages come and go
+    - today it's python/java. yestday it was pascal/cobol
+    - before that, fortran/lisp
+
+    - a good programer has to learn the principles behind programming that *transcend* the specifics of any languge
+    - there's no better way to get at these principles than th approach from a fp perspective
+
+    - ocaml is great to learn fp
+      - ocaml does a great job at clarifying and simplifying the essense of functional programming
+      - in a way that scala (blends fp and imperative) or haskell (too extreme fp) do not
+
+
+    - fp predicts the future
+      - garbage collection (java, lisp)
+      - generics (java, ml)
+      - higher order functions (c#/java, lisp)
+      - type inference (c++/java)
+      - what's next? pattern matching
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(2) THE BASICS OF OCAML
+  - learning a new programming language involves
+    - syntax
+    - semantics
+    - idioms
+    - libraries
+    - tools
+
+    - the course focouses on semantics and idioms, they are the most important
+    - syntax is just implementation detail, and libs/tools will always be changing
+
+    - semantics
+      - there are two pieces to semantics
+      
+      1. the statics
+      2. the dynamics
+
+      - the static semantics define the compile-time checking that is done to ensure the program is legal *beyond* syntax requirements
+      - dynamics define the runtime behavior of a program as its executed or evaluated
+
+  THE OCAML TOPLEVEL
+    - utop
+  COMPILING OCAML PROGRAMS
+    - ocamlc (compiler)
+    - dune (build system)
+  EXPRESSIONS
+    - the primary piece of ocaml syntax is the *expression*
+    - imperative languages are primarily built on *commands*
+    - functional languages are primariyl b uilt on *expressions*
+    - an expression will fail to evaluate to a value for either one of two reasons
+      1. evaluate of the expressoin raises an exception
+      2. evaluation of the expresson never terminates
+
+
+    - ocaml deliberaly does *not* support operator *overlading*
+      - arithmetic operatons on floats are written with a. after
+      - *. not *
+
+
+    - assertions
+    - if expressions
+      - we call the arms "guards"
+      - if expressions in ocaml are just expressions
+      - they can be put anywhere an expression can go
+      - this is similar to the ternary operator
+
+
+    - let expressions
+      - let x = 42;; is a let *definition*
+      - let x = 42 in x + 1;; is a let *expression*
+        - here we're *binding* a value to the name x
+        - then using that bding inside another expression, namely, x+1
+
+        - (let x = 42) + 1 will error since let definition does not evaluate to a value
+
+      - another way to understand let defintions at the toplevel
+        - they are just let expressions without body expressions
+
+        let a = "big";;
+        let b = "red;;
+        let c = a ^ b;;
+
+        is understood by ocaml as
+
+        let a = "big" in
+        let b = "red" in
+        let c = a ^ b in
+
+
+      - syntax
+        - let x = e1 in e2
+
+
+        - we call e1 the *binding expression*
+        - we call e2 the *body expression*
+
+
+  FUNCTIONS
+  DOCUMENTATION
+  PRINTING
+  DEBUGGING
+  SUMMARY
+  EXERCISES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
