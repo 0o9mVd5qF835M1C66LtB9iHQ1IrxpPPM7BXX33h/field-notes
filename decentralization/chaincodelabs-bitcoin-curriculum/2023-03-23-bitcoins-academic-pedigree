@@ -1,0 +1,319 @@
+bitcoin's academic pedigree
+===========================
+https://queue.acm.org/detail.cfm?id=3136559
+
+- the concept of cryptocurrencies is built from forgotten ideas in research literature
+
+intro
+  - media gives the impression
+    - several decades of research into digital cash
+    - beginning with David Chaum
+    - did not lead to commerical success bc
+    - it required a centralized, banklike server controlling the system
+    - and no banks wanted to sign on
+
+    - along came bitcoin, a radically different proposal for decentralized cryptocurrency
+    - that did not need banks
+    - and digital cash finally succeeded
+    - satoshi nakamoto was an academic outsider
+    - and bitcoin bears no resemblance to earlier academic proposals
+
+  - this article challenges that narrative
+    - nearly all technical components of bitcoin originated in the academic literature of the 1980's/90's
+    - this does not diminish nakamoto's achievement
+    - but it shows he stood on the shoulders of giants
+    - by tracing the origins of the ideas in bitcoin, we can zero in on nakamoto's true *leap* of insight
+    - this explains why bitcoin took so long to be invented
+
+
+
+the ledger
+  - problem
+    - how would you builkd a ledger for use in an environment like the internet
+    - where participants may not trust each other?
+
+    - the ledger should be
+      - immutable, append only
+      - hashable to get cryptographic digest
+    
+    - we need these properties bc
+    - the ledger is a global data structure
+    - collectively maintained by a mutually untrusting set of participants
+
+    - this contrasts with existing approaches to decentralizing digital ledgers
+    - it involved many participants to maintain local ledgers
+    - and it was up to user querying this set of ledgers to *resolve conflicts*
+
+  - linked timestamping
+    - bitcoin's ledger data structure is borrowed, with minimal modifications
+    - from a series of papers by stuart haber and scott stornetta 1990 -> 1997
+    - nakamoto directly references them in the whitepaper
+
+    - haber and stornetta's work addressed the problem of
+      - document timestamping
+      - they aimed to build a digital notary service
+      - for patents, business contracts, and other documents,
+      - one may want to establish that the document was created at a certain point in time
+      - and no later
+
+    - the creator of each document asserts a time of creation and
+      - signs the document
+      - the timestamp
+      - and the previously broadcast document
+
+      - this forms a long chain with pointers backwards in time
+      - an outside user *cannot* alter a timestamped message
+      - the creator *canot* alter a timestamped message without altering the entire chain of messages that *follow*
+
+      - thus, the entire chain is locked in, immutable, and temporally ordered
+    
+    - bitcoin takes the data structure from haber and stornetta's work
+    - and reengineers its security properties with proof of work
+
+    - in follow-up papers, haber and stornetta offer improvements
+      1. links between documents can be created via hashes rather than signatures for simplicity and speed
+      2. documents can be threaded via batches/blocks rather than individually (inefficient)
+      3. within each block, documents can be linked together via binary tree of hash pointers (merkle tree) rather than linear chain
+
+  - byzantine fault tolerance
+    - a different research field, fault-tolerant distributed computing, has studied this problem
+    - it goes by different names, including state replication
+    - early solutions, including paxos, proposed by turing award winner leslie lamport
+      - consider state replication when
+      - communication channels are unreliable
+      - and when a minority of nodes may exhibit certain "realistic" faults
+        - going offline forever
+        - rebooting and sending outdated messages
+      - a prolific literate followed with more adverse settings
+
+    - a related line of work studied the situation where the network is *mostly* reliable
+    - BUT
+      - the definition of "fault" was expanded to handle *any* deviation from the protocol
+      - such byzantine faults include both
+      - naturally occuring faults as well as
+      - maliciously crafted behaviors
+    - they were first studied in a paper also by lamport in 1982
+    - much later in 1999, a landmark paper by castro and lskov introduced PBFT (practical byzantine fault tolerance)
+
+    - in the bitcoin white paper
+      - nakamoto does *not* cite existing bft literature or use its language
+      - he uses some concepts, referring to his protocol as a consensus mechanism
+      - and considering faults of both attackers
+      - and nodes joining/leaving the network
+      - this is contrast to his explicit reference to the literate on linked timestamping, and proof of work
+      - when asked about the byzantine generals' problem,
+      - nakamoto asserts that proof of work solves the problem
+
+
+        
+proof of work
+  - virtually all fault-tolerant systems assume that a strict majority or supermajority (> 50% or 66%)
+  - of nodes in the system are both
+    1. honest
+    2. reliable
+  
+  - in an open P2P network, there is no registration of nodes
+  - and they freely join and leave
+
+  - thus, an adversary can create enough sybils, or sockpuppet nodes, to overcome the consensus guarantees of the system
+
+  - the sybil attack was formalized in 2002 by john douceur
+  - who turned to a cryptographic construction called *proof of work* to mitigate it
+
+  - the origins
+    - first proposal that would be considered proof of work today
+    - was in 1992, by cynthia dwork and moni naor
+    - their goal was to deter spam
+    - in dwork and naor's design, email recipients would process only those emails that were accompanied by proof
+    - proof that the sender had performed a moderate amount of computational work
+    - computing the proof would take perhaps a few secs with a regular computer
+    - posing no difficulty for regular users
+    - but a spammer wishing to send millions of emails would require several weeks
+
+  - hashcash
+    - a very similar idea called hashcash was independently invented in 1997 by adam back
+      - a phd researcher, part of the cypherpunk community
+        - hashcash is simpler than dwork/naor's idea
+      - no trapdoor, no central auth
+      - uses only hash functions instead of digital signatures
+      - hashcash, as the name suggests viewed proof of work as a form of cash
+
+    - on the website, it was an alternative to david chaum's digicash
+    - later, back made comments suggesting that bitcoin was a straightforward extension of hashcash
+    - but it has no protection against double spending
+
+  - pow and digital cash, catch-22
+    - hashcash declared puzzle solutions to *be* cash
+    - more coherent approaches to treating puzzle solutions as cash are b-money and bitgold
+      - if disagreement about the ledger occurs among the servers/nodes
+      - there isn't a clear way to resolve though
+      - letting the majority decide seems to be implicit
+      - but majority mechanism isn't secure with sybil attacks
+      - unless there is a central gatekeeper
+
+
+
+putting it all together
+  - the true genius of nakamoto's invention
+    - with bitcoin, for the first time
+    - puzzle solutions don't constitute cash by themselves
+    - instead, they are merely used to *secure* the ledger
+    - solving proo of work is performed by specialized entities called *miners*
+
+  - miners
+    - are constantly in a race with each other to find the next puzzle solution
+    - each miner solves a slightly different varaint of the puzzle so that
+    - chance of success is proportional to the fraction of global mining power that the miner controls
+    - a miner who solves a puzzle gets to contribute the next block, which is based on linked timestamping
+    - in exchange for contributing the block, the miner is rewarded with newly minted units of the currency
+    - if a miner contributes an invalid tx or block, it will be rejected by the majority of other miners
+    - in this way, bc of monetary incentives, miners ensure each other's compliance with the protocol
+
+
+  - double-spending
+    - bitcoin solves double-spending problem with existing POW schemes bc
+    - it *decouples* puzzle solutions from economic value
+    - puzzle solutions are actually *twice* decoupled
+      1. the amount of work required to produce a block is a *floating* parameter
+      2. the number of bitcoins issued per block is *not* fixed either
+
+  - nakamoto's genius
+    - wasn't any individual components of bitcoin
+    - but rather, the intricate way they fit together to breathe life into the system
+
+    - bitcoin is bootstrapped via circular dependence of three entities
+
+    1. secure ledger is necessary to prevent double spending and ensure currency has *value*
+    2. a value currency is necessary to incentivize *miners*
+    3. strong *mining* power is necessary to secure the *ledger*
+
+
+  - keys as identities
+    - in order to "speak" for an identity (public key)
+    - you must know the corresponding private key
+    - you can create a new identity at any time
+    - by generating a new key pair
+    - without a central authority or registry
+    - this is the notion of decentralized identity management
+    - how alice communicates with bob is external to the system
+
+    - although radically different from centralized payment systems today
+    - these ideas are quite old, dating back to david chaum, the father of digital cash
+
+
+
+the blockchain
+  - so far,
+    - this article has not addressed blockchain
+    - if you believe the hype, blockchain is bitcoin's main invention
+    - nakamoto actually doesn't mention that term at all
+  
+  - in fact,
+    - blockchain has no standard technical definition
+    - it's a loose umbrella term used by various parties
+    - to refer to systems that bear varying levels of resemblance
+    - to bitcoin and its ledger
+
+  - blockchain != nakamoto consensus
+    - especially in banking
+    - don't use nakamoto consensus
+    - they use the ledger data structure
+    - and byzantine agreement
+    - which, as shown, dates to the '90s
+    - this belies the claim that blockchains are a new and revolutionary technology
+    - the buzz around blockchains have helped banks initiate collective action to deploy shared-ledger technology
+
+  - blockchain does not imply security
+    - blockchains are frequently presented as more secure than traditional registries
+    - this is a misleading claim
+    - the oveall stability of the system
+    - must be separated from endpoint (users/devices) security
+
+    - the systemic risk of blockchains may be lower than that of many central institutions
+    - but endpoint-security risk of blockchains is far worse than traditional institutions
+    - blockchains is a one way door
+    - self-custody has risks as well
+
+
+concluding lessons
+  - practitioners should be skeptical of claims of revolutionary technology
+  - as shown, most of the ideas in bitcoin that have generated excitement
+    - distributed ledgers
+    - byzantine agreement
+  - actually date back to 20 years or more
+
+  - academia seems to have the opposite problem
+    - a resistance to radical extrinsic ideas
+    - the bitcoin white paper, despite the pedigree of its many ideas, was more novel than most academic research
+    - moreover, nakamoto didn't care for peer review
+    - and he didn't fully connect it to its history
+    - as a result, academics essentially ignored bitcoin for several years
+    - many academics informally argued bitcoin could not work
+      - based on theoretical models
+      - or experiences with past systems
+      - despite the fact that it was working in practice
+
+  - bitcoin was unusual and successful
+    - not bc it was on the cutting edge of research on any of its components
+    - but bc it combined old ideas from many previously unrelated fields
+    - satoshi saw the forest for the trees
+    - he was a generalist
+    - this is not easy to do, as it requires bridging disparate terminology, assumptions, etc
+    - but this is a valuable blueprint for innovation
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

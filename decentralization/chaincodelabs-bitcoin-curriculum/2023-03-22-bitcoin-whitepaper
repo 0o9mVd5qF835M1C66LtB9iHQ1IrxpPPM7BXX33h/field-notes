@@ -1,0 +1,377 @@
+bitcoin: a peer-to-peer electronic cash system
+==============================================
+https://bitcoin.org/bitcoin.pdf
+
+0. abstract
+  - a pure p2p version of electronic cash would allow
+    - online payments to be sent directly from one party to another
+    - without going through a financial institution
+  
+  - digital signatures provide part of the solution
+  - but main benefits are lost if a trusted third party is still required to prevent double spending
+
+  - we propose a solution to the double spending problem using a p2p network
+  - the network timestamps txs by hasing them into an ongoing chain of hash-based proof of work
+  - the longest chain
+    - not only serves as proof of the sequence of events witnessed
+    - but proof that it came from the largest pool of CPU power
+    
+    - as long as the majority of CPU power is controlled by nodes that are not cooperating to attack the network
+    - they'll generate the longest chain and outpace attackers
+    - the network itself requires minimal structure
+  
+  - messages are broadcast on a best effort basis
+  - nodes can leave and rejoin the network at will
+  - accepting the longest proof-of-work chain as proof of what happened, while they were gone
+
+
+
+1. introduction
+  - commerce on the internet
+    - has come to rely almost exclusively on financial institutions
+    - these institutions serve as trusted third parties to process electronic payments
+    - while the system works well enough for most tx
+    - it still suffers from the inherent weaknesses of the trust-based model
+
+    - completely non-reversible tx are not really possible
+    - since financial institutions cannot avoid mediating disputes
+    - the cost of mediation increases tx costs
+    - limiting the minimum practical tx size
+    - and cutting off possibility for small casual tx
+  
+  - with the possibility of reversal
+    - the need for trust *spreads*
+    - merchants must be wary of their customers
+    - hassling them for more information than they would otherwise need
+    - a certain percentage of fraid is unavoidable
+    
+    - these costs and payment uncertainties can be avoided in person via physical currency
+    - but no mechanism exists to make payments over a communications channel without a trusted party
+
+  - what is needed is
+    - an electronic payment system
+    - based on cryptographic proof instead of trust
+    - allowing any two willing parties to transact directly with each other
+    - without the need for a *trusted* third party
+    
+    - tx that are computationally impractical to reverse would protect sellers
+    - routine escrow mechanisms could easily be implemented to protect buyers
+  - in this paper
+    - we propose a solution to the double spend problem
+    - using a P2P distributed timestamp server
+    - to generate computational proof of the chronological order of txs
+    - the system is secure as long as honest nodes collectively control more CPU power
+    - than any cooperating group of attacker nodes
+
+
+
+2. transactions
+  - we define an electronic coin as a
+    - chain of digital structures (bitcoin is a chain)
+  - each owner transfers the coin to the next by
+    - digitally signing a hash of the previous tx
+    - and the public key of the next owner
+    - and adding these to the end of the coin (chain)
+    - a payee can verify the signatures to verify the chain of ownership
+
+  - the problem
+    - the payee can't verify that one of the owners did not double-spend the coin
+    - a common solution is to introduced a trusted central authority/mint
+    - that checks every tx for double-spending
+
+    - after each tx, the coin must be returned to the mint to issue a new coin
+    - only coins issued directly from the mint are trusted not to be double-spent
+    - the problem with this sol: fate of the entire money system depends on the company running the mint
+    - every tx has to go through them
+    - just like a bank
+
+  - we need
+    - a way for the payee to know that the previous owners
+    - did *not* sign any earlier txs
+    - for our purposes, the earliest tx is the one that counts
+    - we don't care about later attempts to double-spend
+    - the only way to confirm the absense of a tx is to be aware of all txs
+    
+    - in the mint based model
+    - the mint was aware of all txs and decided *which* arrived *first*
+    
+  - to accomplish this without a trusted party
+    1. txs must be publically announced
+    2. a system for participants to agree on:
+      - a *single* history of the order in which they were received
+
+  - the payee needs proof that the time of each tx,
+  - the majority of nodes agreed it was the first received
+
+
+
+3. timestamp server
+  - the solution we propose begins w a timestamp server
+
+  - a timestamp server works
+    - by taking a hash of a block of items to be timestamped
+    - and widely publishing the hash such as in the newspaper or usenet post
+
+  - the timestamp proves
+    - that the data must have existed at the time (obviously, in order to get into the hash)
+    - each timestamp includes the previous timestamp in its hash
+    - this forms a chain
+    - each additional timetamp reinforces the ones before it
+
+
+
+
+
+4. proof of work
+  - to implement a distributed timestamp server on a p2p basis
+  - we need to use a proof-of-work system
+  - similar to adam back's hashcash, rather than newspaper or usenet posts
+
+  - POW involves scanning for a value that when hashed (such as SHA-256)
+    - the hash begins with a number of zer obits
+    - the average work required is the exponential in the number of zero bits required
+    - and can be verified by executing a single hash
+
+  - for our timestamp network, we implement proof-of-work
+    - by increasing a nonce in the block until a value is found that gives the block's hash the required zero bits
+    - once the CPU effort has been expanded to make it satisfy the proof-of-work
+    - the block cannot be changed without *redoing* the work
+    - as later blocks are chained after it,
+    - the work to change the block would include redoing all the blocks after it
+
+  - this proof-of-work implemention
+    - also solves the problem of determining representation in majority decision making
+    - if the majority were based on one-IP-address-one-vote,
+    - it could be subverted by anyone able to allocate many IPs
+
+  - proof-of-work is essentially one-CPU-one-vote
+    - the majority decision is represented by the *longest chain*
+    - the longest chain has the greatest proof-of-work effort *invested* into it
+    - if a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains
+
+  - to modify a past block, an attacker would have to
+    - *redo* the proof-of-work of the block and all blocks *after* it
+    - and then *catch up* with and *surpass* the work of the honest nodes
+    - we will show later the probability of a slower attacker catching up diminishes exponentially as subsequent blocks are added
+
+  - to compensate for increasing hardware speed and varying interest in running nodes over time
+    - the proof-of-work difficulty is determined by a moving average targeting
+    - an average number of blocks per hour
+    - if they're generated too fast, the difficulty increases
+
+
+
+5. network
+  - the steps to run the network are as follows:
+
+  1. new txs are broadcast to all nodes
+  2. each node collects new txs into a block
+  3. each node works on finding a difficult proof-of-work for its block
+  4. when a node finds a proof-of-work, it broadcasts the block to all nodes
+  5. nodes accept the block only if all transactions in it are valid and not already spent
+  6. nodes express their acceptance of the block by working on creating the next block in the chain, using the hash of the accepted block as the previous hash
+
+  - nodes always consider the longest chain to be the correct one
+  - and will keep working on extending it
+  - if two nodes broadcast different versions of the next block simultaenously
+  - some nodes may receive one or the other first
+
+  - in that case, they work on the first one they received
+    - but save the other branch in case it becomes longer
+    - the tie will be broken whe nthe next proof-of-work is found
+    - and one branch becomes longer
+    - the nodes that were working on the other branch will then switch to the longer one
+
+  - new tx broadcasts do not necessarily need to reach *all* nodes
+    - as long as they reach *many* nodes, they will get into a block before long
+    - block broadcasts are also tolerant of *dropped* messages
+    - if a node does *not* receive a block,
+    - it will request it when it receives the next block,
+    - and realizes it missed one
+
+
+
+6. incentive
+  - by convention,
+    - the first tx in a block is a special tx that starts a new coin owned by the creator of the block
+    - this adds an incentive for nodes to support the network
+    - and provides a way to initially distribute coins into circulation
+    - since there is no central authority to issue them
+
+  - the steady addition of a constant of amont of new coins is analagous
+    - to gold miners expending resources to add gold to circulation
+    - in our case ,its CPU time and electricity that is expended
+
+  - the incentive can also be funded with tx fees
+    - if the output value of a tx is less than the input value,
+    - the difference is a tx fee that is added to the incentive value of the block containing the tx
+    - once a predetermined number of coins have entered circulation
+    - the incentive can transition entirely to tx fees
+    - can be completely *inflation free*
+
+  - the incentive may help encourge nodes to stay honest
+    - if a greedy attacker is able to assemble more CPU pwoer than all the honest nodes
+    - he would have to choose bt using it to defraud people by stealing back his payments,
+    - or using it to generate new coins
+
+    - he ought to find it more profitable to play by the rules
+    - such rules that favor him with more new coins than everyone ele combined
+    - than to undermine the system and the validity of his own wealth
+
+
+
+7. reclaiming disk space
+  - once the latest tx in a coin is buried under enough blocks
+    - the spent txs before it can be discarded to save disk space
+    - to facilitate this without breaking the block's hash,
+    - txs are hashed ina merkle tree
+    - with onl the root included in the block's hash
+    - old blocks can then be compacted by stubbing off branches of the tree
+    - the interior hashes do *not* need to be stored
+
+  - a block header with no txs would be about 80 bytes
+
+  - if we suppose blocks are generated every 10 minutes, 80 bytes * 6 * 24 * 365 = 4.2MB/year
+  - with computer systems typically selling 2GB of RAM as of 2008
+  - and moore's law predicting current growth of 1.2GB per year
+  - stroage should *not* be a problem even if block headers must be kept in memory
+
+
+8. simplified payment verification
+  - it's possible to verify payments *without* running a full network node
+    - a user only needs to keep a copy of the block headers of the longest proof-of-work chain
+    - which they can get by querying network nodes until they're convinced they have the longest chain
+    - and obtain the merkle branch linking the tx to the block it's timestamped in
+
+  - they can't check the tx for themself, but by linking it to a place in the chain,
+    - they can see that a network node has accepted it
+    - and blocks added after it further confirm the network has accepted it
+
+  - as such, the verification is reliable as long as honest nodes control the network
+    - but is more vulnerable if the network is overpowered by an attacker
+    - while network nodes can verify txs for themselves, the simplified method can be fooled
+    - by an attacker's fabricated txs for as long as the attacker can continue to overpower the network
+
+
+
+9. combining and splitting value
+  - although it would be possible to handle coins individually
+  - it would be unwieldy to make a separate tx for every cent in a transfer
+  - to allow value to be split and combined
+    - txs contain multiple inputs and outputs
+    - normally there will be either a single input from a larger prev tx
+    - or multiple inputs combining smaller amounts
+    
+    - and at most two outputs
+    - one for the payment
+    - one returning the change, if any, back to the sender
+
+
+
+10. privacy
+  - the traditional banking model achieves a level of privacy by
+    - limiting access to information to the parties involved
+    - and the trusted third party
+  - the necessity to announce all transactions publicly precludes this method
+
+  - but
+    - privacy can still be maintained by breaking the flow of information in another place
+    - by keeping keys *anonymous*
+  
+  - the public can see
+    - that someone is sending an amount to someone else
+    - but without information linking the tx to anyone
+    - this is similar to the level of information released by stock exchanges
+    - where time/size of individual trades aka "the tape" is made public
+    - but without telling who the parties are
+
+  - an additional firewall, and new key pair should be used for each tx
+    - to keep them from being linked to a common owner
+    - some linking is still unavoidable with multi-input tx
+    - which nessarily reveal that their inputs were owned by the same owner
+    - the risk is that if the owner of a key is revealed
+    - linking could reveal other tx that belonged to the same owner
+
+11. calculations
+
+12. conclusion
+  - we have proposed a system for electronic transactions
+  - without* relying on trust
+  - we started with the usual framework of coins made from digital signatures
+    - this provides strong control of ownership
+    - but is incomplete without a way to prevent double-spending
+  - to solve this, we proposed a P2P network using POW
+    - to record a public history of transactions
+    - this quickly becomes impactical for an attacker to change
+    - if honest nodes control a majority of CPU power
+
+  - the network is robust in its unstructured simplicity
+    - nodes work all at once with little coordination
+    - they do not need to be identified
+    - since messages are *not* routed to any particular place
+    - and only need to be delivered on a best effort basis
+    - nodes can leave and rejoin the network at will
+    - accepting the POW chain as proof of what happened while they were gone
+  - they vote with CPU power
+    - expressing their acceptance of valid blocks
+    - by working on extending them and rejecting invalid blocks by refusing to work on them
+    - any needed rules and incentives can be enforced with this consensus mechanism
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
